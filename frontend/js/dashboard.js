@@ -1,16 +1,20 @@
 /* =========================================
    DisasterMesh Dashboard
-   Phase 1 - Steps 10, 11 and 12
-
-   Step 10:
-   Incident status workflow
-
-   Step 11:
-   Message history
-
-   Step 12:
-   System health
+   Phase 1 - Steps 13, 14 and 15
 ========================================= */
+
+
+/* =========================================
+   CURRENT SESSION
+========================================= */
+
+const currentUser = {
+
+    name: "Rescue Operator",
+
+    role: "OPERATOR"
+
+};
 
 
 /* =========================================
@@ -174,7 +178,7 @@ const nodes = [
 
 
 /* =========================================
-   ROUTES
+   ROUTE DATA
 ========================================= */
 
 const routes = [
@@ -373,8 +377,11 @@ const systemHealth = [
 let selectedIncidentId = null;
 
 let currentFilters = {
+
     priority: "ALL",
+
     category: "ALL"
+
 };
 
 let currentMapFilter = "ALL";
@@ -391,13 +398,286 @@ let incidentLayer = null;
 
 
 /* =========================================
+   NAVIGATION DATA
+========================================= */
+
+const viewInformation = {
+
+    dashboard: {
+
+        eyebrow: "RESCUE OPERATIONS",
+
+        title: "Command Dashboard",
+
+        description:
+            "Monitor incidents, field nodes and network activity."
+
+    },
+
+    incidents: {
+
+        eyebrow: "RESPONSE MANAGEMENT",
+
+        title: "Incident Management",
+
+        description:
+            "Review and manage emergency requests."
+
+    },
+
+    nodes: {
+
+        eyebrow: "FIELD INFRASTRUCTURE",
+
+        title: "Node Management",
+
+        description:
+            "Monitor registered field and relay nodes."
+
+    },
+
+    network: {
+
+        eyebrow: "MESH NETWORK",
+
+        title: "Network Operations",
+
+        description:
+            "Monitor routes, connectivity and recovery activity."
+
+    },
+
+    messages: {
+
+        eyebrow: "MESSAGE TRAFFIC",
+
+        title: "Message History",
+
+        description:
+            "Inspect delivery, routing and packet state."
+
+    },
+
+    settings: {
+
+        eyebrow: "SYSTEM CONFIGURATION",
+
+        title: "Settings",
+
+        description:
+            "Dashboard and operator configuration."
+
+    }
+
+};
+
+
+/* =========================================
+   ROLE-BASED ACCESS
+========================================= */
+
+function applyRolePermissions() {
+
+    const adminElements =
+        document.querySelectorAll(
+            ".admin-only"
+        );
+
+
+    adminElements.forEach(element => {
+
+        if (
+            currentUser.role ===
+            "ADMIN"
+        ) {
+
+            element.classList.add(
+                "admin-visible"
+            );
+
+        } else {
+
+            element.classList.remove(
+                "admin-visible"
+            );
+
+        }
+
+    });
+
+
+    document.getElementById(
+        "currentUserName"
+    ).textContent =
+        currentUser.name;
+
+
+    document.getElementById(
+        "currentUserRole"
+    ).textContent =
+        currentUser.role === "ADMIN"
+            ? "Administrator"
+            : "Rescue Operator";
+
+
+    document.getElementById(
+        "settingsUserName"
+    ).textContent =
+        currentUser.name;
+
+
+    document.getElementById(
+        "settingsUserRole"
+    ).textContent =
+        currentUser.role === "ADMIN"
+            ? "Administrator"
+            : "Rescue Operator";
+
+}
+
+
+/* =========================================
+   NAVIGATION
+========================================= */
+
+function switchView(viewName) {
+
+    const targetView =
+        document.getElementById(
+            `view-${viewName}`
+        );
+
+
+    if (!targetView) {
+        return;
+    }
+
+
+    document
+        .querySelectorAll(
+            ".page-view"
+        )
+        .forEach(view => {
+
+            view.classList.remove(
+                "active-view"
+            );
+
+        });
+
+
+    targetView.classList.add(
+        "active-view"
+    );
+
+
+    document
+        .querySelectorAll(
+            ".nav-item"
+        )
+        .forEach(item => {
+
+            item.classList.toggle(
+                "active",
+                item.dataset.view ===
+                    viewName
+            );
+
+        });
+
+
+    const info =
+        viewInformation[viewName];
+
+
+    if (info) {
+
+        document.getElementById(
+            "pageEyebrow"
+        ).textContent =
+            info.eyebrow;
+
+
+        document.getElementById(
+            "pageTitle"
+        ).textContent =
+            info.title;
+
+
+        document.getElementById(
+            "pageDescription"
+        ).textContent =
+            info.description;
+
+    }
+
+
+    if (viewName === "nodes") {
+
+        renderFullNodeTable();
+
+    }
+
+
+    if (viewName === "network") {
+
+        renderNetworkView();
+
+    }
+
+
+    if (viewName === "messages") {
+
+        renderFullMessageTable();
+
+    }
+
+
+    if (viewName === "incidents") {
+
+        renderIncidentManagement();
+
+    }
+
+}
+
+
+function setupNavigation() {
+
+    document
+        .querySelectorAll(
+            ".nav-item"
+        )
+        .forEach(item => {
+
+            item.addEventListener(
+                "click",
+                event => {
+
+                    event.preventDefault();
+
+                    switchView(
+                        item.dataset.view
+                    );
+
+                }
+            );
+
+        });
+
+}
+
+
+/* =========================================
    NODE COUNTS
 ========================================= */
 
 function getActiveNodeCount() {
 
     return nodes.filter(
-        node => node.status === "ONLINE"
+        node =>
+            node.status ===
+            "ONLINE"
     ).length;
 
 }
@@ -406,7 +686,9 @@ function getActiveNodeCount() {
 function getOfflineNodeCount() {
 
     return nodes.filter(
-        node => node.status === "OFFLINE"
+        node =>
+            node.status ===
+            "OFFLINE"
     ).length;
 
 }
@@ -420,9 +702,12 @@ function getCriticalIncidentCount() {
 
     return incidents.filter(
         incident =>
-            incident.priority === "CRITICAL" &&
-            incident.status !== "RESOLVED" &&
-            incident.status !== "CANCELLED"
+            incident.priority ===
+                "CRITICAL" &&
+            incident.status !==
+                "RESOLVED" &&
+            incident.status !==
+                "CANCELLED"
     ).length;
 
 }
@@ -432,67 +717,118 @@ function getHighPriorityCount() {
 
     return incidents.filter(
         incident =>
-            incident.priority === "HIGH" &&
-            incident.status !== "RESOLVED" &&
-            incident.status !== "CANCELLED"
+            incident.priority ===
+                "HIGH" &&
+            incident.status !==
+                "RESOLVED" &&
+            incident.status !==
+                "CANCELLED"
     ).length;
 
 }
 
 
 /* =========================================
-   STATISTICS
+   UPDATE STATISTICS
 ========================================= */
 
 function updateStatistics() {
 
-    document.getElementById("activeNodes").textContent =
-        String(getActiveNodeCount()).padStart(2, "0");
+    document.getElementById(
+        "activeNodes"
+    ).textContent =
+        String(
+            getActiveNodeCount()
+        ).padStart(
+            2,
+            "0"
+        );
 
 
-    document.getElementById("offlineNodes").textContent =
-        String(getOfflineNodeCount()).padStart(2, "0");
+    document.getElementById(
+        "offlineNodes"
+    ).textContent =
+        String(
+            getOfflineNodeCount()
+        ).padStart(
+            2,
+            "0"
+        );
 
 
-    document.getElementById("criticalIncidents").textContent =
-        String(getCriticalIncidentCount()).padStart(2, "0");
+    document.getElementById(
+        "criticalIncidents"
+    ).textContent =
+        String(
+            getCriticalIncidentCount()
+        ).padStart(
+            2,
+            "0"
+        );
 
 
-    document.getElementById("highPriority").textContent =
-        String(getHighPriorityCount()).padStart(2, "0");
+    document.getElementById(
+        "highPriority"
+    ).textContent =
+        String(
+            getHighPriorityCount()
+        ).padStart(
+            2,
+            "0"
+        );
 
 
-    document.getElementById("totalMessages").textContent =
-        String(messages.length).padStart(2, "0");
+    document.getElementById(
+        "totalMessages"
+    ).textContent =
+        String(
+            messages.length
+        ).padStart(
+            2,
+            "0"
+        );
 
 }
 
 
 /* =========================================
-   PRIORITY / STATUS HELPERS
+   HELPERS
 ========================================= */
 
-function getPriorityClass(priority) {
+function getPriorityClass(
+    priority
+) {
 
-    return `priority-${priority.toLowerCase()}`;
-
-}
-
-
-function getStatusClass(status) {
-
-    return `status-${status.toLowerCase().replaceAll(" ", "-")}`;
+    return `priority-${
+        priority.toLowerCase()
+    }`;
 
 }
 
 
-function getNodeStatusClass(status) {
+function getStatusClass(
+    status
+) {
 
-    if (status === "ONLINE") {
-        return "node-online";
-    }
+    return `status-${
+        status
+            .toLowerCase()
+            .replaceAll(
+                " ",
+                "-"
+            )
+    }`;
 
-    return "node-offline";
+}
+
+
+function getNodeStatusClass(
+    status
+) {
+
+    return status === "ONLINE"
+        ? "node-online"
+        : "node-offline";
 
 }
 
@@ -503,37 +839,50 @@ function getNodeStatusClass(status) {
 
 function getFilteredIncidents() {
 
-    return incidents.filter(incident => {
+    return incidents.filter(
+        incident => {
 
-        const priorityMatch =
-            currentFilters.priority === "ALL" ||
-            incident.priority === currentFilters.priority;
-
-
-        const categoryMatch =
-            currentFilters.category === "ALL" ||
-            incident.category === currentFilters.category;
+            const priorityMatch =
+                currentFilters.priority ===
+                    "ALL" ||
+                incident.priority ===
+                    currentFilters.priority;
 
 
-        return priorityMatch && categoryMatch;
+            const categoryMatch =
+                currentFilters.category ===
+                    "ALL" ||
+                incident.category ===
+                    currentFilters.category;
 
-    });
+
+            return (
+                priorityMatch &&
+                categoryMatch
+            );
+
+        }
+    );
 
 }
 
 
 /* =========================================
-   RENDER INCIDENTS
+   RENDER INCIDENT QUEUE
 ========================================= */
 
 function renderIncidents() {
 
     const incidentList =
-        document.getElementById("incidentList");
+        document.getElementById(
+            "incidentList"
+        );
 
 
     const incidentCount =
-        document.getElementById("incidentCount");
+        document.getElementById(
+            "incidentCount"
+        );
 
 
     const filteredIncidents =
@@ -541,13 +890,21 @@ function renderIncidents() {
 
 
     incidentCount.textContent =
-        String(filteredIncidents.length).padStart(2, "0");
+        String(
+            filteredIncidents.length
+        ).padStart(
+            2,
+            "0"
+        );
 
 
     incidentList.innerHTML = "";
 
 
-    if (filteredIncidents.length === 0) {
+    if (
+        filteredIncidents.length ===
+        0
+    ) {
 
         incidentList.innerHTML = `
             <div class="no-incidents">
@@ -560,76 +917,82 @@ function renderIncidents() {
     }
 
 
-    filteredIncidents.forEach(incident => {
+    filteredIncidents.forEach(
+        incident => {
 
-        const incidentElement =
-            document.createElement("div");
-
-
-        incidentElement.className =
-            "incident-item";
-
-
-        incidentElement.dataset.incidentId =
-            incident.id;
+            const element =
+                document.createElement(
+                    "div"
+                );
 
 
-        incidentElement.innerHTML = `
-
-            <div class="incident-top">
-
-                <span class="priority-badge ${getPriorityClass(incident.priority)}">
-                    ${incident.priority}
-                </span>
-
-                <span class="incident-time">
-                    ${incident.time}
-                </span>
-
-            </div>
+            element.className =
+                "incident-item";
 
 
-            <div class="incident-title">
-                ${incident.category}
-            </div>
+            element.innerHTML = `
+
+                <div class="incident-top">
+
+                    <span class="priority-badge ${getPriorityClass(
+                        incident.priority
+                    )}">
+                        ${incident.priority}
+                    </span>
+
+                    <span class="incident-time">
+                        ${incident.time}
+                    </span>
+
+                </div>
+
+                <div class="incident-title">
+                    ${incident.category}
+                </div>
+
+                <div class="incident-message">
+                    ${incident.message}
+                </div>
+
+                <div class="incident-meta">
+
+                    <span>
+                        Node: ${incident.node}
+                    </span>
+
+                    <span>
+                        GPS: ${incident.location}
+                    </span>
+
+                </div>
+
+                <div class="incident-status ${getStatusClass(
+                    incident.status
+                )}">
+                    ${incident.status.replaceAll(
+                        "_",
+                        " "
+                    )}
+                </div>
+
+            `;
 
 
-            <div class="incident-message">
-                ${incident.message}
-            </div>
+            element.addEventListener(
+                "click",
+                () =>
+                    openIncidentModal(
+                        incident.id
+                    )
+            );
 
 
-            <div class="incident-meta">
+            incidentList.appendChild(
+                element
+            );
 
-                <span>
-                    Node: ${incident.node}
-                </span>
-
-                <span>
-                    GPS: ${incident.location}
-                </span>
-
-            </div>
-
-
-            <div class="incident-status ${getStatusClass(incident.status)}">
-                ${incident.status.replaceAll("_", " ")}
-            </div>
-
-        `;
-
-
-        incidentElement.addEventListener(
-            "click",
-            () => openIncidentModal(incident.id)
-        );
-
-
-        incidentList.appendChild(
-            incidentElement
-        );
-
-    });
+        }
+    );
 
 }
 
@@ -659,19 +1022,24 @@ function updateFilters() {
 
 function resetFilters() {
 
-    currentFilters.priority = "ALL";
+    currentFilters.priority =
+        "ALL";
 
-    currentFilters.category = "ALL";
+
+    currentFilters.category =
+        "ALL";
 
 
     document.getElementById(
         "priorityFilter"
-    ).value = "ALL";
+    ).value =
+        "ALL";
 
 
     document.getElementById(
         "categoryFilter"
-    ).value = "ALL";
+    ).value =
+        "ALL";
 
 
     renderIncidents();
@@ -711,121 +1079,149 @@ function setupFilterEvents() {
    INCIDENT WORKFLOW
 ========================================= */
 
-function getNextStatus(status) {
+function getNextStatus(
+    status
+) {
 
     const workflow = {
 
-        NEW: "ACKNOWLEDGED",
+        NEW:
+            "ACKNOWLEDGED",
 
-        ACKNOWLEDGED: "ASSIGNED",
+        ACKNOWLEDGED:
+            "ASSIGNED",
 
-        ASSIGNED: "IN_PROGRESS",
+        ASSIGNED:
+            "IN_PROGRESS",
 
-        IN_PROGRESS: "RESOLVED"
+        IN_PROGRESS:
+            "RESOLVED"
 
     };
 
 
-    return workflow[status] || null;
+    return workflow[status] ||
+        null;
 
 }
 
 
-function getStatusActionText(status) {
+function getStatusActionText(
+    status
+) {
 
     const actions = {
 
-        NEW: "Acknowledge Incident",
+        NEW:
+            "Acknowledge Incident",
 
-        ACKNOWLEDGED: "Assign Incident",
+        ACKNOWLEDGED:
+            "Assign Incident",
 
-        ASSIGNED: "Start Response",
+        ASSIGNED:
+            "Start Response",
 
-        IN_PROGRESS: "Resolve Incident"
+        IN_PROGRESS:
+            "Resolve Incident"
 
     };
 
 
-    return actions[status] || "";
+    return actions[status] ||
+        "";
 
 }
 
 
 /* =========================================
-   UPDATE WORKFLOW VISUAL
+   WORKFLOW DISPLAY
 ========================================= */
 
-function updateWorkflow(status) {
+function updateWorkflow(
+    status
+) {
 
-    const workflowSteps =
+    const steps =
         document.querySelectorAll(
             ".workflow-step"
         );
 
 
-    const workflowLines =
+    const lines =
         document.querySelectorAll(
             ".workflow-line"
         );
 
 
     const order = [
+
         "NEW",
+
         "ACKNOWLEDGED",
+
         "ASSIGNED",
+
         "IN_PROGRESS",
+
         "RESOLVED"
+
     ];
 
 
-    workflowSteps.forEach(step => {
-
-        step.classList.remove(
-            "completed",
-            "current",
-            "cancelled"
-        );
-
-    });
-
-
-    workflowLines.forEach(line => {
-
-        line.classList.remove(
-            "completed"
-        );
-
-    });
-
-
-    if (status === "CANCELLED") {
-
-        workflowSteps.forEach(step => {
+    steps.forEach(
+        step => {
 
             step.classList.remove(
+                "completed",
                 "current",
-                "completed"
-            );
-
-            step.classList.add(
                 "cancelled"
             );
 
-        });
+        }
+    );
+
+
+    lines.forEach(
+        line => {
+
+            line.classList.remove(
+                "completed"
+            );
+
+        }
+    );
+
+
+    if (
+        status ===
+        "CANCELLED"
+    ) {
+
+        steps.forEach(
+            step =>
+                step.classList.add(
+                    "cancelled"
+                )
+        );
 
         return;
 
     }
 
 
-    const currentIndex =
-        order.indexOf(status);
+    const index =
+        order.indexOf(
+            status
+        );
 
 
-    workflowSteps.forEach(
-        (step, index) => {
+    steps.forEach(
+        (step, stepIndex) => {
 
-            if (index < currentIndex) {
+            if (
+                stepIndex <
+                index
+            ) {
 
                 step.classList.add(
                     "completed"
@@ -833,10 +1229,15 @@ function updateWorkflow(status) {
 
             }
 
-            if (index === currentIndex) {
+
+            if (
+                stepIndex ===
+                index
+            ) {
 
                 step.classList.add(
-                    status === "RESOLVED"
+                    status ===
+                        "RESOLVED"
                         ? "completed"
                         : "current"
                 );
@@ -847,10 +1248,13 @@ function updateWorkflow(status) {
     );
 
 
-    workflowLines.forEach(
-        (line, index) => {
+    lines.forEach(
+        (line, lineIndex) => {
 
-            if (index < currentIndex) {
+            if (
+                lineIndex <
+                index
+            ) {
 
                 line.classList.add(
                     "completed"
@@ -868,11 +1272,15 @@ function updateWorkflow(status) {
    OPEN INCIDENT MODAL
 ========================================= */
 
-function openIncidentModal(incidentId) {
+function openIncidentModal(
+    incidentId
+) {
 
     const incident =
         incidents.find(
-            item => item.id === incidentId
+            item =>
+                item.id ===
+                incidentId
         );
 
 
@@ -891,36 +1299,36 @@ function openIncidentModal(incidentId) {
         incident.category;
 
 
-    const modalPriority =
+    const priority =
         document.getElementById(
             "modalPriority"
         );
 
 
-    modalPriority.textContent =
+    priority.textContent =
         incident.priority;
 
 
-    modalPriority.className =
+    priority.className =
         `priority-badge ${getPriorityClass(
             incident.priority
         )}`;
 
 
-    const modalStatus =
+    const status =
         document.getElementById(
             "modalStatus"
         );
 
 
-    modalStatus.textContent =
+    status.textContent =
         incident.status.replaceAll(
             "_",
             " "
         );
 
 
-    modalStatus.className =
+    status.className =
         `incident-status ${getStatusClass(
             incident.status
         )}`;
@@ -956,6 +1364,18 @@ function openIncidentModal(incidentId) {
         incident.time;
 
 
+    const assignment =
+        document.getElementById(
+            "assignmentGroup"
+        );
+
+
+    assignment.style.display =
+        incident.status === "NEW"
+            ? "none"
+            : "flex";
+
+
     document.getElementById(
         "assignedTeam"
     ).value =
@@ -963,7 +1383,7 @@ function openIncidentModal(incidentId) {
         "Rescue Team Alpha";
 
 
-    const statusActionButton =
+    const actionButton =
         document.getElementById(
             "statusActionButton"
         );
@@ -975,49 +1395,31 @@ function openIncidentModal(incidentId) {
         );
 
 
-    const assignmentGroup =
-        document.getElementById(
-            "assignmentGroup"
-        );
-
-
     if (
-        incident.status === "RESOLVED" ||
-        incident.status === "CANCELLED"
+        incident.status ===
+            "RESOLVED" ||
+        incident.status ===
+            "CANCELLED"
     ) {
 
-        statusActionButton.style.display =
+        actionButton.style.display =
             "none";
 
         cancelButton.style.display =
-            "none";
-
-        assignmentGroup.style.display =
             "none";
 
     } else {
 
-        statusActionButton.style.display =
+        actionButton.style.display =
             "block";
 
         cancelButton.style.display =
             "block";
 
-        assignmentGroup.style.display =
-            "flex";
-
-        statusActionButton.textContent =
+        actionButton.textContent =
             getStatusActionText(
                 incident.status
             );
-
-    }
-
-
-    if (incident.status === "NEW") {
-
-        assignmentGroup.style.display =
-            "none";
 
     }
 
@@ -1047,7 +1449,7 @@ function openIncidentModal(incidentId) {
 
 
 /* =========================================
-   CLOSE INCIDENT MODAL
+   CLOSE MODAL
 ========================================= */
 
 function closeIncidentModal() {
@@ -1064,7 +1466,8 @@ function closeIncidentModal() {
     );
 
 
-    selectedIncidentId = null;
+    selectedIncidentId =
+        null;
 
 }
 
@@ -1082,7 +1485,9 @@ function advanceIncidentStatus() {
 
     const incident =
         incidents.find(
-            item => item.id === selectedIncidentId
+            item =>
+                item.id ===
+                selectedIncidentId
         );
 
 
@@ -1102,7 +1507,10 @@ function advanceIncidentStatus() {
     }
 
 
-    if (nextStatus === "ASSIGNED") {
+    if (
+        nextStatus ===
+        "ASSIGNED"
+    ) {
 
         incident.assignedTeam =
             document.getElementById(
@@ -1118,8 +1526,9 @@ function advanceIncidentStatus() {
 
     renderIncidents();
 
-    updateStatistics();
+    renderIncidentManagement();
 
+    updateStatistics();
 
     openIncidentModal(
         incident.id
@@ -1141,7 +1550,9 @@ function cancelIncident() {
 
     const incident =
         incidents.find(
-            item => item.id === selectedIncidentId
+            item =>
+                item.id ===
+                selectedIncidentId
         );
 
 
@@ -1156,8 +1567,9 @@ function cancelIncident() {
 
     renderIncidents();
 
-    updateStatistics();
+    renderIncidentManagement();
 
+    updateStatistics();
 
     openIncidentModal(
         incident.id
@@ -1171,12 +1583,6 @@ function cancelIncident() {
 ========================================= */
 
 function setupModalEvents() {
-
-    const modal =
-        document.getElementById(
-            "incidentModal"
-        );
-
 
     document.getElementById(
         "closeModal"
@@ -1229,23 +1635,27 @@ function setupModalEvents() {
                 );
 
 
-            if (!incident) {
-                return;
+            if (incident) {
+
+                incident.assignedTeam =
+                    event.target.value;
+
             }
-
-
-            incident.assignedTeam =
-                event.target.value;
 
         }
     );
 
 
-    modal.addEventListener(
+    document.getElementById(
+        "incidentModal"
+    ).addEventListener(
         "click",
         event => {
 
-            if (event.target === modal) {
+            if (
+                event.target.id ===
+                "incidentModal"
+            ) {
 
                 closeIncidentModal();
 
@@ -1259,7 +1669,10 @@ function setupModalEvents() {
         "keydown",
         event => {
 
-            if (event.key === "Escape") {
+            if (
+                event.key ===
+                "Escape"
+            ) {
 
                 closeIncidentModal();
 
@@ -1272,23 +1685,22 @@ function setupModalEvents() {
 
 
 /* =========================================
-   MAP INITIALIZATION
+   MAP
 ========================================= */
 
 function initializeMap() {
 
-    map = L.map(
-        "map",
-        {
-            zoomControl: true,
-
-            attributionControl: true
-        }
-    );
+    map =
+        L.map(
+            "map"
+        );
 
 
     map.setView(
-        [22.5735, 88.3645],
+        [
+            22.5735,
+            88.3645
+        ],
         16
     );
 
@@ -1296,20 +1708,28 @@ function initializeMap() {
     L.tileLayer(
         "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
         {
+
             maxZoom: 19,
 
             attribution:
                 "&copy; OpenStreetMap contributors"
+
         }
-    ).addTo(map);
+    ).addTo(
+        map
+    );
 
 
     nodeLayer =
-        L.layerGroup().addTo(map);
+        L.layerGroup().addTo(
+            map
+        );
 
 
     incidentLayer =
-        L.layerGroup().addTo(map);
+        L.layerGroup().addTo(
+            map
+        );
 
 
     createNodeMarkers();
@@ -1327,93 +1747,108 @@ function initializeMap() {
 
 function createNodeMarkers() {
 
-    nodes.forEach(node => {
+    nodes.forEach(
+        node => {
 
-        if (!node.gpsValid) {
-            return;
-        }
+            if (
+                !node.gpsValid
+            ) {
+                return;
+            }
 
 
-        const isOnline =
-            node.status === "ONLINE";
+            const online =
+                node.status ===
+                "ONLINE";
 
 
-        const marker =
-            L.circleMarker(
-                [
-                    node.latitude,
-                    node.longitude
-                ],
-                {
+            const marker =
+                L.circleMarker(
+                    [
+                        node.latitude,
+                        node.longitude
+                    ],
+                    {
 
-                    radius: 8,
+                        radius: 8,
 
-                    color: isOnline
-                        ? "#16a34a"
-                        : "#dc2626",
+                        color:
+                            online
+                                ? "#16a34a"
+                                : "#dc2626",
 
-                    fillColor: isOnline
-                        ? "#16a34a"
-                        : "#dc2626",
+                        fillColor:
+                            online
+                                ? "#16a34a"
+                                : "#dc2626",
 
-                    fillOpacity: 0.9,
+                        fillOpacity:
+                            0.9,
 
-                    weight: 2
+                        weight: 2
 
-                }
+                    }
+                );
+
+
+            marker.bindPopup(`
+                <div class="map-node-tooltip">
+
+                    <strong>
+                        ${node.id}
+                    </strong>
+
+                    <br>
+
+                    Status:
+                    <strong>
+                        ${node.status}
+                    </strong>
+
+                    <br>
+
+                    Battery:
+                    ${node.battery}%
+
+                    <br>
+
+                    RSSI:
+                    ${
+                        node.rssi !== null
+                            ? `${node.rssi} dBm`
+                            : "--"
+                    }
+
+                    <br>
+
+                    GPS:
+                    ${node.gps}
+
+                </div>
+            `);
+
+
+            marker.on(
+                "click",
+                () =>
+                    focusMapOnNode(
+                        node
+                    )
             );
 
 
-        marker.bindPopup(`
-            <div class="map-node-tooltip">
-
-                <strong>${node.id}</strong>
-
-                <br>
-
-                Status:
-                <strong>
-                    ${node.status}
-                </strong>
-
-                <br>
-
-                Battery:
-                ${node.battery}%
-
-                <br>
-
-                RSSI:
-                ${
-                    node.rssi !== null
-                        ? `${node.rssi} dBm`
-                        : "--"
-                }
-
-                <br>
-
-                GPS:
-                ${node.gps}
-
-            </div>
-        `);
+            marker.addTo(
+                nodeLayer
+            );
 
 
-        marker.on(
-            "click",
-            () => focusMapOnNode(node)
-        );
+            nodeMarkers[
+                node.id
+            ] =
+                marker;
 
-
-        marker.addTo(
-            nodeLayer
-        );
-
-
-        nodeMarkers[node.id] =
-            marker;
-
-    });
+        }
+    );
 
 }
 
@@ -1439,9 +1874,11 @@ function createIncidentMarkers() {
 
                         color: "#dc2626",
 
-                        fillColor: "#dc2626",
+                        fillColor:
+                            "#dc2626",
 
-                        fillOpacity: 0.82,
+                        fillOpacity:
+                            0.82,
 
                         weight: 3
 
@@ -1492,7 +1929,8 @@ function createIncidentMarkers() {
 
             incidentMarkers[
                 incident.id
-            ] = marker;
+            ] =
+                marker;
 
         }
     );
@@ -1501,65 +1939,128 @@ function createIncidentMarkers() {
 
 
 /* =========================================
-   MAP FILTER
+   MAP FILTERS
 ========================================= */
 
-function setMapFilter(filter) {
+function setMapFilter(
+    filter
+) {
 
     currentMapFilter =
         filter;
 
 
     document
-        .querySelectorAll(".map-control")
-        .forEach(button => {
+        .querySelectorAll(
+            ".map-control"
+        )
+        .forEach(
+            button => {
 
-            button.classList.toggle(
-                "active",
-                button.dataset.mapFilter ===
-                    filter
+                button.classList.toggle(
+                    "active",
+                    button.dataset.mapFilter ===
+                        filter
+                );
+
+            }
+        );
+
+
+    if (
+        filter ===
+        "ALL"
+    ) {
+
+        if (
+            !map.hasLayer(
+                nodeLayer
+            )
+        ) {
+
+            nodeLayer.addTo(
+                map
             );
 
-        });
-
-
-    if (filter === "ALL") {
-
-        if (!map.hasLayer(nodeLayer)) {
-            nodeLayer.addTo(map);
         }
 
 
-        if (!map.hasLayer(incidentLayer)) {
-            incidentLayer.addTo(map);
-        }
+        if (
+            !map.hasLayer(
+                incidentLayer
+            )
+        ) {
 
-    }
+            incidentLayer.addTo(
+                map
+            );
 
-
-    if (filter === "NODES") {
-
-        if (map.hasLayer(incidentLayer)) {
-            map.removeLayer(incidentLayer);
-        }
-
-
-        if (!map.hasLayer(nodeLayer)) {
-            nodeLayer.addTo(map);
         }
 
     }
 
 
-    if (filter === "INCIDENTS") {
+    if (
+        filter ===
+        "NODES"
+    ) {
 
-        if (map.hasLayer(nodeLayer)) {
-            map.removeLayer(nodeLayer);
+        if (
+            map.hasLayer(
+                incidentLayer
+            )
+        ) {
+
+            map.removeLayer(
+                incidentLayer
+            );
+
         }
 
 
-        if (!map.hasLayer(incidentLayer)) {
-            incidentLayer.addTo(map);
+        if (
+            !map.hasLayer(
+                nodeLayer
+            )
+        ) {
+
+            nodeLayer.addTo(
+                map
+            );
+
+        }
+
+    }
+
+
+    if (
+        filter ===
+        "INCIDENTS"
+    ) {
+
+        if (
+            map.hasLayer(
+                nodeLayer
+            )
+        ) {
+
+            map.removeLayer(
+                nodeLayer
+            );
+
+        }
+
+
+        if (
+            !map.hasLayer(
+                incidentLayer
+            )
+        ) {
+
+            incidentLayer.addTo(
+                map
+            );
+
         }
 
     }
@@ -1570,87 +2071,19 @@ function setMapFilter(filter) {
 function setupMapFilterEvents() {
 
     document
-        .querySelectorAll(".map-control")
-        .forEach(button => {
-
-            button.addEventListener(
-                "click",
-                () =>
-                    setMapFilter(
-                        button.dataset.mapFilter
-                    )
-            );
-
-        });
-
-}
-
-
-/* =========================================
-   FIT MAP
-========================================= */
-
-function fitAllMapObjects() {
-
-    const points = [];
-
-
-    nodes.forEach(node => {
-
-        if (node.gpsValid) {
-
-            points.push([
-                node.latitude,
-                node.longitude
-            ]);
-
-        }
-
-    });
-
-
-    incidents.forEach(incident => {
-
-        points.push([
-            incident.latitude,
-            incident.longitude
-        ]);
-
-    });
-
-
-    if (points.length === 0) {
-        return;
-    }
-
-
-    const bounds =
-        L.latLngBounds(points);
-
-
-    map.fitBounds(
-        bounds,
-        {
-            padding: [30, 30]
-        }
-    );
-
-}
-
-
-function setupViewFullMapButton() {
-
-    document
-        .getElementById(
-            "viewFullMapButton"
+        .querySelectorAll(
+            ".map-control"
         )
-        .addEventListener(
-            "click",
-            () => {
+        .forEach(
+            button => {
 
-                map.invalidateSize();
-
-                fitAllMapObjects();
+                button.addEventListener(
+                    "click",
+                    () =>
+                        setMapFilter(
+                            button.dataset.mapFilter
+                        )
+                );
 
             }
         );
@@ -1659,8 +2092,68 @@ function setupViewFullMapButton() {
 
 
 /* =========================================
-   MAP FOCUS
+   MAP FIT / FOCUS
 ========================================= */
+
+function fitAllMapObjects() {
+
+    const points = [];
+
+
+    nodes.forEach(
+        node => {
+
+            if (
+                node.gpsValid
+            ) {
+
+                points.push(
+                    [
+                        node.latitude,
+                        node.longitude
+                    ]
+                );
+
+            }
+
+        }
+    );
+
+
+    incidents.forEach(
+        incident => {
+
+            points.push(
+                [
+                    incident.latitude,
+                    incident.longitude
+                ]
+            );
+
+        }
+    );
+
+
+    if (
+        points.length ===
+        0
+    ) {
+        return;
+    }
+
+
+    map.fitBounds(
+        L.latLngBounds(
+            points
+        ),
+        {
+            padding:
+                [30, 30]
+        }
+    );
+
+}
+
 
 function focusMapOnIncident(
     incident
@@ -1726,7 +2219,9 @@ function focusMapOnNode(
 
 
     const marker =
-        nodeMarkers[node.id];
+        nodeMarkers[
+            node.id
+        ];
 
 
     if (marker) {
@@ -1738,238 +2233,303 @@ function focusMapOnNode(
 }
 
 
+function setupMapButton() {
+
+    document.getElementById(
+        "viewFullMapButton"
+    ).addEventListener(
+        "click",
+        () => {
+
+            map.invalidateSize();
+
+            fitAllMapObjects();
+
+        }
+    );
+
+}
+
+
 /* =========================================
-   RENDER NODE TABLE
+   NODE TABLE
 ========================================= */
 
-function renderNodes() {
+function buildNodeRows(
+    targetId
+) {
 
-    const tableBody =
+    const body =
         document.getElementById(
-            "nodeTableBody"
+            targetId
         );
 
 
-    tableBody.innerHTML = "";
+    if (!body) {
+        return;
+    }
 
 
-    nodes.forEach(node => {
-
-        const row =
-            document.createElement("tr");
+    body.innerHTML = "";
 
 
-        const batteryClass =
-            node.battery < 50
-                ? "battery-low"
-                : "";
+    nodes.forEach(
+        node => {
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
 
 
-        const gpsDisplay =
-            node.gpsValid
-                ? "Available"
-                : "Unavailable";
+            const batteryClass =
+                node.battery <
+                50
+                    ? "battery-low"
+                    : "";
 
 
-        const gpsClass =
-            node.gpsValid
-                ? "gps-valid"
-                : "gps-unavailable";
+            const gpsDisplay =
+                node.gpsValid
+                    ? "Available"
+                    : "Unavailable";
 
 
-        const rssiDisplay =
-            node.rssi !== null
-                ? `${node.rssi} dBm`
-                : "--";
+            const gpsClass =
+                node.gpsValid
+                    ? "gps-valid"
+                    : "gps-unavailable";
 
 
-        row.innerHTML = `
-
-            <td>
-                <span class="node-id">
-                    ${node.id}
-                </span>
-            </td>
+            const rssiDisplay =
+                node.rssi !== null
+                    ? `${node.rssi} dBm`
+                    : "--";
 
 
-            <td>
+            row.innerHTML = `
 
-                <span class="node-status ${getNodeStatusClass(node.status)}">
+                <td>
 
-                    <span class="node-status-dot"></span>
+                    <span class="node-id">
+                        ${node.id}
+                    </span>
 
-                    ${node.status}
-
-                </span>
-
-            </td>
+                </td>
 
 
-            <td>
+                <td>
 
-                <div class="battery-wrapper">
+                    <span class="node-status ${getNodeStatusClass(
+                        node.status
+                    )}">
 
-                    <div class="battery-bar">
+                        <span class="node-status-dot"></span>
 
-                        <div
-                            class="battery-level ${batteryClass}"
-                            style="width: ${node.battery}%"
-                        ></div>
+                        ${node.status}
+
+                    </span>
+
+                </td>
+
+
+                <td>
+
+                    <div class="battery-wrapper">
+
+                        <div class="battery-bar">
+
+                            <div
+                                class="battery-level ${batteryClass}"
+                                style="width: ${node.battery}%"
+                            ></div>
+
+                        </div>
+
+                        <span>
+                            ${node.battery}%
+                        </span>
 
                     </div>
 
-                    <span>
-                        ${node.battery}%
+                </td>
+
+
+                <td>
+
+                    <span class="rssi-value">
+                        ${rssiDisplay}
                     </span>
 
-                </div>
-
-            </td>
+                </td>
 
 
-            <td>
+                <td>
 
-                <span class="rssi-value">
-                    ${rssiDisplay}
-                </span>
+                    <span class="${gpsClass}">
+                        ${gpsDisplay}
+                    </span>
 
-            </td>
-
-
-            <td>
-
-                <span class="${gpsClass}">
-                    ${gpsDisplay}
-                </span>
-
-            </td>
+                </td>
 
 
-            <td>
+                <td>
 
-                <span class="last-seen">
-                    ${node.lastSeen}
-                </span>
+                    <span class="last-seen">
+                        ${node.lastSeen}
+                    </span>
 
-            </td>
+                </td>
 
-        `;
-
-
-        row.addEventListener(
-            "click",
-            () => {
-
-                if (node.gpsValid) {
-
-                    focusMapOnNode(node);
-
-                }
-
-            }
-        );
+            `;
 
 
-        tableBody.appendChild(
-            row
-        );
+            row.addEventListener(
+                "click",
+                () =>
+                    focusMapOnNode(
+                        node
+                    )
+            );
 
-    });
+
+            body.appendChild(
+                row
+            );
+
+        }
+    );
+
+}
+
+
+function renderNodes() {
+
+    buildNodeRows(
+        "nodeTableBody"
+    );
+
+}
+
+
+function renderFullNodeTable() {
+
+    buildNodeRows(
+        "fullNodeTableBody"
+    );
 
 }
 
 
 /* =========================================
-   RENDER ROUTES
+   ROUTES
 ========================================= */
+
+function renderRouteRows(
+    targetId
+) {
+
+    const body =
+        document.getElementById(
+            targetId
+        );
+
+
+    if (!body) {
+        return;
+    }
+
+
+    body.innerHTML = "";
+
+
+    routes.forEach(
+        route => {
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+
+            const statusClass =
+                route.status ===
+                "ACTIVE"
+                    ? "route-active"
+                    : route.status ===
+                      "STANDBY"
+                        ? "route-standby"
+                        : "route-stale";
+
+
+            row.innerHTML = `
+
+                <td>
+                    <strong>
+                        ${route.source}
+                    </strong>
+                </td>
+
+                <td>
+                    ${route.destination}
+                </td>
+
+                <td>
+                    ${route.nextHop}
+                </td>
+
+                <td>
+                    ${route.hopCount}
+                </td>
+
+                <td>
+                    <span class="route-quality">
+                        ${route.quality}
+                    </span>
+                </td>
+
+                <td>
+                    <span class="route-status ${statusClass}">
+                        ${route.status}
+                    </span>
+                </td>
+
+            `;
+
+
+            body.appendChild(
+                row
+            );
+
+        }
+    );
+
+}
+
 
 function renderRoutes() {
 
-    const tableBody =
-        document.getElementById(
-            "routeTableBody"
-        );
+    renderRouteRows(
+        "routeTableBody"
+    );
+
+}
 
 
-    tableBody.innerHTML = "";
+function renderNetworkView() {
+
+    renderRouteRows(
+        "networkRouteTableBody"
+    );
 
 
-    routes.forEach(route => {
-
-        const row =
-            document.createElement("tr");
-
-
-        let routeStatusClass =
-            "route-stale";
-
-
-        if (route.status === "ACTIVE") {
-
-            routeStatusClass =
-                "route-active";
-
-        }
-
-
-        if (route.status === "STANDBY") {
-
-            routeStatusClass =
-                "route-standby";
-
-        }
-
-
-        row.innerHTML = `
-
-            <td>
-                <strong>
-                    ${route.source}
-                </strong>
-            </td>
-
-            <td>
-                ${route.destination}
-            </td>
-
-            <td>
-                ${route.nextHop}
-            </td>
-
-            <td>
-                ${route.hopCount}
-            </td>
-
-            <td>
-
-                <span class="route-quality">
-                    ${route.quality}
-                </span>
-
-            </td>
-
-            <td>
-
-                <span class="route-status ${routeStatusClass}">
-                    ${route.status}
-                </span>
-
-            </td>
-
-        `;
-
-
-        tableBody.appendChild(
-            row
-        );
-
-    });
+    renderNetworkTopology();
 
 }
 
 
 /* =========================================
-   TOPOLOGY
+   NETWORK TOPOLOGY
 ========================================= */
 
 const topologyPositions = {
@@ -2012,26 +2572,37 @@ const topologyPositions = {
 };
 
 
-function renderTopology() {
+function drawTopology(
+    svgId,
+    nodeContainerId
+) {
 
     const svg =
         document.getElementById(
-            "topologySvg"
+            svgId
         );
 
 
-    const nodeContainer =
+    const container =
         document.getElementById(
-            "topologyNodes"
+            nodeContainerId
         );
+
+
+    if (
+        !svg ||
+        !container
+    ) {
+        return;
+    }
 
 
     svg.innerHTML = "";
 
-    nodeContainer.innerHTML = "";
+    container.innerHTML = "";
 
 
-    const topologyConnections = [
+    const connections = [
 
         {
             from: "DM-001",
@@ -2078,7 +2649,7 @@ function renderTopology() {
     ];
 
 
-    topologyConnections.forEach(
+    connections.forEach(
         connection => {
 
             const from =
@@ -2093,7 +2664,10 @@ function renderTopology() {
                 ];
 
 
-            if (!from || !to) {
+            if (
+                !from ||
+                !to
+            ) {
                 return;
             }
 
@@ -2166,92 +2740,80 @@ function renderTopology() {
     );
 
 
-    nodes.forEach(node => {
+    nodes.forEach(
+        node => {
 
-        const position =
-            topologyPositions[
-                node.id
-            ];
-
-
-        if (!position) {
-            return;
-        }
+            const position =
+                topologyPositions[
+                    node.id
+                ];
 
 
-        const element =
-            document.createElement(
-                "div"
+            if (!position) {
+                return;
+            }
+
+
+            const element =
+                document.createElement(
+                    "div"
+                );
+
+
+            const online =
+                node.status ===
+                "ONLINE";
+
+
+            element.className =
+                `topology-node ${
+                    online
+                        ? "active"
+                        : "offline"
+                }`;
+
+
+            element.style.left =
+                `${position.x}%`;
+
+
+            element.style.top =
+                `${position.y}%`;
+
+
+            element.innerHTML = `
+
+                <span class="topology-node-id">
+                    ${node.id}
+                </span>
+
+                <span class="topology-node-status">
+
+                    <span class="topology-node-dot ${
+                        online
+                            ? "online"
+                            : "offline"
+                    }"></span>
+
+                    ${node.status}
+
+                </span>
+
+            `;
+
+
+            container.appendChild(
+                element
             );
 
-
-        const isOnline =
-            node.status ===
-            "ONLINE";
+        }
+    );
 
 
-        element.className =
-            `topology-node ${
-                isOnline
-                    ? "active"
-                    : "offline"
-            }`;
-
-
-        element.style.left =
-            `${position.x}%`;
-
-
-        element.style.top =
-            `${position.y}%`;
-
-
-        element.innerHTML = `
-
-            <span class="topology-node-id">
-                ${node.id}
-            </span>
-
-            <span class="topology-node-status">
-
-                <span class="topology-node-dot ${
-                    isOnline
-                        ? "online"
-                        : "offline"
-                }"></span>
-
-                ${node.status}
-
-            </span>
-
-        `;
-
-
-        element.addEventListener(
-            "click",
-            () => {
-
-                if (node.gpsValid) {
-
-                    focusMapOnNode(
-                        node
-                    );
-
-                }
-
-            }
-        );
-
-
-        nodeContainer.appendChild(
-            element
-        );
-
-    });
-
-
-    const gatewayPosition =
-        topologyPositions.GATEWAY;
+    const gateway =
+        topologyPositions[
+            "GATEWAY"
+        ];
 
 
     const gatewayElement =
@@ -2265,11 +2827,11 @@ function renderTopology() {
 
 
     gatewayElement.style.left =
-        `${gatewayPosition.x}%`;
+        `${gateway.x}%`;
 
 
     gatewayElement.style.top =
-        `${gatewayPosition.y}%`;
+        `${gateway.y}%`;
 
 
     gatewayElement.innerHTML = `
@@ -2285,155 +2847,203 @@ function renderTopology() {
     `;
 
 
-    nodeContainer.appendChild(
+    container.appendChild(
         gatewayElement
     );
 
 }
 
 
-/* =========================================
-   RENDER MESSAGE HISTORY
-========================================= */
+function renderTopology() {
 
-function renderMessages() {
+    drawTopology(
+        "topologySvg",
+        "topologyNodes"
+    );
 
-    const tableBody =
-        document.getElementById(
-            "messageTableBody"
-        );
+}
 
 
-    const messageCount =
-        document.getElementById(
-            "messageCount"
-        );
+function renderNetworkTopology() {
 
-
-    messageCount.textContent =
-        String(messages.length).padStart(
-            2,
-            "0"
-        );
-
-
-    tableBody.innerHTML = "";
-
-
-    messages.forEach(message => {
-
-        const row =
-            document.createElement(
-                "tr"
-            );
-
-
-        let statusClass =
-            "message-failed";
-
-
-        if (
-            message.status ===
-            "DELIVERED"
-        ) {
-
-            statusClass =
-                "message-delivered";
-
-        }
-
-
-        if (
-            message.status ===
-            "QUEUED"
-        ) {
-
-            statusClass =
-                "message-queued";
-
-        }
-
-
-        if (
-            message.status ===
-            "FORWARDED"
-        ) {
-
-            statusClass =
-                "message-forwarded";
-
-        }
-
-
-        row.innerHTML = `
-
-            <td>
-
-                <span class="message-id">
-                    ${message.id}
-                </span>
-
-            </td>
-
-            <td>
-                ${message.sender}
-            </td>
-
-            <td>
-                ${message.category}
-            </td>
-
-            <td>
-
-                <span class="priority-badge ${getPriorityClass(message.priority)}">
-                    ${message.priority}
-                </span>
-
-            </td>
-
-            <td>
-                ${message.hopCount}
-            </td>
-
-            <td>
-                ${message.ttl}
-            </td>
-
-            <td>
-
-                <span class="message-status ${statusClass}">
-                    ${message.status}
-                </span>
-
-            </td>
-
-            <td>
-                ${message.time}
-            </td>
-
-        `;
-
-
-        row.addEventListener(
-            "click",
-            () => showMessageDetails(
-                message
-            )
-        );
-
-
-        tableBody.appendChild(
-            row
-        );
-
-    });
+    drawTopology(
+        "networkTopologySvg",
+        "networkTopologyNodes"
+    );
 
 }
 
 
 /* =========================================
-   MESSAGE DETAILS
+   MESSAGE TABLE
 ========================================= */
+
+function getMessageStatusClass(
+    status
+) {
+
+    if (
+        status ===
+        "DELIVERED"
+    ) {
+
+        return "message-delivered";
+
+    }
+
+
+    if (
+        status ===
+        "QUEUED"
+    ) {
+
+        return "message-queued";
+
+    }
+
+
+    if (
+        status ===
+        "FORWARDED"
+    ) {
+
+        return "message-forwarded";
+
+    }
+
+
+    return "message-failed";
+
+}
+
+
+function buildMessageRows(
+    targetId
+) {
+
+    const body =
+        document.getElementById(
+            targetId
+        );
+
+
+    if (!body) {
+        return;
+    }
+
+
+    body.innerHTML = "";
+
+
+    messages.forEach(
+        message => {
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+
+            row.innerHTML = `
+
+                <td>
+
+                    <span class="message-id">
+                        ${message.id}
+                    </span>
+
+                </td>
+
+                <td>
+                    ${message.sender}
+                </td>
+
+                <td>
+                    ${message.category}
+                </td>
+
+                <td>
+
+                    <span class="priority-badge ${getPriorityClass(
+                        message.priority
+                    )}">
+                        ${message.priority}
+                    </span>
+
+                </td>
+
+                <td>
+                    ${message.hopCount}
+                </td>
+
+                <td>
+                    ${message.ttl}
+                </td>
+
+                <td>
+
+                    <span class="message-status ${getMessageStatusClass(
+                        message.status
+                    )}">
+                        ${message.status}
+                    </span>
+
+                </td>
+
+                <td>
+                    ${message.time}
+                </td>
+
+            `;
+
+
+            row.addEventListener(
+                "click",
+                () =>
+                    showMessageDetails(
+                        message
+                    )
+            );
+
+
+            body.appendChild(
+                row
+            );
+
+        }
+    );
+
+}
+
+
+function renderMessages() {
+
+    buildMessageRows(
+        "messageTableBody"
+    );
+
+
+    document.getElementById(
+        "messageCount"
+    ).textContent =
+        String(
+            messages.length
+        ).padStart(
+            2,
+            "0"
+        );
+
+}
+
+
+function renderFullMessageTable() {
+
+    buildMessageRows(
+        "fullMessageTableBody"
+    );
+
+}
+
 
 function showMessageDetails(
     message
@@ -2454,7 +3064,119 @@ function showMessageDetails(
 
 
 /* =========================================
-   RENDER SYSTEM HEALTH
+   INCIDENT MANAGEMENT VIEW
+========================================= */
+
+function renderIncidentManagement() {
+
+    const container =
+        document.getElementById(
+            "incidentManagementList"
+        );
+
+
+    if (!container) {
+        return;
+    }
+
+
+    container.innerHTML = "";
+
+
+    incidents.forEach(
+        incident => {
+
+            const item =
+                document.createElement(
+                    "div"
+                );
+
+
+            item.className =
+                "incident-item";
+
+
+            item.innerHTML = `
+
+                <div class="incident-top">
+
+                    <span class="priority-badge ${getPriorityClass(
+                        incident.priority
+                    )}">
+                        ${incident.priority}
+                    </span>
+
+                    <span class="incident-time">
+                        ${incident.time}
+                    </span>
+
+                </div>
+
+
+                <div class="incident-title">
+                    ${incident.category}
+                </div>
+
+
+                <div class="incident-message">
+                    ${incident.message}
+                </div>
+
+
+                <div class="incident-meta">
+
+                    <span>
+                        ID: ${incident.id}
+                    </span>
+
+                    <span>
+                        Node: ${incident.node}
+                    </span>
+
+                    <span>
+                        Team:
+                        ${
+                            incident.assignedTeam
+                                || "Unassigned"
+                        }
+                    </span>
+
+                </div>
+
+
+                <div class="incident-status ${getStatusClass(
+                    incident.status
+                )}">
+                    ${incident.status.replaceAll(
+                        "_",
+                        " "
+                    )}
+                </div>
+
+            `;
+
+
+            item.addEventListener(
+                "click",
+                () =>
+                    openIncidentModal(
+                        incident.id
+                    )
+            );
+
+
+            container.appendChild(
+                item
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================
+   SYSTEM HEALTH
 ========================================= */
 
 function renderSystemHealth() {
@@ -2468,117 +3190,90 @@ function renderSystemHealth() {
     container.innerHTML = "";
 
 
-    systemHealth.forEach(service => {
+    systemHealth.forEach(
+        service => {
 
-        const card =
-            document.createElement(
-                "div"
-            );
-
-
-        let healthClass =
-            "health-down";
+            const card =
+                document.createElement(
+                    "div"
+                );
 
 
-        if (
-            service.state ===
-            "UP"
-        ) {
-
-            healthClass =
-                "health-up";
-
-        }
+            let stateClass =
+                "health-down";
 
 
-        if (
-            service.state ===
-            "WARNING"
-        ) {
+            if (
+                service.state ===
+                "UP"
+            ) {
 
-            healthClass =
-                "health-warning";
-
-        }
-
-
-        card.className =
-            "health-card";
-
-
-        card.innerHTML = `
-
-            <div class="health-card-top">
-
-                <span class="health-service">
-                    ${service.service}
-                </span>
-
-                <span class="health-state ${healthClass}">
-
-                    <span class="health-state-dot"></span>
-
-                    ${service.state}
-
-                </span>
-
-            </div>
-
-
-            <p class="health-description">
-                ${service.description}
-            </p>
-
-
-            <div class="health-metric">
-
-                <span class="health-metric-label">
-                    ${service.metricLabel}
-                </span>
-
-                <span class="health-metric-value">
-                    ${service.metricValue}
-                </span>
-
-            </div>
-
-        `;
-
-
-        container.appendChild(
-            card
-        );
-
-    });
-
-}
-
-
-/* =========================================
-   NODE BUTTON
-========================================= */
-
-function setupNodeButton() {
-
-    document
-        .getElementById(
-            "viewAllNodesButton"
-        )
-        .addEventListener(
-            "click",
-            () => {
-
-                document
-                    .querySelector(
-                        ".node-panel"
-                    )
-                    .scrollIntoView({
-                        behavior: "smooth",
-                        block: "start"
-                    });
+                stateClass =
+                    "health-up";
 
             }
-        );
+
+
+            if (
+                service.state ===
+                "WARNING"
+            ) {
+
+                stateClass =
+                    "health-warning";
+
+            }
+
+
+            card.className =
+                "health-card";
+
+
+            card.innerHTML = `
+
+                <div class="health-card-top">
+
+                    <span class="health-service">
+                        ${service.service}
+                    </span>
+
+                    <span class="health-state ${stateClass}">
+
+                        <span class="health-state-dot"></span>
+
+                        ${service.state}
+
+                    </span>
+
+                </div>
+
+
+                <p class="health-description">
+                    ${service.description}
+                </p>
+
+
+                <div class="health-metric">
+
+                    <span class="health-metric-label">
+                        ${service.metricLabel}
+                    </span>
+
+                    <span class="health-metric-value">
+                        ${service.metricValue}
+                    </span>
+
+                </div>
+
+            `;
+
+
+            container.appendChild(
+                card
+            );
+
+        }
+    );
 
 }
 
@@ -2590,6 +3285,10 @@ function setupNodeButton() {
 document.addEventListener(
     "DOMContentLoaded",
     () => {
+
+        applyRolePermissions();
+
+        setupNavigation();
 
         updateStatistics();
 
@@ -2611,9 +3310,7 @@ document.addEventListener(
 
         setupMapFilterEvents();
 
-        setupViewFullMapButton();
-
-        setupNodeButton();
+        setupMapButton();
 
         initializeMap();
 

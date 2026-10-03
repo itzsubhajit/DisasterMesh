@@ -38,9 +38,7 @@
 
 body {
     font-family: "Segoe UI", Arial, sans-serif;
-
     background: var(--bg-main);
-
     color: var(--text-primary);
 }
 
@@ -50,7 +48,8 @@ body.modal-open {
 
 button,
 a,
-select {
+select,
+input {
     font-family: inherit;
 }
 
@@ -60,7 +59,6 @@ button {
 
 .app {
     min-height: 100vh;
-
     display: flex;
 }
 
@@ -71,15 +69,12 @@ button {
 
 .sidebar {
     width: 260px;
-
     min-height: 100vh;
 
     background: var(--bg-sidebar);
-
     color: white;
 
     display: flex;
-
     flex-direction: column;
 
     padding: 24px 16px;
@@ -87,9 +82,7 @@ button {
 
 .brand {
     display: flex;
-
     align-items: center;
-
     gap: 12px;
 
     padding: 0 8px 28px;
@@ -100,24 +93,20 @@ button {
     height: 42px;
 
     display: flex;
-
     align-items: center;
     justify-content: center;
 
     border-radius: 10px;
 
     background: #1f2937;
-
     border: 1px solid #334155;
 
     font-size: 13px;
-
     font-weight: 700;
 }
 
 .brand-text h1 {
     font-size: 17px;
-
     font-weight: 600;
 }
 
@@ -133,9 +122,7 @@ button {
 
 .navigation {
     display: flex;
-
     flex-direction: column;
-
     gap: 5px;
 }
 
@@ -143,7 +130,6 @@ button {
     margin: 12px 10px 8px;
 
     font-size: 10px;
-
     font-weight: 600;
 
     letter-spacing: 1.2px;
@@ -159,9 +145,7 @@ button {
     min-height: 44px;
 
     display: flex;
-
     align-items: center;
-
     gap: 13px;
 
     padding: 0 12px;
@@ -173,17 +157,19 @@ button {
     text-decoration: none;
 
     font-size: 13px;
+
+    transition:
+        background 0.15s ease,
+        color 0.15s ease;
 }
 
 .nav-item:hover {
     background: #182230;
-
     color: white;
 }
 
 .nav-item.active {
     background: #1d2c40;
-
     color: white;
 }
 
@@ -209,9 +195,7 @@ button {
 
 .system-status {
     display: flex;
-
     align-items: center;
-
     gap: 10px;
 
     padding: 13px;
@@ -252,7 +236,7 @@ button {
 
 
 /* =========================
-   MAIN
+   MAIN CONTENT
 ========================= */
 
 .main-content {
@@ -372,6 +356,51 @@ button {
     color: var(--text-secondary);
 
     font-size: 9px;
+}
+
+
+/* =========================
+   PAGE VIEWS
+========================= */
+
+.page-view {
+    display: none;
+}
+
+.page-view.active-view {
+    display: block;
+}
+
+.page-section-header {
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    margin-bottom: 18px;
+
+    padding: 5px 2px;
+}
+
+.page-section-header h3 {
+    margin-top: 3px;
+
+    font-size: 20px;
+
+    font-weight: 650;
+}
+
+.page-section-header p {
+    margin-top: 6px;
+
+    color: var(--text-secondary);
+
+    font-size: 11px;
+}
+
+.standalone-panel {
+    margin-bottom: 18px;
 }
 
 
@@ -516,6 +545,10 @@ button {
     cursor: pointer;
 
     font-size: 10px;
+
+    transition:
+        border-color 0.15s ease,
+        color 0.15s ease;
 }
 
 .panel-button:hover {
@@ -587,10 +620,6 @@ button {
     font-size: 9px;
 
     font-weight: 600;
-}
-
-.map-control:hover {
-    color: var(--text-primary);
 }
 
 .map-control.active {
@@ -685,10 +714,6 @@ button {
     border-radius: 3px;
 
     background: var(--critical);
-}
-
-.map-node-tooltip {
-    font-size: 10px;
 }
 
 
@@ -801,12 +826,6 @@ button {
     font-size: 9px;
 }
 
-.reset-filter-button:hover {
-    border-color: #cbd5e1;
-
-    color: var(--text-primary);
-}
-
 .incident-list {
     max-height: 330px;
 
@@ -821,10 +840,6 @@ button {
     cursor: pointer;
 
     transition: background 0.15s ease;
-}
-
-.incident-item:last-child {
-    border-bottom: none;
 }
 
 .incident-item:hover {
@@ -973,7 +988,7 @@ button {
 
 
 /* =========================
-   NODE HEALTH
+   NODE TABLE
 ========================= */
 
 .node-table-container {
@@ -1020,14 +1035,14 @@ button {
     white-space: nowrap;
 }
 
-.node-table tbody tr:last-child td {
-    border-bottom: none;
-}
-
 .node-table tbody tr:hover {
     background: #fafcff;
 
     cursor: pointer;
+}
+
+.node-table tbody tr:last-child td {
+    border-bottom: none;
 }
 
 .node-id {
@@ -1401,7 +1416,7 @@ button {
 
 
 /* =========================
-   MESSAGE HISTORY
+   MESSAGES
 ========================= */
 
 .messages-panel {
@@ -1458,20 +1473,18 @@ button {
     white-space: nowrap;
 }
 
-.message-table tbody tr:last-child td {
-    border-bottom: none;
-}
-
 .message-table tbody tr:hover {
     background: #fafcff;
 
     cursor: pointer;
 }
 
+.message-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
 .message-id {
     font-weight: 700;
-
-    color: var(--text-primary);
 }
 
 .message-status {
@@ -1669,6 +1682,135 @@ button {
 
 
 /* =========================
+   SETTINGS
+========================= */
+
+.settings-grid {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 18px;
+}
+
+.settings-card {
+    padding: 0;
+
+    overflow: hidden;
+}
+
+.settings-card-header {
+    padding: 18px 20px;
+
+    border-bottom: 1px solid var(--border);
+
+    background: #fafbfc;
+}
+
+.settings-card-header h4 {
+    margin-top: 4px;
+
+    font-size: 13px;
+}
+
+.settings-row {
+    min-height: 58px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 12px 20px;
+
+    border-bottom: 1px solid var(--border);
+
+    color: var(--text-secondary);
+
+    font-size: 10px;
+}
+
+.settings-row:last-child {
+    border-bottom: none;
+}
+
+.settings-row strong {
+    color: var(--text-primary);
+
+    font-weight: 650;
+}
+
+.admin-only {
+    display: none;
+}
+
+.admin-visible {
+    display: block;
+}
+
+
+/* =========================
+   TOGGLE
+========================= */
+
+.toggle {
+    position: relative;
+
+    width: 34px;
+    height: 18px;
+
+    display: inline-block;
+}
+
+.toggle input {
+    display: none;
+}
+
+.toggle-slider {
+    position: absolute;
+
+    inset: 0;
+
+    background: #cbd5e1;
+
+    border-radius: 20px;
+
+    cursor: pointer;
+
+    transition: background 0.2s ease;
+}
+
+.toggle-slider::before {
+    content: "";
+
+    position: absolute;
+
+    width: 14px;
+    height: 14px;
+
+    left: 2px;
+    top: 2px;
+
+    background: white;
+
+    border-radius: 50%;
+
+    transition: transform 0.2s ease;
+}
+
+.toggle input:checked + .toggle-slider {
+    background: var(--accent);
+}
+
+.toggle input:checked + .toggle-slider::before {
+    transform: translateX(16px);
+}
+
+
+/* =========================
    MODAL
 ========================= */
 
@@ -1753,12 +1895,6 @@ button {
     font-size: 20px;
 }
 
-.modal-close:hover {
-    background: #f1f5f9;
-
-    color: var(--text-primary);
-}
-
 .modal-body {
     padding: 22px;
 }
@@ -1817,7 +1953,7 @@ button {
 }
 
 .assignment-group {
-    display: flex;
+    display: none;
 
     flex-direction: column;
 
@@ -1848,10 +1984,6 @@ button {
     outline: none;
 
     font-size: 10px;
-}
-
-.assignment-group select:focus {
-    border-color: var(--accent);
 }
 
 
@@ -1997,20 +2129,12 @@ button {
     color: white;
 }
 
-.primary-action:hover {
-    background: #1d4ed8;
-}
-
 .cancel-action {
     background: var(--critical-light);
 
     border: 1px solid #fecaca;
 
     color: var(--critical);
-}
-
-.cancel-action:hover {
-    background: #fee2e2;
 }
 
 
@@ -2030,11 +2154,6 @@ button {
     border-radius: 10px;
 }
 
-.incident-list::-webkit-scrollbar-track,
-.incident-modal::-webkit-scrollbar-track {
-    background: #f8fafc;
-}
-
 
 /* =========================
    RESPONSIVE
@@ -2052,6 +2171,14 @@ button {
 
     .system-health-grid {
         grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+@media (max-width: 900px) {
+
+    .settings-grid {
+        grid-template-columns: 1fr;
     }
 
 }
@@ -2089,16 +2216,6 @@ button {
         grid-template-columns: repeat(2, 1fr);
     }
 
-    .workflow {
-        overflow-x: auto;
-
-        padding-bottom: 5px;
-    }
-
-    .workflow-step {
-        flex-shrink: 0;
-    }
-
 }
 
 @media (max-width: 520px) {
@@ -2127,10 +2244,7 @@ button {
         flex-direction: column;
     }
 
-    .filter-group {
-        width: 100%;
-    }
-
+    .filter-group,
     .reset-filter-button {
         width: 100%;
     }
@@ -2143,16 +2257,12 @@ button {
         grid-template-columns: 1fr;
     }
 
-    .modal-footer {
-        flex-direction: column;
+    .workflow {
+        overflow-x: auto;
     }
 
-    .modal-action {
-        width: 100%;
-    }
-
-    .topology-canvas {
-        height: 420px;
+    .workflow-step {
+        flex-shrink: 0;
     }
 
 }

@@ -1,10 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>DisasterMesh | Rescue Dashboard</title>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        DisasterMesh | Rescue Dashboard
+    </title>
+
 
     <!-- Leaflet -->
     <link
@@ -12,157 +20,282 @@
         href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     >
 
-    <link rel="stylesheet" href="css/style.css">
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+
 </head>
+
 
 <body>
 
-    <div class="app">
+<div class="app">
 
-        <!-- Sidebar -->
-        <aside class="sidebar">
 
-            <div class="brand">
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
 
-                <div class="brand-mark">
-                    DM
-                </div>
+    <aside class="sidebar">
 
-                <div class="brand-text">
-                    <h1>DisasterMesh</h1>
-                    <span>Emergency Response System</span>
+        <div class="brand">
+
+            <div class="brand-mark">
+                DM
+            </div>
+
+            <div class="brand-text">
+
+                <h1>
+                    DisasterMesh
+                </h1>
+
+                <span>
+                    Emergency Response System
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <nav class="navigation">
+
+            <div class="nav-section-title">
+                OPERATIONS
+            </div>
+
+
+            <a
+                href="#"
+                class="nav-item active"
+                data-view="dashboard"
+            >
+
+                <span class="nav-icon">
+                    ▦
+                </span>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </a>
+
+
+            <a
+                href="#"
+                class="nav-item"
+                data-view="incidents"
+            >
+
+                <span class="nav-icon">
+                    !
+                </span>
+
+                <span>
+                    Incidents
+                </span>
+
+            </a>
+
+
+            <a
+                href="#"
+                class="nav-item"
+                data-view="nodes"
+            >
+
+                <span class="nav-icon">
+                    ◉
+                </span>
+
+                <span>
+                    Nodes
+                </span>
+
+            </a>
+
+
+            <a
+                href="#"
+                class="nav-item"
+                data-view="network"
+            >
+
+                <span class="nav-icon">
+                    ⌁
+                </span>
+
+                <span>
+                    Network
+                </span>
+
+            </a>
+
+
+            <a
+                href="#"
+                class="nav-item"
+                data-view="messages"
+            >
+
+                <span class="nav-icon">
+                    ≡
+                </span>
+
+                <span>
+                    Messages
+                </span>
+
+            </a>
+
+
+            <div class="nav-section-title system-title">
+                SYSTEM
+            </div>
+
+
+            <a
+                href="#"
+                class="nav-item"
+                data-view="settings"
+            >
+
+                <span class="nav-icon">
+                    ⚙
+                </span>
+
+                <span>
+                    Settings
+                </span>
+
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-footer">
+
+            <div class="system-status">
+
+                <span class="status-dot"></span>
+
+                <div>
+
+                    <strong>
+                        System Operational
+                    </strong>
+
+                    <small>
+                        All core services running
+                    </small>
+
                 </div>
 
             </div>
 
+        </div>
 
-            <nav class="navigation">
-
-                <div class="nav-section-title">
-                    OPERATIONS
-                </div>
-
-                <a href="#" class="nav-item active">
-                    <span class="nav-icon">▦</span>
-                    <span>Dashboard</span>
-                </a>
-
-                <a href="#" class="nav-item">
-                    <span class="nav-icon">!</span>
-                    <span>Incidents</span>
-                </a>
-
-                <a href="#" class="nav-item">
-                    <span class="nav-icon">◉</span>
-                    <span>Nodes</span>
-                </a>
-
-                <a href="#" class="nav-item">
-                    <span class="nav-icon">⌁</span>
-                    <span>Network</span>
-                </a>
-
-                <a href="#" class="nav-item">
-                    <span class="nav-icon">≡</span>
-                    <span>Messages</span>
-                </a>
+    </aside>
 
 
-                <div class="nav-section-title system-title">
-                    SYSTEM
-                </div>
 
-                <a href="#" class="nav-item">
-                    <span class="nav-icon">⚙</span>
-                    <span>Settings</span>
-                </a>
+    <!-- =========================
+         MAIN CONTENT
+    ========================== -->
 
-            </nav>
+    <main class="main-content">
 
 
-            <div class="sidebar-footer">
+        <!-- TOPBAR -->
 
-                <div class="system-status">
+        <header class="topbar">
+
+            <div class="page-heading">
+
+                <span
+                    class="eyebrow"
+                    id="pageEyebrow"
+                >
+                    RESCUE OPERATIONS
+                </span>
+
+
+                <h2 id="pageTitle">
+                    Command Dashboard
+                </h2>
+
+
+                <p id="pageDescription">
+                    Monitor incidents, field nodes and network activity.
+                </p>
+
+            </div>
+
+
+            <div class="topbar-actions">
+
+
+                <div class="system-indicator">
 
                     <span class="status-dot"></span>
 
-                    <div>
-                        <strong>System Operational</strong>
-                        <small>All core services running</small>
-                    </div>
-
-                </div>
-
-            </div>
-
-        </aside>
-
-
-        <!-- Main Content -->
-        <main class="main-content">
-
-            <!-- Topbar -->
-            <header class="topbar">
-
-                <div class="page-heading">
-
-                    <span class="eyebrow">
-                        RESCUE OPERATIONS
+                    <span>
+                        Online
                     </span>
 
-                    <h2>
-                        Command Dashboard
-                    </h2>
-
-                    <p>
-                        Monitor incidents, field nodes and network activity.
-                    </p>
-
                 </div>
 
 
-                <div class="topbar-actions">
+                <div class="operator operator-menu">
 
-                    <div class="system-indicator">
+                    <div class="operator-avatar">
+                        RO
+                    </div>
 
-                        <span class="status-dot"></span>
 
-                        <span>
-                            Online
+                    <div class="operator-info">
+
+                        <strong id="currentUserName">
+                            Rescue Operator
+                        </strong>
+
+                        <span id="currentUserRole">
+                            Rescue Operator
                         </span>
 
                     </div>
 
-
-                    <div class="operator">
-
-                        <div class="operator-avatar">
-                            RO
-                        </div>
-
-                        <div class="operator-info">
-
-                            <strong>
-                                Rescue Operator
-                            </strong>
-
-                            <span>
-                                Operator
-                            </span>
-
-                        </div>
-
-                    </div>
-
                 </div>
 
-            </header>
+            </div>
+
+        </header>
 
 
-            <!-- Dashboard -->
-            <section class="dashboard-content">
 
-                <!-- Statistics -->
+        <!-- =========================
+             VIEWS
+        ========================== -->
+
+        <section class="dashboard-content">
+
+
+            <!-- =========================
+                 DASHBOARD VIEW
+            ========================== -->
+
+            <div
+                class="page-view active-view"
+                id="view-dashboard"
+            >
+
+
+                <!-- STATISTICS -->
+
                 <div class="stats-grid">
 
                     <div class="stat-card">
@@ -267,10 +400,12 @@
                 </div>
 
 
-                <!-- Map + Incident Queue -->
+
+                <!-- MAP + INCIDENTS -->
+
                 <div class="dashboard-grid">
 
-                    <!-- Emergency Map -->
+
                     <section class="panel map-panel">
 
                         <div class="panel-header">
@@ -343,6 +478,7 @@
                                     MAP LEGEND
                                 </div>
 
+
                                 <div class="legend-item">
 
                                     <span class="legend-node online"></span>
@@ -353,6 +489,7 @@
 
                                 </div>
 
+
                                 <div class="legend-item">
 
                                     <span class="legend-node offline"></span>
@@ -362,6 +499,7 @@
                                     </span>
 
                                 </div>
+
 
                                 <div class="legend-item">
 
@@ -380,7 +518,7 @@
                     </section>
 
 
-                    <!-- Incident Queue -->
+
                     <section class="panel incident-panel">
 
                         <div class="panel-header">
@@ -408,16 +546,17 @@
                         </div>
 
 
-                        <!-- Filters -->
                         <div class="incident-filters">
 
                             <div class="filter-group">
 
-                                <label for="priorityFilter">
+                                <label>
                                     Priority
                                 </label>
 
-                                <select id="priorityFilter">
+                                <select
+                                    id="priorityFilter"
+                                >
 
                                     <option value="ALL">
                                         All Priorities
@@ -446,11 +585,13 @@
 
                             <div class="filter-group">
 
-                                <label for="categoryFilter">
+                                <label>
                                     Category
                                 </label>
 
-                                <select id="categoryFilter">
+                                <select
+                                    id="categoryFilter"
+                                >
 
                                     <option value="ALL">
                                         All Categories
@@ -502,7 +643,9 @@
                 </div>
 
 
-                <!-- Node Health -->
+
+                <!-- NODE HEALTH -->
+
                 <section class="panel node-panel">
 
                     <div class="panel-header">
@@ -538,12 +681,29 @@
 
                                 <tr>
 
-                                    <th>Node</th>
-                                    <th>Status</th>
-                                    <th>Battery</th>
-                                    <th>Signal</th>
-                                    <th>GPS</th>
-                                    <th>Last Seen</th>
+                                    <th>
+                                        Node
+                                    </th>
+
+                                    <th>
+                                        Status
+                                    </th>
+
+                                    <th>
+                                        Battery
+                                    </th>
+
+                                    <th>
+                                        Signal
+                                    </th>
+
+                                    <th>
+                                        GPS
+                                    </th>
+
+                                    <th>
+                                        Last Seen
+                                    </th>
 
                                 </tr>
 
@@ -560,7 +720,9 @@
                 </section>
 
 
-                <!-- Network Topology -->
+
+                <!-- NETWORK TOPOLOGY -->
+
                 <section class="panel topology-panel">
 
                     <div class="panel-header">
@@ -641,19 +803,38 @@
 
                                         <tr>
 
-                                            <th>Source</th>
-                                            <th>Destination</th>
-                                            <th>Next Hop</th>
-                                            <th>Hops</th>
-                                            <th>Quality</th>
-                                            <th>Status</th>
+                                            <th>
+                                                Source
+                                            </th>
+
+                                            <th>
+                                                Destination
+                                            </th>
+
+                                            <th>
+                                                Next Hop
+                                            </th>
+
+                                            <th>
+                                                Hops
+                                            </th>
+
+                                            <th>
+                                                Quality
+                                            </th>
+
+                                            <th>
+                                                Status
+                                            </th>
 
                                         </tr>
 
                                     </thead>
 
 
-                                    <tbody id="routeTableBody">
+                                    <tbody
+                                        id="routeTableBody"
+                                    >
                                     </tbody>
 
                                 </table>
@@ -667,7 +848,9 @@
                 </section>
 
 
-                <!-- Message History -->
+
+                <!-- MESSAGE TRAFFIC -->
+
                 <section class="panel messages-panel">
 
                     <div class="panel-header">
@@ -703,21 +886,46 @@
 
                                 <tr>
 
-                                    <th>Message ID</th>
-                                    <th>Sender</th>
-                                    <th>Category</th>
-                                    <th>Priority</th>
-                                    <th>Hops</th>
-                                    <th>TTL</th>
-                                    <th>Status</th>
-                                    <th>Time</th>
+                                    <th>
+                                        Message ID
+                                    </th>
+
+                                    <th>
+                                        Sender
+                                    </th>
+
+                                    <th>
+                                        Category
+                                    </th>
+
+                                    <th>
+                                        Priority
+                                    </th>
+
+                                    <th>
+                                        Hops
+                                    </th>
+
+                                    <th>
+                                        TTL
+                                    </th>
+
+                                    <th>
+                                        Status
+                                    </th>
+
+                                    <th>
+                                        Time
+                                    </th>
 
                                 </tr>
 
                             </thead>
 
 
-                            <tbody id="messageTableBody">
+                            <tbody
+                                id="messageTableBody"
+                            >
                             </tbody>
 
                         </table>
@@ -727,7 +935,9 @@
                 </section>
 
 
-                <!-- System Health -->
+
+                <!-- SYSTEM HEALTH -->
+
                 <section class="panel system-health-panel">
 
                     <div class="panel-header">
@@ -766,63 +976,672 @@
 
                 </section>
 
-            </section>
-
-        </main>
-
-    </div>
+            </div>
 
 
-    <!-- Incident Details Modal -->
-    <div
-        class="modal-overlay"
-        id="incidentModal"
-    >
 
-        <div class="incident-modal">
+            <!-- =========================
+                 INCIDENTS VIEW
+            ========================== -->
 
-            <div class="modal-header">
+            <div
+                class="page-view"
+                id="view-incidents"
+            >
 
-                <div>
+                <section class="page-section-header">
 
-                    <span class="panel-kicker">
-                        INCIDENT DETAILS
-                    </span>
+                    <div>
 
-                    <h3 id="modalIncidentCategory">
-                        Incident
-                    </h3>
+                        <span class="panel-kicker">
+                            RESPONSE MANAGEMENT
+                        </span>
 
-                </div>
+                        <h3>
+                            Incident Management
+                        </h3>
+
+                        <p>
+                            Review and manage all emergency requests.
+                        </p>
+
+                    </div>
+
+                </section>
 
 
-                <button
-                    class="modal-close"
-                    id="closeModal"
-                >
-                    ×
-                </button>
+                <section class="panel standalone-panel">
+
+                    <div class="incident-management-list">
+
+                        <div
+                            id="incidentManagementList"
+                        >
+                        </div>
+
+                    </div>
+
+                </section>
 
             </div>
 
 
-            <div class="modal-body">
 
-                <div class="modal-priority-row">
+            <!-- =========================
+                 NODES VIEW
+            ========================== -->
 
-                    <span
-                        class="priority-badge"
-                        id="modalPriority"
+            <div
+                class="page-view"
+                id="view-nodes"
+            >
+
+                <section class="page-section-header">
+
+                    <div>
+
+                        <span class="panel-kicker">
+                            FIELD INFRASTRUCTURE
+                        </span>
+
+                        <h3>
+                            Node Management
+                        </h3>
+
+                        <p>
+                            Monitor registered field and relay nodes.
+                        </p>
+
+                    </div>
+
+
+                    <div
+                        class="admin-only"
+                        id="nodeManagementButton"
                     >
-                        CRITICAL
+
+                        <button class="panel-button">
+                            Register Node
+                        </button>
+
+                    </div>
+
+                </section>
+
+
+                <section class="panel standalone-panel">
+
+                    <div class="node-table-container">
+
+                        <table class="node-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Node
+                                    </th>
+
+                                    <th>
+                                        Status
+                                    </th>
+
+                                    <th>
+                                        Battery
+                                    </th>
+
+                                    <th>
+                                        Signal
+                                    </th>
+
+                                    <th>
+                                        GPS
+                                    </th>
+
+                                    <th>
+                                        Last Seen
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody
+                                id="fullNodeTableBody"
+                            >
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+
+
+            <!-- =========================
+                 NETWORK VIEW
+            ========================== -->
+
+            <div
+                class="page-view"
+                id="view-network"
+            >
+
+                <section class="page-section-header">
+
+                    <div>
+
+                        <span class="panel-kicker">
+                            MESH NETWORK
+                        </span>
+
+                        <h3>
+                            Network Operations
+                        </h3>
+
+                        <p>
+                            Monitor routes, connectivity and recovery activity.
+                        </p>
+
+                    </div>
+
+                </section>
+
+
+                <section class="panel standalone-panel">
+
+                    <div class="topology-content">
+
+                        <div
+                            class="topology-canvas"
+                            id="networkTopologyCanvas"
+                        >
+
+                            <svg
+                                class="topology-lines"
+                                id="networkTopologySvg"
+                            >
+                            </svg>
+
+
+                            <div
+                                class="topology-nodes"
+                                id="networkTopologyNodes"
+                            >
+                            </div>
+
+                        </div>
+
+
+                        <div class="route-summary">
+
+                            <div class="route-summary-header">
+
+                                <span class="panel-kicker">
+                                    ROUTING TABLE
+                                </span>
+
+                                <h4>
+                                    Active and Standby Routes
+                                </h4>
+
+                            </div>
+
+
+                            <div class="route-table-container">
+
+                                <table class="route-table">
+
+                                    <thead>
+
+                                        <tr>
+
+                                            <th>
+                                                Source
+                                            </th>
+
+                                            <th>
+                                                Destination
+                                            </th>
+
+                                            <th>
+                                                Next Hop
+                                            </th>
+
+                                            <th>
+                                                Hops
+                                            </th>
+
+                                            <th>
+                                                Quality
+                                            </th>
+
+                                            <th>
+                                                Status
+                                            </th>
+
+                                        </tr>
+
+                                    </thead>
+
+
+                                    <tbody
+                                        id="networkRouteTableBody"
+                                    >
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+
+
+            <!-- =========================
+                 MESSAGES VIEW
+            ========================== -->
+
+            <div
+                class="page-view"
+                id="view-messages"
+            >
+
+                <section class="page-section-header">
+
+                    <div>
+
+                        <span class="panel-kicker">
+                            MESSAGE TRAFFIC
+                        </span>
+
+                        <h3>
+                            Message History
+                        </h3>
+
+                        <p>
+                            Inspect message delivery, routing and packet state.
+                        </p>
+
+                    </div>
+
+                </section>
+
+
+                <section class="panel standalone-panel">
+
+                    <div class="message-table-container">
+
+                        <table class="message-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Message ID
+                                    </th>
+
+                                    <th>
+                                        Sender
+                                    </th>
+
+                                    <th>
+                                        Category
+                                    </th>
+
+                                    <th>
+                                        Priority
+                                    </th>
+
+                                    <th>
+                                        Hops
+                                    </th>
+
+                                    <th>
+                                        TTL
+                                    </th>
+
+                                    <th>
+                                        Status
+                                    </th>
+
+                                    <th>
+                                        Time
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody
+                                id="fullMessageTableBody"
+                            >
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+
+
+            <!-- =========================
+                 SETTINGS VIEW
+            ========================== -->
+
+            <div
+                class="page-view"
+                id="view-settings"
+            >
+
+                <section class="page-section-header">
+
+                    <div>
+
+                        <span class="panel-kicker">
+                            SYSTEM CONFIGURATION
+                        </span>
+
+                        <h3>
+                            Settings
+                        </h3>
+
+                        <p>
+                            Dashboard and operator configuration.
+                        </p>
+
+                    </div>
+
+                </section>
+
+
+                <div class="settings-grid">
+
+
+                    <section class="panel settings-card">
+
+                        <div class="settings-card-header">
+
+                            <div>
+
+                                <span class="panel-kicker">
+                                    OPERATOR PROFILE
+                                </span>
+
+                                <h4>
+                                    Current Session
+                                </h4>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="settings-row">
+
+                            <span>
+                                Name
+                            </span>
+
+                            <strong
+                                id="settingsUserName"
+                            >
+                                Rescue Operator
+                            </strong>
+
+                        </div>
+
+
+                        <div class="settings-row">
+
+                            <span>
+                                Role
+                            </span>
+
+                            <strong
+                                id="settingsUserRole"
+                            >
+                                Rescue Operator
+                            </strong>
+
+                        </div>
+
+                    </section>
+
+
+
+                    <section class="panel settings-card">
+
+                        <div class="settings-card-header">
+
+                            <div>
+
+                                <span class="panel-kicker">
+                                    DISPLAY
+                                </span>
+
+                                <h4>
+                                    Dashboard Preferences
+                                </h4>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="settings-row">
+
+                            <span>
+                                Auto Refresh
+                            </span>
+
+                            <label class="toggle">
+
+                                <input
+                                    type="checkbox"
+                                    checked
+                                    id="autoRefreshToggle"
+                                >
+
+                                <span class="toggle-slider"></span>
+
+                            </label>
+
+                        </div>
+
+
+                        <div class="settings-row">
+
+                            <span>
+                                Map Animations
+                            </span>
+
+                            <label class="toggle">
+
+                                <input
+                                    type="checkbox"
+                                    checked
+                                    id="mapAnimationToggle"
+                                >
+
+                                <span class="toggle-slider"></span>
+
+                            </label>
+
+                        </div>
+
+                    </section>
+
+
+
+                    <section
+                        class="panel settings-card admin-only"
+                    >
+
+                        <div class="settings-card-header">
+
+                            <div>
+
+                                <span class="panel-kicker">
+                                    ADMINISTRATION
+                                </span>
+
+                                <h4>
+                                    Administrative Controls
+                                </h4>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="settings-row">
+
+                            <span>
+                                User Management
+                            </span>
+
+                            <button class="panel-button">
+                                Manage Users
+                            </button>
+
+                        </div>
+
+
+                        <div class="settings-row">
+
+                            <span>
+                                Node Registration
+                            </span>
+
+                            <button class="panel-button">
+                                Manage Nodes
+                            </button>
+
+                        </div>
+
+
+                        <div class="settings-row">
+
+                            <span>
+                                Security Logs
+                            </span>
+
+                            <button class="panel-button">
+                                View Logs
+                            </button>
+
+                        </div>
+
+                    </section>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+
+<!-- =========================
+     INCIDENT MODAL
+========================== -->
+
+<div
+    class="modal-overlay"
+    id="incidentModal"
+>
+
+    <div class="incident-modal">
+
+        <div class="modal-header">
+
+            <div>
+
+                <span class="panel-kicker">
+                    INCIDENT DETAILS
+                </span>
+
+                <h3 id="modalIncidentCategory">
+                    Incident
+                </h3>
+
+            </div>
+
+
+            <button
+                class="modal-close"
+                id="closeModal"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="modal-body">
+
+            <div class="modal-priority-row">
+
+                <span
+                    class="priority-badge"
+                    id="modalPriority"
+                >
+                    CRITICAL
+                </span>
+
+
+                <span
+                    class="incident-status"
+                    id="modalStatus"
+                >
+                    NEW
+                </span>
+
+            </div>
+
+
+            <div class="detail-group">
+
+                <span class="detail-label">
+                    MESSAGE
+                </span>
+
+                <p id="modalMessage">
+                </p>
+
+            </div>
+
+
+            <div class="detail-grid">
+
+                <div class="detail-group">
+
+                    <span class="detail-label">
+                        INCIDENT ID
                     </span>
 
-
-                    <span
-                        class="incident-status"
-                        id="modalStatus"
-                    >
-                        NEW
+                    <span id="modalId">
                     </span>
 
                 </div>
@@ -831,207 +1650,210 @@
                 <div class="detail-group">
 
                     <span class="detail-label">
-                        MESSAGE
+                        NODE
                     </span>
 
-                    <p id="modalMessage">
-                    </p>
+                    <span id="modalNode">
+                    </span>
 
                 </div>
 
 
-                <div class="detail-grid">
-
-                    <div class="detail-group">
-
-                        <span class="detail-label">
-                            INCIDENT ID
-                        </span>
-
-                        <span id="modalId">
-                        </span>
-
-                    </div>
-
-
-                    <div class="detail-group">
-
-                        <span class="detail-label">
-                            NODE
-                        </span>
-
-                        <span id="modalNode">
-                        </span>
-
-                    </div>
-
-
-                    <div class="detail-group">
-
-                        <span class="detail-label">
-                            GPS LOCATION
-                        </span>
-
-                        <span id="modalLocation">
-                        </span>
-
-                    </div>
-
-
-                    <div class="detail-group">
-
-                        <span class="detail-label">
-                            TIME
-                        </span>
-
-                        <span id="modalTime">
-                        </span>
-
-                    </div>
-
-                </div>
-
-
-                <!-- Assigned Team -->
-                <div
-                    class="assignment-group"
-                    id="assignmentGroup"
-                >
-
-                    <label
-                        for="assignedTeam"
-                        class="detail-label"
-                    >
-                        ASSIGNED TEAM
-                    </label>
-
-
-                    <select id="assignedTeam">
-
-                        <option value="Rescue Team Alpha">
-                            Rescue Team Alpha
-                        </option>
-
-                        <option value="Rescue Team Bravo">
-                            Rescue Team Bravo
-                        </option>
-
-                        <option value="Medical Response Unit">
-                            Medical Response Unit
-                        </option>
-
-                        <option value="Fire Response Unit">
-                            Fire Response Unit
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <!-- Status Workflow -->
-                <div class="workflow-section">
+                <div class="detail-group">
 
                     <span class="detail-label">
-                        RESPONSE LIFECYCLE
+                        GPS LOCATION
                     </span>
 
+                    <span id="modalLocation">
+                    </span>
 
-                    <div class="workflow">
+                </div>
 
-                        <div
-                            class="workflow-step"
-                            data-workflow="NEW"
-                        >
-                            <span class="workflow-dot"></span>
-                            <span>NEW</span>
-                        </div>
 
-                        <div class="workflow-line"></div>
+                <div class="detail-group">
 
-                        <div
-                            class="workflow-step"
-                            data-workflow="ACKNOWLEDGED"
-                        >
-                            <span class="workflow-dot"></span>
-                            <span>ACKNOWLEDGED</span>
-                        </div>
+                    <span class="detail-label">
+                        TIME
+                    </span>
 
-                        <div class="workflow-line"></div>
-
-                        <div
-                            class="workflow-step"
-                            data-workflow="ASSIGNED"
-                        >
-                            <span class="workflow-dot"></span>
-                            <span>ASSIGNED</span>
-                        </div>
-
-                        <div class="workflow-line"></div>
-
-                        <div
-                            class="workflow-step"
-                            data-workflow="IN_PROGRESS"
-                        >
-                            <span class="workflow-dot"></span>
-                            <span>IN PROGRESS</span>
-                        </div>
-
-                        <div class="workflow-line"></div>
-
-                        <div
-                            class="workflow-step"
-                            data-workflow="RESOLVED"
-                        >
-                            <span class="workflow-dot"></span>
-                            <span>RESOLVED</span>
-                        </div>
-
-                    </div>
+                    <span id="modalTime">
+                    </span>
 
                 </div>
 
             </div>
 
 
-            <div class="modal-footer">
+            <div
+                class="assignment-group"
+                id="assignmentGroup"
+            >
 
-                <button
-                    class="modal-action secondary-action"
-                    id="modalCloseButton"
+                <label
+                    for="assignedTeam"
+                    class="detail-label"
                 >
-                    Close
-                </button>
+                    ASSIGNED TEAM
+                </label>
 
 
-                <button
-                    class="modal-action cancel-action"
-                    id="cancelIncidentButton"
-                >
-                    Cancel Incident
-                </button>
+                <select id="assignedTeam">
+
+                    <option value="Rescue Team Alpha">
+                        Rescue Team Alpha
+                    </option>
+
+                    <option value="Rescue Team Bravo">
+                        Rescue Team Bravo
+                    </option>
+
+                    <option value="Medical Response Unit">
+                        Medical Response Unit
+                    </option>
+
+                    <option value="Fire Response Unit">
+                        Fire Response Unit
+                    </option>
+
+                </select>
+
+            </div>
 
 
-                <button
-                    class="modal-action primary-action"
-                    id="statusActionButton"
-                >
-                    Acknowledge Incident
-                </button>
+            <div class="workflow-section">
+
+                <span class="detail-label">
+                    RESPONSE LIFECYCLE
+                </span>
+
+
+                <div class="workflow">
+
+                    <div
+                        class="workflow-step"
+                        data-workflow="NEW"
+                    >
+                        <span class="workflow-dot"></span>
+
+                        <span>
+                            NEW
+                        </span>
+
+                    </div>
+
+
+                    <div class="workflow-line"></div>
+
+
+                    <div
+                        class="workflow-step"
+                        data-workflow="ACKNOWLEDGED"
+                    >
+                        <span class="workflow-dot"></span>
+
+                        <span>
+                            ACKNOWLEDGED
+                        </span>
+
+                    </div>
+
+
+                    <div class="workflow-line"></div>
+
+
+                    <div
+                        class="workflow-step"
+                        data-workflow="ASSIGNED"
+                    >
+                        <span class="workflow-dot"></span>
+
+                        <span>
+                            ASSIGNED
+                        </span>
+
+                    </div>
+
+
+                    <div class="workflow-line"></div>
+
+
+                    <div
+                        class="workflow-step"
+                        data-workflow="IN_PROGRESS"
+                    >
+                        <span class="workflow-dot"></span>
+
+                        <span>
+                            IN PROGRESS
+                        </span>
+
+                    </div>
+
+
+                    <div class="workflow-line"></div>
+
+
+                    <div
+                        class="workflow-step"
+                        data-workflow="RESOLVED"
+                    >
+                        <span class="workflow-dot"></span>
+
+                        <span>
+                            RESOLVED
+                        </span>
+
+                    </div>
+
+                </div>
 
             </div>
 
         </div>
 
+
+        <div class="modal-footer">
+
+            <button
+                class="modal-action secondary-action"
+                id="modalCloseButton"
+            >
+                Close
+            </button>
+
+
+            <button
+                class="modal-action cancel-action"
+                id="cancelIncidentButton"
+            >
+                Cancel Incident
+            </button>
+
+
+            <button
+                class="modal-action primary-action"
+                id="statusActionButton"
+            >
+                Acknowledge Incident
+            </button>
+
+        </div>
+
     </div>
 
+</div>
 
-    <!-- Leaflet -->
-    <script
-        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    ></script>
 
-    <script src="js/dashboard.js"></script>
+
+<!-- Leaflet -->
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+></script>
+
+
+<script src="js/dashboard.js"></script>
+
 
 </body>
 </html>
