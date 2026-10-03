@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>DisasterMesh | Rescue Dashboard</title>
+
+    <!-- Leaflet -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <div class="app">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+
+            <div class="brand">
+
+                <div class="brand-mark">
+                    DM
+                </div>
+
+                <div class="brand-text">
+                    <h1>DisasterMesh</h1>
+                    <span>Emergency Response System</span>
+                </div>
+
+            </div>
+
+
+            <nav class="navigation">
+
+                <div class="nav-section-title">
+                    OPERATIONS
+                </div>
+
+                <a href="#" class="nav-item active">
+                    <span class="nav-icon">▦</span>
+                    <span>Dashboard</span>
+                </a>
+
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">!</span>
+                    <span>Incidents</span>
+                </a>
+
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">◉</span>
+                    <span>Nodes</span>
+                </a>
+
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">⌁</span>
+                    <span>Network</span>
+                </a>
+
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">≡</span>
+                    <span>Messages</span>
+                </a>
+
+
+                <div class="nav-section-title system-title">
+                    SYSTEM
+                </div>
+
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">⚙</span>
+                    <span>Settings</span>
+                </a>
+
+            </nav>
+
+
+            <div class="sidebar-footer">
+
+                <div class="system-status">
+
+                    <span class="status-dot"></span>
+
+                    <div>
+                        <strong>System Operational</strong>
+                        <small>All core services running</small>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+
+        <!-- Main Content -->
+        <main class="main-content">
+
+            <!-- Topbar -->
+            <header class="topbar">
+
+                <div class="page-heading">
+
+                    <span class="eyebrow">
+                        RESCUE OPERATIONS
+                    </span>
+
+                    <h2>
+                        Command Dashboard
+                    </h2>
+
+                    <p>
+                        Monitor incidents, field nodes and network activity.
+                    </p>
+
+                </div>
+
+
+                <div class="topbar-actions">
+
+                    <div class="system-indicator">
+
+                        <span class="status-dot"></span>
+
+                        <span>
+                            Online
+                        </span>
+
+                    </div>
+
+
+                    <div class="operator">
+
+                        <div class="operator-avatar">
+                            RO
+                        </div>
+
+                        <div class="operator-info">
+
+                            <strong>
+                                Rescue Operator
+                            </strong>
+
+                            <span>
+                                Operator
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            <!-- Dashboard -->
+            <section class="dashboard-content">
+
+                <!-- Statistics -->
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+
+                        <span class="stat-label">
+                            Active Nodes
+                        </span>
+
+                        <strong
+                            class="stat-value"
+                            id="activeNodes"
+                        >
+                            00
+                        </strong>
+
+                        <span class="stat-description">
+                            Currently online
+                        </span>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <span class="stat-label">
+                            Offline Nodes
+                        </span>
+
+                        <strong
+                            class="stat-value"
+                            id="offlineNodes"
+                        >
+                            00
+                        </strong>
+
+                        <span class="stat-description">
+                            Requires attention
+                        </span>
+
+                    </div>
+
+
+                    <div class="stat-card critical-card">
+
+                        <span class="stat-label">
+                            Critical Incidents
+                        </span>
+
+                        <strong
+                            class="stat-value"
+                            id="criticalIncidents"
+                        >
+                            00
+                        </strong>
+
+                        <span class="stat-description">
+                            Immediate review
+                        </span>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <span class="stat-label">
+                            High Priority
+                        </span>
+
+                        <strong
+                            class="stat-value"
+                            id="highPriority"
+                        >
+                            00
+                        </strong>
+
+                        <span class="stat-description">
+                            Awaiting action
+                        </span>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <span class="stat-label">
+                            Messages
+                        </span>
+
+                        <strong
+                            class="stat-value"
+                            id="totalMessages"
+                        >
+                            00
+                        </strong>
+
+                        <span class="stat-description">
+                            Received today
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Map + Incident Queue -->
+                <div class="dashboard-grid">
+
+                    <!-- Emergency Map -->
+                    <section class="panel map-panel">
+
+                        <div class="panel-header">
+
+                            <div>
+
+                                <span class="panel-kicker">
+                                    LIVE LOCATION
+                                </span>
+
+                                <h3>
+                                    Emergency Map
+                                </h3>
+
+                            </div>
+
+
+                            <div class="map-header-actions">
+
+                                <span class="map-live-badge">
+                                    LIVE
+                                </span>
+
+                                <button
+                                    class="panel-button"
+                                    id="viewFullMapButton"
+                                >
+                                    Fit All
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="map-controls">
+
+                            <button
+                                class="map-control active"
+                                data-map-filter="ALL"
+                            >
+                                All
+                            </button>
+
+                            <button
+                                class="map-control"
+                                data-map-filter="NODES"
+                            >
+                                Nodes
+                            </button>
+
+                            <button
+                                class="map-control"
+                                data-map-filter="INCIDENTS"
+                            >
+                                Incidents
+                            </button>
+
+                        </div>
+
+
+                        <div
+                            class="map-container"
+                            id="map"
+                        >
+
+                            <div class="map-legend">
+
+                                <div class="legend-title">
+                                    MAP LEGEND
+                                </div>
+
+                                <div class="legend-item">
+
+                                    <span class="legend-node online"></span>
+
+                                    <span>
+                                        Online Node
+                                    </span>
+
+                                </div>
+
+                                <div class="legend-item">
+
+                                    <span class="legend-node offline"></span>
+
+                                    <span>
+                                        Offline Node
+                                    </span>
+
+                                </div>
+
+                                <div class="legend-item">
+
+                                    <span class="legend-incident"></span>
+
+                                    <span>
+                                        Emergency
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- Incident Queue -->
+                    <section class="panel incident-panel">
+
+                        <div class="panel-header">
+
+                            <div>
+
+                                <span class="panel-kicker">
+                                    RESPONSE QUEUE
+                                </span>
+
+                                <h3>
+                                    Incident Queue
+                                </h3>
+
+                            </div>
+
+
+                            <span
+                                class="count-badge"
+                                id="incidentCount"
+                            >
+                                00
+                            </span>
+
+                        </div>
+
+
+                        <!-- Filters -->
+                        <div class="incident-filters">
+
+                            <div class="filter-group">
+
+                                <label for="priorityFilter">
+                                    Priority
+                                </label>
+
+                                <select id="priorityFilter">
+
+                                    <option value="ALL">
+                                        All Priorities
+                                    </option>
+
+                                    <option value="CRITICAL">
+                                        Critical
+                                    </option>
+
+                                    <option value="HIGH">
+                                        High
+                                    </option>
+
+                                    <option value="MEDIUM">
+                                        Medium
+                                    </option>
+
+                                    <option value="LOW">
+                                        Low
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="filter-group">
+
+                                <label for="categoryFilter">
+                                    Category
+                                </label>
+
+                                <select id="categoryFilter">
+
+                                    <option value="ALL">
+                                        All Categories
+                                    </option>
+
+                                    <option value="Trapped Person">
+                                        Trapped Person
+                                    </option>
+
+                                    <option value="Medical Emergency">
+                                        Medical Emergency
+                                    </option>
+
+                                    <option value="Building Collapse">
+                                        Building Collapse
+                                    </option>
+
+                                    <option value="Missing Person">
+                                        Missing Person
+                                    </option>
+
+                                    <option value="Rescue Required">
+                                        Rescue Required
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <button
+                                class="reset-filter-button"
+                                id="resetFilters"
+                            >
+                                Reset
+                            </button>
+
+                        </div>
+
+
+                        <div
+                            class="incident-list"
+                            id="incidentList"
+                        >
+                        </div>
+
+                    </section>
+
+                </div>
+
+
+                <!-- Node Health -->
+                <section class="panel node-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <span class="panel-kicker">
+                                FIELD INFRASTRUCTURE
+                            </span>
+
+                            <h3>
+                                Node Health
+                            </h3>
+
+                        </div>
+
+
+                        <button
+                            class="panel-button"
+                            id="viewAllNodesButton"
+                        >
+                            View All Nodes
+                        </button>
+
+                    </div>
+
+
+                    <div class="node-table-container">
+
+                        <table class="node-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>Node</th>
+                                    <th>Status</th>
+                                    <th>Battery</th>
+                                    <th>Signal</th>
+                                    <th>GPS</th>
+                                    <th>Last Seen</th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody id="nodeTableBody">
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </section>
+
+
+                <!-- Network Topology -->
+                <section class="panel topology-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <span class="panel-kicker">
+                                NETWORK MONITORING
+                            </span>
+
+                            <h3>
+                                Mesh Topology
+                            </h3>
+
+                        </div>
+
+
+                        <div class="topology-status">
+
+                            <span class="topology-status-dot"></span>
+
+                            <span>
+                                Mesh Active
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="topology-content">
+
+                        <div
+                            class="topology-canvas"
+                            id="topologyCanvas"
+                        >
+
+                            <svg
+                                class="topology-lines"
+                                id="topologySvg"
+                            >
+                            </svg>
+
+
+                            <div
+                                class="topology-nodes"
+                                id="topologyNodes"
+                            >
+                            </div>
+
+                        </div>
+
+
+                        <div class="route-summary">
+
+                            <div class="route-summary-header">
+
+                                <div>
+
+                                    <span class="panel-kicker">
+                                        ROUTE INFORMATION
+                                    </span>
+
+                                    <h4>
+                                        Current Routes
+                                    </h4>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="route-table-container">
+
+                                <table class="route-table">
+
+                                    <thead>
+
+                                        <tr>
+
+                                            <th>Source</th>
+                                            <th>Destination</th>
+                                            <th>Next Hop</th>
+                                            <th>Hops</th>
+                                            <th>Quality</th>
+                                            <th>Status</th>
+
+                                        </tr>
+
+                                    </thead>
+
+
+                                    <tbody id="routeTableBody">
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- Message History -->
+                <section class="panel messages-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <span class="panel-kicker">
+                                MESSAGE TRAFFIC
+                            </span>
+
+                            <h3>
+                                Recent Messages
+                            </h3>
+
+                        </div>
+
+
+                        <span
+                            class="count-badge message-count-badge"
+                            id="messageCount"
+                        >
+                            00
+                        </span>
+
+                    </div>
+
+
+                    <div class="message-table-container">
+
+                        <table class="message-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>Message ID</th>
+                                    <th>Sender</th>
+                                    <th>Category</th>
+                                    <th>Priority</th>
+                                    <th>Hops</th>
+                                    <th>TTL</th>
+                                    <th>Status</th>
+                                    <th>Time</th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody id="messageTableBody">
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </section>
+
+
+                <!-- System Health -->
+                <section class="panel system-health-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <span class="panel-kicker">
+                                SYSTEM MONITORING
+                            </span>
+
+                            <h3>
+                                System Health
+                            </h3>
+
+                        </div>
+
+
+                        <div class="health-overall">
+
+                            <span class="health-overall-dot"></span>
+
+                            <span>
+                                Operational
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="system-health-grid"
+                        id="systemHealthGrid"
+                    >
+                    </div>
+
+                </section>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- Incident Details Modal -->
+    <div
+        class="modal-overlay"
+        id="incidentModal"
+    >
+
+        <div class="incident-modal">
+
+            <div class="modal-header">
+
+                <div>
+
+                    <span class="panel-kicker">
+                        INCIDENT DETAILS
+                    </span>
+
+                    <h3 id="modalIncidentCategory">
+                        Incident
+                    </h3>
+
+                </div>
+
+
+                <button
+                    class="modal-close"
+                    id="closeModal"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <div class="modal-priority-row">
+
+                    <span
+                        class="priority-badge"
+                        id="modalPriority"
+                    >
+                        CRITICAL
+                    </span>
+
+
+                    <span
+                        class="incident-status"
+                        id="modalStatus"
+                    >
+                        NEW
+                    </span>
+
+                </div>
+
+
+                <div class="detail-group">
+
+                    <span class="detail-label">
+                        MESSAGE
+                    </span>
+
+                    <p id="modalMessage">
+                    </p>
+
+                </div>
+
+
+                <div class="detail-grid">
+
+                    <div class="detail-group">
+
+                        <span class="detail-label">
+                            INCIDENT ID
+                        </span>
+
+                        <span id="modalId">
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-group">
+
+                        <span class="detail-label">
+                            NODE
+                        </span>
+
+                        <span id="modalNode">
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-group">
+
+                        <span class="detail-label">
+                            GPS LOCATION
+                        </span>
+
+                        <span id="modalLocation">
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-group">
+
+                        <span class="detail-label">
+                            TIME
+                        </span>
+
+                        <span id="modalTime">
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Assigned Team -->
+                <div
+                    class="assignment-group"
+                    id="assignmentGroup"
+                >
+
+                    <label
+                        for="assignedTeam"
+                        class="detail-label"
+                    >
+                        ASSIGNED TEAM
+                    </label>
+
+
+                    <select id="assignedTeam">
+
+                        <option value="Rescue Team Alpha">
+                            Rescue Team Alpha
+                        </option>
+
+                        <option value="Rescue Team Bravo">
+                            Rescue Team Bravo
+                        </option>
+
+                        <option value="Medical Response Unit">
+                            Medical Response Unit
+                        </option>
+
+                        <option value="Fire Response Unit">
+                            Fire Response Unit
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Status Workflow -->
+                <div class="workflow-section">
+
+                    <span class="detail-label">
+                        RESPONSE LIFECYCLE
+                    </span>
+
+
+                    <div class="workflow">
+
+                        <div
+                            class="workflow-step"
+                            data-workflow="NEW"
+                        >
+                            <span class="workflow-dot"></span>
+                            <span>NEW</span>
+                        </div>
+
+                        <div class="workflow-line"></div>
+
+                        <div
+                            class="workflow-step"
+                            data-workflow="ACKNOWLEDGED"
+                        >
+                            <span class="workflow-dot"></span>
+                            <span>ACKNOWLEDGED</span>
+                        </div>
+
+                        <div class="workflow-line"></div>
+
+                        <div
+                            class="workflow-step"
+                            data-workflow="ASSIGNED"
+                        >
+                            <span class="workflow-dot"></span>
+                            <span>ASSIGNED</span>
+                        </div>
+
+                        <div class="workflow-line"></div>
+
+                        <div
+                            class="workflow-step"
+                            data-workflow="IN_PROGRESS"
+                        >
+                            <span class="workflow-dot"></span>
+                            <span>IN PROGRESS</span>
+                        </div>
+
+                        <div class="workflow-line"></div>
+
+                        <div
+                            class="workflow-step"
+                            data-workflow="RESOLVED"
+                        >
+                            <span class="workflow-dot"></span>
+                            <span>RESOLVED</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button
+                    class="modal-action secondary-action"
+                    id="modalCloseButton"
+                >
+                    Close
+                </button>
+
+
+                <button
+                    class="modal-action cancel-action"
+                    id="cancelIncidentButton"
+                >
+                    Cancel Incident
+                </button>
+
+
+                <button
+                    class="modal-action primary-action"
+                    id="statusActionButton"
+                >
+                    Acknowledge Incident
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Leaflet -->
+    <script
+        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    ></script>
+
+    <script src="js/dashboard.js"></script>
+
+</body>
+</html>
