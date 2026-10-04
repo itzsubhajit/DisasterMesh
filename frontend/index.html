@@ -1,0 +1,4632 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        DisasterMesh | Rescue Dashboard
+    </title>
+
+
+    <!-- =========================================
+         LEAFLET
+    ========================================== -->
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
+
+    <!-- =========================================
+         DISASTERMESH STYLES
+    ========================================== -->
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================
+     AUTHENTICATION SCREEN
+========================================= -->
+
+<div
+    class="auth-screen"
+    id="authScreen"
+>
+
+    <div class="auth-card">
+
+        <div class="auth-brand">
+
+            <div class="auth-brand-mark">
+                DM
+            </div>
+
+
+            <div>
+
+                <h1>
+                    DisasterMesh
+                </h1>
+
+
+                <span>
+                    Emergency Response System
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="auth-heading">
+
+            <span class="eyebrow">
+                SECURE ACCESS
+            </span>
+
+
+            <h2>
+                Operator Login
+            </h2>
+
+
+            <p>
+                Sign in to access rescue operations.
+            </p>
+
+        </div>
+
+
+        <form
+            class="auth-form"
+            id="loginForm"
+        >
+
+            <div class="auth-field">
+
+                <label for="username">
+                    Username
+                </label>
+
+
+                <input
+                    type="text"
+                    id="username"
+                    autocomplete="username"
+                    placeholder="Enter username"
+                    required
+                >
+
+            </div>
+
+
+            <div class="auth-field">
+
+                <label for="password">
+                    Password
+                </label>
+
+
+                <input
+                    type="password"
+                    id="password"
+                    autocomplete="current-password"
+                    placeholder="Enter password"
+                    required
+                >
+
+            </div>
+
+
+            <div
+                class="auth-error"
+                id="authError"
+            >
+            </div>
+
+
+            <button
+                type="submit"
+                class="auth-submit"
+                id="loginButton"
+            >
+                Sign In
+            </button>
+
+        </form>
+
+
+        <div class="demo-credentials">
+
+            <span>
+                DEMO ACCESS
+            </span>
+
+
+            <p>
+                Operator:
+                <strong>operator</strong> /
+                <strong>operator123</strong>
+            </p>
+
+
+            <p>
+                Administrator:
+                <strong>admin</strong> /
+                <strong>admin123</strong>
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================
+     APPLICATION
+========================================= -->
+
+<div
+    class="app"
+    id="application"
+>
+
+
+    <!-- =========================================
+         SIDEBAR
+    ========================================== -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-mark">
+                DM
+            </div>
+
+
+            <div class="brand-text">
+
+                <h1>
+                    DisasterMesh
+                </h1>
+
+
+                <span>
+                    Emergency Response System
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <nav class="navigation">
+
+
+            <div class="nav-section-title">
+                OPERATIONS
+            </div>
+
+
+            <!-- DASHBOARD -->
+
+            <a
+                href="#"
+                class="nav-item active"
+                data-view="dashboard"
+            >
+
+                <span class="nav-icon">
+                    ▦
+                </span>
+
+
+                <span>
+                    Dashboard
+                </span>
+
+            </a>
+
+
+            <!-- INCIDENTS -->
+
+            <a
+                href="#"
+                class="nav-item"
+                data-view="incidents"
+            >
+
+                <span class="nav-icon">
+                    !
+                </span>
+
+
+                <span>
+                    Incidents
+                </span>
+
+            </a>
+
+
+            <!-- NODES -->
+
+            <a
+                href="#"
+                class="nav-item"
+                data-view="nodes"
+            >
+
+                <span class="nav-icon">
+                    ◉
+                </span>
+
+
+                <span>
+                    Nodes
+                </span>
+
+            </a>
+
+
+            <!-- NETWORK -->
+
+            <a
+                href="#"
+                class="nav-item"
+                data-view="network"
+            >
+
+                <span class="nav-icon">
+                    ⌁
+                </span>
+
+
+                <span>
+                    Network
+                </span>
+
+            </a>
+
+
+            <!-- MESSAGES -->
+
+            <a
+                href="#"
+                class="nav-item"
+                data-view="messages"
+            >
+
+                <span class="nav-icon">
+                    ≡
+                </span>
+
+
+                <span>
+                    Messages
+                </span>
+
+            </a>
+
+
+            <!-- STEP 24 -->
+
+            <a
+                href="#"
+                class="nav-item"
+                data-view="queue"
+            >
+
+                <span class="nav-icon">
+                    ▤
+                </span>
+
+
+                <span>
+                    Packet Queue
+                </span>
+
+            </a>
+
+
+            <div class="nav-section-title system-title">
+                SYSTEM
+            </div>
+
+
+            <!-- STEP 26 -->
+
+            <a
+                href="#"
+                class="nav-item"
+                data-view="gateway"
+            >
+
+                <span class="nav-icon">
+                    ⇄
+                </span>
+
+
+                <span>
+                    Gateway
+                </span>
+
+            </a>
+
+
+            <!-- STEP 25 -->
+
+            <a
+                href="#"
+                class="nav-item"
+                data-view="logs"
+            >
+
+                <span class="nav-icon">
+                    ▧
+                </span>
+
+
+                <span>
+                    Audit Logs
+                </span>
+
+            </a>
+
+
+            <!-- SETTINGS -->
+
+            <a
+                href="#"
+                class="nav-item"
+                data-view="settings"
+            >
+
+                <span class="nav-icon">
+                    ⚙
+                </span>
+
+
+                <span>
+                    Settings
+                </span>
+
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-footer">
+
+            <div class="system-status">
+
+                <span class="status-dot"></span>
+
+
+                <div>
+
+                    <strong>
+                        System Operational
+                    </strong>
+
+
+                    <small>
+                        All core services running
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- =========================================
+         MAIN CONTENT
+    ========================================== -->
+
+    <main class="main-content">
+
+
+        <!-- =========================================
+             TOPBAR
+        ========================================== -->
+
+        <header class="topbar">
+
+            <div class="page-heading">
+
+                <span
+                    class="eyebrow"
+                    id="pageEyebrow"
+                >
+                    RESCUE OPERATIONS
+                </span>
+
+
+                <h2 id="pageTitle">
+                    Command Dashboard
+                </h2>
+
+
+                <p id="pageDescription">
+                    Monitor incidents, field nodes and network activity.
+                </p>
+
+            </div>
+
+
+            <div class="topbar-actions">
+
+
+                <div class="system-indicator">
+
+                    <span class="status-dot"></span>
+
+
+                    <span>
+                        Online
+                    </span>
+
+                </div>
+
+
+                <div class="operator">
+
+                    <div class="operator-avatar">
+                        RO
+                    </div>
+
+
+                    <div class="operator-info">
+
+                        <strong id="currentUserName">
+                            Rescue Operator
+                        </strong>
+
+
+                        <span id="currentUserRole">
+                            Rescue Operator
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    class="header-logout-button"
+                    id="dashboardLogoutButton"
+                >
+                    Sign Out
+                </button>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =========================================
+             PAGE CONTENT
+        ========================================== -->
+
+        <section class="dashboard-content">
+
+
+            <!-- =====================================================
+                 DASHBOARD VIEW
+            ====================================================== -->
+
+            <div
+                class="page-view active-view"
+                id="view-dashboard"
+            >
+
+
+                <!-- =========================
+                     STATISTICS
+                ========================== -->
+
+                <div class="stats-grid">
+
+
+                    <div class="stat-card">
+
+                        <span class="stat-label">
+                            Active Nodes
+                        </span>
+
+
+                        <strong
+                            class="stat-value"
+                            id="activeNodes"
+                        >
+                            00
+                        </strong>
+
+
+                        <span class="stat-description">
+                            Currently online
+                        </span>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <span class="stat-label">
+                            Offline Nodes
+                        </span>
+
+
+                        <strong
+                            class="stat-value"
+                            id="offlineNodes"
+                        >
+                            00
+                        </strong>
+
+
+                        <span class="stat-description">
+                            Requires attention
+                        </span>
+
+                    </div>
+
+
+                    <div class="stat-card critical-card">
+
+                        <span class="stat-label">
+                            Critical Incidents
+                        </span>
+
+
+                        <strong
+                            class="stat-value"
+                            id="criticalIncidents"
+                        >
+                            00
+                        </strong>
+
+
+                        <span class="stat-description">
+                            Immediate review
+                        </span>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <span class="stat-label">
+                            High Priority
+                        </span>
+
+
+                        <strong
+                            class="stat-value"
+                            id="highPriority"
+                        >
+                            00
+                        </strong>
+
+
+                        <span class="stat-description">
+                            Awaiting action
+                        </span>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <span class="stat-label">
+                            Messages
+                        </span>
+
+
+                        <strong
+                            class="stat-value"
+                            id="totalMessages"
+                        >
+                            00
+                        </strong>
+
+
+                        <span class="stat-description">
+                            Received today
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =========================
+                     MAP + INCIDENT QUEUE
+                ========================== -->
+
+                <div class="dashboard-grid">
+
+
+                    <!-- MAP -->
+
+                    <section class="panel map-panel">
+
+                        <div class="panel-header">
+
+                            <div>
+
+                                <span class="panel-kicker">
+                                    LIVE LOCATION
+                                </span>
+
+
+                                <h3>
+                                    Emergency Map
+                                </h3>
+
+                            </div>
+
+
+                            <div class="map-header-actions">
+
+                                <span class="map-live-badge">
+                                    LIVE
+                                </span>
+
+
+                                <button
+                                    class="panel-button"
+                                    id="viewFullMapButton"
+                                >
+                                    Fit All
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="map-controls">
+
+                            <button
+                                class="map-control active"
+                                data-map-filter="ALL"
+                            >
+                                All
+                            </button>
+
+
+                            <button
+                                class="map-control"
+                                data-map-filter="NODES"
+                            >
+                                Nodes
+                            </button>
+
+
+                            <button
+                                class="map-control"
+                                data-map-filter="INCIDENTS"
+                            >
+                                Incidents
+                            </button>
+
+                        </div>
+
+
+                        <div
+                            class="map-container"
+                            id="map"
+                        >
+
+                            <div class="map-legend">
+
+                                <div class="legend-title">
+                                    MAP LEGEND
+                                </div>
+
+
+                                <div class="legend-item">
+
+                                    <span class="legend-node online"></span>
+
+
+                                    <span>
+                                        Online Node
+                                    </span>
+
+                                </div>
+
+
+                                <div class="legend-item">
+
+                                    <span class="legend-node offline"></span>
+
+
+                                    <span>
+                                        Offline Node
+                                    </span>
+
+                                </div>
+
+
+                                <div class="legend-item">
+
+                                    <span class="legend-incident"></span>
+
+
+                                    <span>
+                                        Emergency
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+
+                    <!-- INCIDENT QUEUE -->
+
+                    <section class="panel incident-panel">
+
+                        <div class="panel-header">
+
+                            <div>
+
+                                <span class="panel-kicker">
+                                    RESPONSE QUEUE
+                                </span>
+
+
+                                <h3>
+                                    Incident Queue
+                                </h3>
+
+                            </div>
+
+
+                            <span
+                                class="count-badge"
+                                id="incidentCount"
+                            >
+                                00
+                            </span>
+
+                        </div>
+
+
+                        <div class="incident-filters">
+
+
+                            <div class="filter-group">
+
+                                <label for="priorityFilter">
+                                    Priority
+                                </label>
+
+
+                                <select
+                                    id="priorityFilter"
+                                >
+
+                                    <option value="ALL">
+                                        All Priorities
+                                    </option>
+
+
+                                    <option value="CRITICAL">
+                                        Critical
+                                    </option>
+
+
+                                    <option value="HIGH">
+                                        High
+                                    </option>
+
+
+                                    <option value="MEDIUM">
+                                        Medium
+                                    </option>
+
+
+                                    <option value="LOW">
+                                        Low
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="filter-group">
+
+                                <label for="categoryFilter">
+                                    Category
+                                </label>
+
+
+                                <select
+                                    id="categoryFilter"
+                                >
+
+                                    <option value="ALL">
+                                        All Categories
+                                    </option>
+
+
+                                    <option value="Trapped Person">
+                                        Trapped Person
+                                    </option>
+
+
+                                    <option value="Medical Emergency">
+                                        Medical Emergency
+                                    </option>
+
+
+                                    <option value="Building Collapse">
+                                        Building Collapse
+                                    </option>
+
+
+                                    <option value="Missing Person">
+                                        Missing Person
+                                    </option>
+
+
+                                    <option value="Rescue Required">
+                                        Rescue Required
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <button
+                                class="reset-filter-button"
+                                id="resetFilters"
+                            >
+                                Reset
+                            </button>
+
+                        </div>
+
+
+                        <div
+                            class="incident-list"
+                            id="incidentList"
+                        >
+                        </div>
+
+                    </section>
+
+                </div>
+
+
+
+                <!-- =========================
+                     NODE HEALTH
+                ========================== -->
+
+                <section class="panel node-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <span class="panel-kicker">
+                                FIELD INFRASTRUCTURE
+                            </span>
+
+
+                            <h3>
+                                Node Health
+                            </h3>
+
+                        </div>
+
+
+                        <button
+                            class="panel-button"
+                            id="viewAllNodesButton"
+                        >
+                            View All Nodes
+                        </button>
+
+                    </div>
+
+
+                    <div class="node-table-container">
+
+                        <table class="node-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Node
+                                    </th>
+
+
+                                    <th>
+                                        Status
+                                    </th>
+
+
+                                    <th>
+                                        Battery
+                                    </th>
+
+
+                                    <th>
+                                        Signal
+                                    </th>
+
+
+                                    <th>
+                                        GPS
+                                    </th>
+
+
+                                    <th>
+                                        Last Seen
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody
+                                id="nodeTableBody"
+                            >
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =========================
+                     MESH TOPOLOGY
+                ========================== -->
+
+                <section class="panel topology-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <span class="panel-kicker">
+                                NETWORK MONITORING
+                            </span>
+
+
+                            <h3>
+                                Mesh Topology
+                            </h3>
+
+                        </div>
+
+
+                        <div class="topology-status">
+
+                            <span class="topology-status-dot"></span>
+
+
+                            <span>
+                                Mesh Active
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="topology-content">
+
+                        <div
+                            class="topology-canvas"
+                            id="topologyCanvas"
+                        >
+
+                            <svg
+                                class="topology-lines"
+                                id="topologySvg"
+                            >
+                            </svg>
+
+
+                            <div
+                                class="topology-nodes"
+                                id="topologyNodes"
+                            >
+                            </div>
+
+                        </div>
+
+
+                        <div class="route-summary">
+
+                            <div class="route-summary-header">
+
+                                <span class="panel-kicker">
+                                    ROUTE INFORMATION
+                                </span>
+
+
+                                <h4>
+                                    Current Routes
+                                </h4>
+
+                            </div>
+
+
+                            <div class="route-table-container">
+
+                                <table class="route-table">
+
+                                    <thead>
+
+                                        <tr>
+
+                                            <th>
+                                                Source
+                                            </th>
+
+
+                                            <th>
+                                                Destination
+                                            </th>
+
+
+                                            <th>
+                                                Next Hop
+                                            </th>
+
+
+                                            <th>
+                                                Hops
+                                            </th>
+
+
+                                            <th>
+                                                Quality
+                                            </th>
+
+
+                                            <th>
+                                                Status
+                                            </th>
+
+                                        </tr>
+
+                                    </thead>
+
+
+                                    <tbody
+                                        id="routeTableBody"
+                                    >
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =========================
+                     RECENT MESSAGES
+                ========================== -->
+
+                <section class="panel messages-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <span class="panel-kicker">
+                                MESSAGE TRAFFIC
+                            </span>
+
+
+                            <h3>
+                                Recent Messages
+                            </h3>
+
+                        </div>
+
+
+                        <span
+                            class="count-badge message-count-badge"
+                            id="messageCount"
+                        >
+                            00
+                        </span>
+
+                    </div>
+
+
+                    <div class="message-table-container">
+
+                        <table class="message-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Message ID
+                                    </th>
+
+
+                                    <th>
+                                        Sender
+                                    </th>
+
+
+                                    <th>
+                                        Category
+                                    </th>
+
+
+                                    <th>
+                                        Priority
+                                    </th>
+
+
+                                    <th>
+                                        Hops
+                                    </th>
+
+
+                                    <th>
+                                        TTL
+                                    </th>
+
+
+                                    <th>
+                                        Status
+                                    </th>
+
+
+                                    <th>
+                                        Time
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody
+                                id="messageTableBody"
+                            >
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =========================
+                     SYSTEM HEALTH
+                ========================== -->
+
+                <section class="panel system-health-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <span class="panel-kicker">
+                                SYSTEM MONITORING
+                            </span>
+
+
+                            <h3>
+                                System Health
+                            </h3>
+
+                        </div>
+
+
+                        <div class="health-overall">
+
+                            <span class="health-overall-dot"></span>
+
+
+                            <span>
+                                Operational
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="system-health-grid"
+                        id="systemHealthGrid"
+                    >
+                    </div>
+
+                </section>
+
+            </div>
+
+
+
+            <!-- =====================================================
+                 INCIDENTS VIEW
+            ====================================================== -->
+
+            <div
+                class="page-view"
+                id="view-incidents"
+            >
+
+                <section class="page-section-header">
+
+                    <div>
+
+                        <span class="panel-kicker">
+                            RESPONSE MANAGEMENT
+                        </span>
+
+
+                        <h3>
+                            Incident Management
+                        </h3>
+
+
+                        <p>
+                            Review and manage all emergency requests.
+                        </p>
+
+                    </div>
+
+                </section>
+
+
+                <section class="panel standalone-panel">
+
+                    <div
+                        id="incidentManagementList"
+                    >
+                    </div>
+
+                </section>
+
+            </div>
+
+
+
+            <!-- =====================================================
+                 NODES VIEW
+                 STEPS 19-22
+            ====================================================== -->
+
+            <div
+                class="page-view"
+                id="view-nodes"
+            >
+
+                <section class="page-section-header">
+
+                    <div>
+
+                        <span class="panel-kicker">
+                            FIELD INFRASTRUCTURE
+                        </span>
+
+
+                        <h3>
+                            Node Management
+                        </h3>
+
+
+                        <p>
+                            Monitor registered field and relay nodes.
+                        </p>
+
+                    </div>
+
+
+                    <div
+                        class="admin-only"
+                        id="nodeManagementButton"
+                    >
+
+                        <button
+                            class="panel-button"
+                            id="registerNodeButton"
+                        >
+                            Register Node
+                        </button>
+
+                    </div>
+
+                </section>
+
+
+                <section class="panel standalone-panel">
+
+                    <div class="node-table-container">
+
+                        <table class="node-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Node
+                                    </th>
+
+
+                                    <th>
+                                        Status
+                                    </th>
+
+
+                                    <th>
+                                        Battery
+                                    </th>
+
+
+                                    <th>
+                                        Signal
+                                    </th>
+
+
+                                    <th>
+                                        GPS
+                                    </th>
+
+
+                                    <th>
+                                        Last Seen
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody
+                                id="fullNodeTableBody"
+                            >
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+
+
+            <!-- =====================================================
+                 NETWORK VIEW
+            ====================================================== -->
+
+            <div
+                class="page-view"
+                id="view-network"
+            >
+
+                <section class="page-section-header">
+
+                    <div>
+
+                        <span class="panel-kicker">
+                            MESH NETWORK
+                        </span>
+
+
+                        <h3>
+                            Network Operations
+                        </h3>
+
+
+                        <p>
+                            Monitor routes, connectivity and recovery activity.
+                        </p>
+
+                    </div>
+
+                </section>
+
+
+                <section class="panel standalone-panel">
+
+                    <div class="topology-content">
+
+
+                        <div
+                            class="topology-canvas"
+                            id="networkTopologyCanvas"
+                        >
+
+                            <svg
+                                class="topology-lines"
+                                id="networkTopologySvg"
+                            >
+                            </svg>
+
+
+                            <div
+                                class="topology-nodes"
+                                id="networkTopologyNodes"
+                            >
+                            </div>
+
+                        </div>
+
+
+                        <div class="route-summary">
+
+                            <div class="route-summary-header">
+
+                                <span class="panel-kicker">
+                                    ROUTING TABLE
+                                </span>
+
+
+                                <h4>
+                                    Active and Standby Routes
+                                </h4>
+
+                            </div>
+
+
+                            <div class="route-table-container">
+
+                                <table class="route-table">
+
+                                    <thead>
+
+                                        <tr>
+
+                                            <th>
+                                                Source
+                                            </th>
+
+
+                                            <th>
+                                                Destination
+                                            </th>
+
+
+                                            <th>
+                                                Next Hop
+                                            </th>
+
+
+                                            <th>
+                                                Hops
+                                            </th>
+
+
+                                            <th>
+                                                Quality
+                                            </th>
+
+
+                                            <th>
+                                                Status
+                                            </th>
+
+                                        </tr>
+
+                                    </thead>
+
+
+                                    <tbody
+                                        id="networkRouteTableBody"
+                                    >
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+
+
+            <!-- =====================================================
+                 MESSAGES VIEW
+                 STEP 23
+            ====================================================== -->
+
+            <div
+                class="page-view"
+                id="view-messages"
+            >
+
+                <section class="page-section-header">
+
+                    <div>
+
+                        <span class="panel-kicker">
+                            MESSAGE TRAFFIC
+                        </span>
+
+
+                        <h3>
+                            Message History
+                        </h3>
+
+
+                        <p>
+                            Inspect message delivery, routing and packet state.
+                        </p>
+
+                    </div>
+
+                </section>
+
+
+                <section class="panel standalone-panel">
+
+                    <div class="message-table-container">
+
+                        <table class="message-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Message ID
+                                    </th>
+
+
+                                    <th>
+                                        Sender
+                                    </th>
+
+
+                                    <th>
+                                        Category
+                                    </th>
+
+
+                                    <th>
+                                        Priority
+                                    </th>
+
+
+                                    <th>
+                                        Hops
+                                    </th>
+
+
+                                    <th>
+                                        TTL
+                                    </th>
+
+
+                                    <th>
+                                        Status
+                                    </th>
+
+
+                                    <th>
+                                        Time
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody
+                                id="fullMessageTableBody"
+                            >
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+
+
+            <!-- =====================================================
+                 STEP 24
+                 PACKET QUEUE / STORE-AND-FORWARD
+            ====================================================== -->
+
+            <div
+                class="page-view"
+                id="view-queue"
+            >
+
+                <section class="page-section-header">
+
+                    <div>
+
+                        <span class="panel-kicker">
+                            RESILIENT DELIVERY
+                        </span>
+
+
+                        <h3>
+                            Packet Queue
+                        </h3>
+
+
+                        <p>
+                            Monitor queued packets, retry state and store-and-forward synchronization.
+                        </p>
+
+                    </div>
+
+                </section>
+
+
+                <!-- QUEUE SUMMARY -->
+
+                <div class="stats-grid queue-stats-grid">
+
+
+                    <div class="stat-card">
+
+                        <span class="stat-label">
+                            Queued Packets
+                        </span>
+
+
+                        <strong
+                            class="stat-value"
+                            id="queuedPacketCount"
+                        >
+                            00
+                        </strong>
+
+
+                        <span class="stat-description">
+                            Awaiting delivery
+                        </span>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <span class="stat-label">
+                            Retry Pending
+                        </span>
+
+
+                        <strong
+                            class="stat-value"
+                            id="retryPacketCount"
+                        >
+                            00
+                        </strong>
+
+
+                        <span class="stat-description">
+                            Scheduled for retry
+                        </span>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <span class="stat-label">
+                            Oldest Packet
+                        </span>
+
+
+                        <strong
+                            class="stat-value"
+                            id="oldestPacketAge"
+                        >
+                            --
+                        </strong>
+
+
+                        <span class="stat-description">
+                            Waiting duration
+                        </span>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <span class="stat-label">
+                            Delivery State
+                        </span>
+
+
+                        <strong
+                            class="stat-value"
+                            id="queueDeliveryState"
+                        >
+                            READY
+                        </strong>
+
+
+                        <span class="stat-description">
+                            Store-and-forward
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- QUEUE CONTROL -->
+
+                <section class="panel standalone-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <span class="panel-kicker">
+                                QUEUE MANAGEMENT
+                            </span>
+
+
+                            <h3>
+                                Store-and-Forward Packets
+                            </h3>
+
+                        </div>
+
+
+                        <div class="queue-header-actions">
+
+                            <span
+                                class="queue-sync-status"
+                                id="queueSyncStatus"
+                            >
+                                Synchronization Ready
+                            </span>
+
+
+                            <button
+                                class="panel-button"
+                                id="retryQueuedPacketsButton"
+                            >
+                                Retry Queued
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="message-table-container">
+
+                        <table
+                            class="message-table"
+                            id="queueTable"
+                        >
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Message ID
+                                    </th>
+
+
+                                    <th>
+                                        Source
+                                    </th>
+
+
+                                    <th>
+                                        Priority
+                                    </th>
+
+
+                                    <th>
+                                        TTL
+                                    </th>
+
+
+                                    <th>
+                                        Retries
+                                    </th>
+
+
+                                    <th>
+                                        Reason
+                                    </th>
+
+
+                                    <th>
+                                        Queue Time
+                                    </th>
+
+
+                                    <th>
+                                        Status
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody
+                                id="packetQueueTableBody"
+                            >
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </section>
+
+
+                <!-- QUEUE INFORMATION -->
+
+                <section class="panel standalone-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <span class="panel-kicker">
+                                DELIVERY POLICY
+                            </span>
+
+
+                            <h3>
+                                Queue Behaviour
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="queue-policy-grid">
+
+
+                        <div class="health-card">
+
+                            <span class="health-service">
+                                No Route
+                            </span>
+
+
+                            <p class="health-description">
+                                Packet remains locally queued until a usable forwarding route becomes available.
+                            </p>
+
+                        </div>
+
+
+                        <div class="health-card">
+
+                            <span class="health-service">
+                                Gateway Offline
+                            </span>
+
+
+                            <p class="health-description">
+                                Gateway retains packets until backend connectivity is restored.
+                            </p>
+
+                        </div>
+
+
+                        <div class="health-card">
+
+                            <span class="health-service">
+                                Retry Handling
+                            </span>
+
+
+                            <p class="health-description">
+                                Queued packets are retried according to priority and retry limits.
+                            </p>
+
+                        </div>
+
+
+                        <div class="health-card">
+
+                            <span class="health-service">
+                                Synchronization
+                            </span>
+
+
+                            <p class="health-description">
+                                Buffered packets are synchronized when the destination service becomes available.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+
+
+            <!-- =====================================================
+                 STEP 26
+                 GATEWAY / BACKEND OPERATIONS
+            ====================================================== -->
+
+            <div
+                class="page-view"
+                id="view-gateway"
+            >
+
+                <section class="page-section-header">
+
+                    <div>
+
+                        <span class="panel-kicker">
+                            BRIDGE OPERATIONS
+                        </span>
+
+
+                        <h3>
+                            Gateway Operations
+                        </h3>
+
+
+                        <p>
+                            Monitor the LoRa gateway, backend connection and synchronization pipeline.
+                        </p>
+
+                    </div>
+
+                </section>
+
+
+                <!-- GATEWAY SUMMARY -->
+
+                <div class="system-health-grid gateway-health-grid">
+
+
+                    <div class="health-card">
+
+                        <div class="health-card-top">
+
+                            <span class="health-service">
+                                LoRa Gateway
+                            </span>
+
+
+                            <span
+                                class="health-state health-up"
+                                id="gatewayState"
+                            >
+
+                                <span class="health-state-dot"></span>
+
+                                UP
+
+                            </span>
+
+                        </div>
+
+
+                        <p class="health-description">
+                            Radio bridge is reachable and processing packets.
+                        </p>
+
+
+                        <div class="health-metric">
+
+                            <span class="health-metric-label">
+                                Last packet
+                            </span>
+
+
+                            <span
+                                class="health-metric-value"
+                                id="gatewayLastPacket"
+                            >
+                                8 sec ago
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="health-card">
+
+                        <div class="health-card-top">
+
+                            <span class="health-service">
+                                Backend API
+                            </span>
+
+
+                            <span
+                                class="health-state health-up"
+                                id="backendState"
+                            >
+
+                                <span class="health-state-dot"></span>
+
+                                UP
+
+                            </span>
+
+                        </div>
+
+
+                        <p class="health-description">
+                            Application server is accepting dashboard requests.
+                        </p>
+
+
+                        <div class="health-metric">
+
+                            <span class="health-metric-label">
+                                Response
+                            </span>
+
+
+                            <span
+                                class="health-metric-value"
+                                id="backendResponseTime"
+                            >
+                                42 ms
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="health-card">
+
+                        <div class="health-card-top">
+
+                            <span class="health-service">
+                                Database
+                            </span>
+
+
+                            <span
+                                class="health-state health-up"
+                                id="databaseState"
+                            >
+
+                                <span class="health-state-dot"></span>
+
+                                UP
+
+                            </span>
+
+                        </div>
+
+
+                        <p class="health-description">
+                            SQLite datastore is available to backend services.
+                        </p>
+
+
+                        <div class="health-metric">
+
+                            <span class="health-metric-label">
+                                Records
+                            </span>
+
+
+                            <span
+                                class="health-metric-value"
+                                id="databaseRecords"
+                            >
+                                184
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="health-card">
+
+                        <div class="health-card-top">
+
+                            <span class="health-service">
+                                Sync Engine
+                            </span>
+
+
+                            <span
+                                class="health-state health-up"
+                                id="syncState"
+                            >
+
+                                <span class="health-state-dot"></span>
+
+                                READY
+
+                            </span>
+
+                        </div>
+
+
+                        <p class="health-description">
+                            Gateway-to-backend synchronization channel is ready.
+                        </p>
+
+
+                        <div class="health-metric">
+
+                            <span class="health-metric-label">
+                                Pending
+                            </span>
+
+
+                            <span
+                                class="health-metric-value"
+                                id="syncPendingCount"
+                            >
+                                1
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- BRIDGE PIPELINE -->
+
+                <section class="panel standalone-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <span class="panel-kicker">
+                                DATA PIPELINE
+                            </span>
+
+
+                            <h3>
+                                Gateway Data Flow
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="gateway-flow">
+
+
+                        <div class="gateway-flow-step">
+
+                            <span class="gateway-flow-number">
+                                01
+                            </span>
+
+
+                            <strong>
+                                LoRa Mesh
+                            </strong>
+
+
+                            <span>
+                                Receive packet
+                            </span>
+
+                        </div>
+
+
+                        <div class="gateway-flow-arrow">
+                            →
+                        </div>
+
+
+                        <div class="gateway-flow-step">
+
+                            <span class="gateway-flow-number">
+                                02
+                            </span>
+
+
+                            <strong>
+                                Gateway
+                            </strong>
+
+
+                            <span>
+                                Validate packet
+                            </span>
+
+                        </div>
+
+
+                        <div class="gateway-flow-arrow">
+                            →
+                        </div>
+
+
+                        <div class="gateway-flow-step">
+
+                            <span class="gateway-flow-number">
+                                03
+                            </span>
+
+
+                            <strong>
+                                Backend API
+                            </strong>
+
+
+                            <span>
+                                Process request
+                            </span>
+
+                        </div>
+
+
+                        <div class="gateway-flow-arrow">
+                            →
+                        </div>
+
+
+                        <div class="gateway-flow-step">
+
+                            <span class="gateway-flow-number">
+                                04
+                            </span>
+
+
+                            <strong>
+                                Database
+                            </strong>
+
+
+                            <span>
+                                Persist data
+                            </span>
+
+                        </div>
+
+
+                        <div class="gateway-flow-arrow">
+                            →
+                        </div>
+
+
+                        <div class="gateway-flow-step">
+
+                            <span class="gateway-flow-number">
+                                05
+                            </span>
+
+
+                            <strong>
+                                Dashboard
+                            </strong>
+
+
+                            <span>
+                                Display result
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- COMMAND CHANNEL -->
+
+                <section class="panel standalone-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <span class="panel-kicker">
+                                COMMUNICATION CHANNELS
+                            </span>
+
+
+                            <h3>
+                                Gateway Channels
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="gateway-channel-grid">
+
+
+                        <div class="health-card">
+
+                            <div class="health-card-top">
+
+                                <span class="health-service">
+                                    LoRa Receive
+                                </span>
+
+
+                                <span class="health-state health-up">
+
+                                    <span class="health-state-dot"></span>
+
+                                    READY
+
+                                </span>
+
+                            </div>
+
+
+                            <p class="health-description">
+                                Incoming mesh packets are accepted by the gateway.
+                            </p>
+
+                        </div>
+
+
+                        <div class="health-card">
+
+                            <div class="health-card-top">
+
+                                <span class="health-service">
+                                    Backend Upload
+                                </span>
+
+
+                                <span class="health-state health-up">
+
+                                    <span class="health-state-dot"></span>
+
+                                    READY
+
+                                </span>
+
+                            </div>
+
+
+                            <p class="health-description">
+                                Gateway can forward validated packets to the API server.
+                            </p>
+
+                        </div>
+
+
+                        <div class="health-card">
+
+                            <div class="health-card-top">
+
+                                <span class="health-service">
+                                    Queue Sync
+                                </span>
+
+
+                                <span class="health-state health-warning">
+
+                                    <span class="health-state-dot"></span>
+
+                                    1 PENDING
+
+                                </span>
+
+                            </div>
+
+
+                            <p class="health-description">
+                                One packet is waiting for a successful synchronization cycle.
+                            </p>
+
+                        </div>
+
+
+                        <div class="health-card">
+
+                            <div class="health-card-top">
+
+                                <span class="health-service">
+                                    Command Return
+                                </span>
+
+
+                                <span class="health-state health-up">
+
+                                    <span class="health-state-dot"></span>
+
+                                    READY
+
+                                </span>
+
+                            </div>
+
+
+                            <p class="health-description">
+                                Authorized commands can be returned to mesh nodes through the gateway.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+
+
+            <!-- =====================================================
+                 STEP 25
+                 AUDIT LOGS
+            ====================================================== -->
+
+            <div
+                class="page-view"
+                id="view-logs"
+            >
+
+                <section class="page-section-header">
+
+                    <div>
+
+                        <span class="panel-kicker">
+                            SECURITY & AUDIT
+                        </span>
+
+
+                        <h3>
+                            Audit Logs
+                        </h3>
+
+
+                        <p>
+                            Review authentication, node registration, administrative and network events.
+                        </p>
+
+                    </div>
+
+
+                    <div
+                        class="admin-only"
+                        id="clearLogsControl"
+                    >
+
+                        <button
+                            class="panel-button"
+                            id="exportLogsButton"
+                        >
+                            Export Logs
+                        </button>
+
+                    </div>
+
+                </section>
+
+
+                <!-- LOG FILTERS -->
+
+                <section class="panel standalone-panel">
+
+                    <div class="incident-filters">
+
+
+                        <div class="filter-group">
+
+                            <label for="logEventFilter">
+                                Event Type
+                            </label>
+
+
+                            <select
+                                id="logEventFilter"
+                            >
+
+                                <option value="ALL">
+                                    All Events
+                                </option>
+
+
+                                <option value="AUTHENTICATION">
+                                    Authentication
+                                </option>
+
+
+                                <option value="NODE">
+                                    Node
+                                </option>
+
+
+                                <option value="INCIDENT">
+                                    Incident
+                                </option>
+
+
+                                <option value="NETWORK">
+                                    Network
+                                </option>
+
+
+                                <option value="SECURITY">
+                                    Security
+                                </option>
+
+
+                                <option value="SYSTEM">
+                                    System
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="filter-group">
+
+                            <label for="logSeverityFilter">
+                                Severity
+                            </label>
+
+
+                            <select
+                                id="logSeverityFilter"
+                            >
+
+                                <option value="ALL">
+                                    All Severities
+                                </option>
+
+
+                                <option value="INFO">
+                                    Info
+                                </option>
+
+
+                                <option value="WARNING">
+                                    Warning
+                                </option>
+
+
+                                <option value="CRITICAL">
+                                    Critical
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <button
+                            class="reset-filter-button"
+                            id="resetLogFilters"
+                        >
+                            Reset
+                        </button>
+
+                    </div>
+
+                </section>
+
+
+                <!-- LOG TABLE -->
+
+                <section class="panel standalone-panel">
+
+                    <div class="message-table-container">
+
+                        <table
+                            class="message-table"
+                            id="auditLogTable"
+                        >
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Log ID
+                                    </th>
+
+
+                                    <th>
+                                        Event Type
+                                    </th>
+
+
+                                    <th>
+                                        Severity
+                                    </th>
+
+
+                                    <th>
+                                        Actor / Node
+                                    </th>
+
+
+                                    <th>
+                                        Description
+                                    </th>
+
+
+                                    <th>
+                                        Time
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody
+                                id="auditLogTableBody"
+                            >
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </section>
+
+
+                <!-- SECURITY SUMMARY -->
+
+                <section class="panel standalone-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <span class="panel-kicker">
+                                SECURITY MONITORING
+                            </span>
+
+
+                            <h3>
+                                Security Summary
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="system-health-grid">
+
+
+                        <div class="health-card">
+
+                            <span class="health-service">
+                                Login Attempts
+                            </span>
+
+
+                            <p class="health-description">
+                                Authentication events recorded for dashboard access.
+                            </p>
+
+
+                            <div class="health-metric">
+
+                                <span class="health-metric-label">
+                                    Events
+                                </span>
+
+
+                                <span
+                                    class="health-metric-value"
+                                    id="loginEventCount"
+                                >
+                                    12
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="health-card">
+
+                            <span class="health-service">
+                                Admin Actions
+                            </span>
+
+
+                            <p class="health-description">
+                                Administrative configuration and node-management events.
+                            </p>
+
+
+                            <div class="health-metric">
+
+                                <span class="health-metric-label">
+                                    Events
+                                </span>
+
+
+                                <span
+                                    class="health-metric-value"
+                                    id="adminEventCount"
+                                >
+                                    8
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="health-card">
+
+                            <span class="health-service">
+                                Security Warnings
+                            </span>
+
+
+                            <p class="health-description">
+                                Events that require security or operational attention.
+                            </p>
+
+
+                            <div class="health-metric">
+
+                                <span class="health-metric-label">
+                                    Warnings
+                                </span>
+
+
+                                <span
+                                    class="health-metric-value"
+                                    id="securityWarningCount"
+                                >
+                                    1
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="health-card">
+
+                            <span class="health-service">
+                                Logging Status
+                            </span>
+
+
+                            <p class="health-description">
+                                Security and operational event recording is active.
+                            </p>
+
+
+                            <div class="health-metric">
+
+                                <span class="health-metric-label">
+                                    State
+                                </span>
+
+
+                                <span
+                                    class="health-metric-value"
+                                    id="loggingState"
+                                >
+                                    ACTIVE
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+
+
+            <!-- =====================================================
+                 SETTINGS VIEW
+            ====================================================== -->
+
+            <div
+                class="page-view"
+                id="view-settings"
+            >
+
+                <section class="page-section-header">
+
+                    <div>
+
+                        <span class="panel-kicker">
+                            SYSTEM CONFIGURATION
+                        </span>
+
+
+                        <h3>
+                            Settings
+                        </h3>
+
+
+                        <p>
+                            Dashboard and operator configuration.
+                        </p>
+
+                    </div>
+
+                </section>
+
+
+                <div class="settings-grid">
+
+
+                    <!-- SESSION -->
+
+                    <section class="panel settings-card">
+
+                        <div class="settings-card-header">
+
+                            <span class="panel-kicker">
+                                OPERATOR PROFILE
+                            </span>
+
+
+                            <h4>
+                                Current Session
+                            </h4>
+
+                        </div>
+
+
+                        <div class="settings-row">
+
+                            <span>
+                                Name
+                            </span>
+
+
+                            <strong id="settingsUserName">
+                                Rescue Operator
+                            </strong>
+
+                        </div>
+
+
+                        <div class="settings-row">
+
+                            <span>
+                                Role
+                            </span>
+
+
+                            <strong id="settingsUserRole">
+                                Rescue Operator
+                            </strong>
+
+                        </div>
+
+
+                        <div class="settings-row">
+
+                            <span>
+                                Session
+                            </span>
+
+
+                            <button
+                                class="panel-button logout-button"
+                                id="logoutButton"
+                            >
+                                Sign Out
+                            </button>
+
+                        </div>
+
+                    </section>
+
+
+
+                    <!-- DISPLAY -->
+
+                    <section class="panel settings-card">
+
+                        <div class="settings-card-header">
+
+                            <span class="panel-kicker">
+                                DISPLAY
+                            </span>
+
+
+                            <h4>
+                                Dashboard Preferences
+                            </h4>
+
+                        </div>
+
+
+                        <div class="settings-row">
+
+                            <span>
+                                Auto Refresh
+                            </span>
+
+
+                            <label class="toggle">
+
+                                <input
+                                    type="checkbox"
+                                    checked
+                                    id="autoRefreshToggle"
+                                >
+
+
+                                <span class="toggle-slider"></span>
+
+                            </label>
+
+                        </div>
+
+
+                        <div class="settings-row">
+
+                            <span>
+                                Map Animations
+                            </span>
+
+
+                            <label class="toggle">
+
+                                <input
+                                    type="checkbox"
+                                    checked
+                                    id="mapAnimationToggle"
+                                >
+
+
+                                <span class="toggle-slider"></span>
+
+                            </label>
+
+                        </div>
+
+                    </section>
+
+
+
+                    <!-- ADMINISTRATION -->
+
+                    <section
+                        class="panel settings-card admin-only"
+                    >
+
+                        <div class="settings-card-header">
+
+                            <span class="panel-kicker">
+                                ADMINISTRATION
+                            </span>
+
+
+                            <h4>
+                                Administrative Controls
+                            </h4>
+
+                        </div>
+
+
+                        <div class="settings-row">
+
+                            <span>
+                                User Management
+                            </span>
+
+
+                            <button class="panel-button">
+                                Manage Users
+                            </button>
+
+                        </div>
+
+
+                        <div class="settings-row">
+
+                            <span>
+                                Node Registration
+                            </span>
+
+
+                            <button
+                                class="panel-button"
+                                id="manageNodesButton"
+                            >
+                                Manage Nodes
+                            </button>
+
+                        </div>
+
+
+                        <div class="settings-row">
+
+                            <span>
+                                Security Logs
+                            </span>
+
+
+                            <button
+                                class="panel-button"
+                                id="manageLogsButton"
+                            >
+                                View Logs
+                            </button>
+
+                        </div>
+
+                    </section>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+
+<!-- =====================================================
+     INCIDENT MODAL
+====================================================== -->
+
+<div
+    class="modal-overlay"
+    id="incidentModal"
+>
+
+    <div class="incident-modal">
+
+        <div class="modal-header">
+
+            <div>
+
+                <span class="panel-kicker">
+                    INCIDENT DETAILS
+                </span>
+
+
+                <h3 id="modalIncidentCategory">
+                    Incident
+                </h3>
+
+            </div>
+
+
+            <button
+                class="modal-close"
+                id="closeModal"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="modal-body">
+
+
+            <div class="modal-priority-row">
+
+                <span
+                    class="priority-badge"
+                    id="modalPriority"
+                >
+                    CRITICAL
+                </span>
+
+
+                <span
+                    class="incident-status"
+                    id="modalStatus"
+                >
+                    NEW
+                </span>
+
+            </div>
+
+
+            <div
+                class="review-warning"
+                id="reviewWarning"
+            >
+
+                <div class="review-warning-title">
+                    Operator Review Required
+                </div>
+
+
+                <p id="reviewWarningText">
+                    This incident requires human verification before status advancement.
+                </p>
+
+
+                <button
+                    class="review-button"
+                    id="reviewButton"
+                >
+                    Mark as Reviewed
+                </button>
+
+            </div>
+
+
+            <div class="detail-group">
+
+                <span class="detail-label">
+                    MESSAGE
+                </span>
+
+
+                <p id="modalMessage">
+                </p>
+
+            </div>
+
+
+            <div class="classification-grid">
+
+
+                <div class="classification-card">
+
+                    <span class="detail-label">
+                        CLASSIFIED CATEGORY
+                    </span>
+
+
+                    <strong id="modalClassification">
+                        Trapped Person
+                    </strong>
+
+                </div>
+
+
+                <div class="classification-card">
+
+                    <span class="detail-label">
+                        CONFIDENCE
+                    </span>
+
+
+                    <strong id="modalConfidence">
+                        94%
+                    </strong>
+
+                </div>
+
+
+                <div class="classification-card">
+
+                    <span class="detail-label">
+                        SAFETY RULE
+                    </span>
+
+
+                    <strong id="modalSafetyRule">
+                        Triggered
+                    </strong>
+
+                </div>
+
+
+                <div class="classification-card">
+
+                    <span class="detail-label">
+                        HUMAN REVIEW
+                    </span>
+
+
+                    <strong id="modalReviewState">
+                        Required
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="detail-grid">
+
+
+                <div class="detail-group">
+
+                    <span class="detail-label">
+                        INCIDENT ID
+                    </span>
+
+
+                    <span id="modalId">
+                    </span>
+
+                </div>
+
+
+                <div class="detail-group">
+
+                    <span class="detail-label">
+                        NODE
+                    </span>
+
+
+                    <span id="modalNode">
+                    </span>
+
+                </div>
+
+
+                <div class="detail-group">
+
+                    <span class="detail-label">
+                        GPS LOCATION
+                    </span>
+
+
+                    <span id="modalLocation">
+                    </span>
+
+                </div>
+
+
+                <div class="detail-group">
+
+                    <span class="detail-label">
+                        TIME
+                    </span>
+
+
+                    <span id="modalTime">
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="assignment-group"
+                id="assignmentGroup"
+            >
+
+                <label
+                    for="assignedTeam"
+                    class="detail-label"
+                >
+                    ASSIGNED TEAM
+                </label>
+
+
+                <select id="assignedTeam">
+
+                    <option value="Rescue Team Alpha">
+                        Rescue Team Alpha
+                    </option>
+
+
+                    <option value="Rescue Team Bravo">
+                        Rescue Team Bravo
+                    </option>
+
+
+                    <option value="Medical Response Unit">
+                        Medical Response Unit
+                    </option>
+
+
+                    <option value="Fire Response Unit">
+                        Fire Response Unit
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="workflow-section">
+
+                <span class="detail-label">
+                    RESPONSE LIFECYCLE
+                </span>
+
+
+                <div class="workflow">
+
+
+                    <div
+                        class="workflow-step"
+                        data-workflow="NEW"
+                    >
+
+                        <span class="workflow-dot"></span>
+
+
+                        <span>
+                            NEW
+                        </span>
+
+                    </div>
+
+
+                    <div class="workflow-line"></div>
+
+
+                    <div
+                        class="workflow-step"
+                        data-workflow="ACKNOWLEDGED"
+                    >
+
+                        <span class="workflow-dot"></span>
+
+
+                        <span>
+                            ACKNOWLEDGED
+                        </span>
+
+                    </div>
+
+
+                    <div class="workflow-line"></div>
+
+
+                    <div
+                        class="workflow-step"
+                        data-workflow="ASSIGNED"
+                    >
+
+                        <span class="workflow-dot"></span>
+
+
+                        <span>
+                            ASSIGNED
+                        </span>
+
+                    </div>
+
+
+                    <div class="workflow-line"></div>
+
+
+                    <div
+                        class="workflow-step"
+                        data-workflow="IN_PROGRESS"
+                    >
+
+                        <span class="workflow-dot"></span>
+
+
+                        <span>
+                            IN PROGRESS
+                        </span>
+
+                    </div>
+
+
+                    <div class="workflow-line"></div>
+
+
+                    <div
+                        class="workflow-step"
+                        data-workflow="RESOLVED"
+                    >
+
+                        <span class="workflow-dot"></span>
+
+
+                        <span>
+                            RESOLVED
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="modal-footer">
+
+            <button
+                class="modal-action secondary-action"
+                id="modalCloseButton"
+            >
+                Close
+            </button>
+
+
+            <button
+                class="modal-action cancel-action"
+                id="cancelIncidentButton"
+            >
+                Cancel Incident
+            </button>
+
+
+            <button
+                class="modal-action primary-action"
+                id="statusActionButton"
+            >
+                Acknowledge Incident
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     NODE DETAIL MODAL
+     STEPS 19-21
+====================================================== -->
+
+<div
+    class="modal-overlay"
+    id="nodeDetailModal"
+>
+
+    <div class="node-detail-modal">
+
+        <div class="modal-header">
+
+            <div>
+
+                <span class="panel-kicker">
+                    NODE INSPECTION
+                </span>
+
+
+                <h3 id="nodeDetailTitle">
+                    Node Details
+                </h3>
+
+            </div>
+
+
+            <button
+                class="modal-close"
+                id="closeNodeDetailModal"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="modal-body">
+
+
+            <!-- NODE SUMMARY -->
+
+            <div class="node-detail-summary">
+
+                <div class="node-detail-identity">
+
+                    <div
+                        class="node-detail-icon"
+                        id="nodeDetailIcon"
+                    >
+                        DM
+                    </div>
+
+
+                    <div>
+
+                        <span class="detail-label">
+                            NODE ID
+                        </span>
+
+
+                        <strong id="nodeDetailId">
+                            DM-001
+                        </strong>
+
+
+                        <span
+                            class="node-detail-status"
+                            id="nodeDetailStatus"
+                        >
+                            ONLINE
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="node-health-indicator">
+
+                    <span
+                        class="node-health-dot"
+                        id="nodeHealthDot"
+                    ></span>
+
+
+                    <div>
+
+                        <strong id="nodeHealthState">
+                            Healthy
+                        </strong>
+
+
+                        <span id="nodeHealthDescription">
+                            Node is operating normally.
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- TELEMETRY -->
+
+            <div class="node-detail-section">
+
+                <div class="node-detail-section-header">
+
+                    <span class="panel-kicker">
+                        LIVE TELEMETRY
+                    </span>
+
+
+                    <h4>
+                        Node Health & Telemetry
+                    </h4>
+
+                </div>
+
+
+                <div class="node-telemetry-grid">
+
+
+                    <div class="node-telemetry-card">
+
+                        <span class="detail-label">
+                            BATTERY
+                        </span>
+
+
+                        <strong id="nodeDetailBattery">
+                            87%
+                        </strong>
+
+
+                        <div class="node-telemetry-bar">
+
+                            <span
+                                id="nodeDetailBatteryBar"
+                            ></span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="node-telemetry-card">
+
+                        <span class="detail-label">
+                            SIGNAL
+                        </span>
+
+
+                        <strong id="nodeDetailSignal">
+                            -61 dBm
+                        </strong>
+
+
+                        <span
+                            class="node-telemetry-subtext"
+                            id="nodeDetailSignalState"
+                        >
+                            Good signal
+                        </span>
+
+                    </div>
+
+
+                    <div class="node-telemetry-card">
+
+                        <span class="detail-label">
+                            GPS
+                        </span>
+
+
+                        <strong id="nodeDetailGpsState">
+                            Available
+                        </strong>
+
+
+                        <span
+                            class="node-telemetry-subtext"
+                            id="nodeDetailGpsCoordinates"
+                        >
+                            22.5726, 88.3639
+                        </span>
+
+                    </div>
+
+
+                    <div class="node-telemetry-card">
+
+                        <span class="detail-label">
+                            LAST SEEN
+                        </span>
+
+
+                        <strong id="nodeDetailLastSeen">
+                            10 sec ago
+                        </strong>
+
+
+                        <span class="node-telemetry-subtext">
+                            Latest heartbeat
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- NODE INFORMATION -->
+
+            <div class="node-detail-section">
+
+                <div class="node-detail-section-header">
+
+                    <span class="panel-kicker">
+                        NODE INFORMATION
+                    </span>
+
+
+                    <h4>
+                        Registration & Location
+                    </h4>
+
+                </div>
+
+
+                <div class="detail-grid">
+
+
+                    <div class="detail-group">
+
+                        <span class="detail-label">
+                            NODE ID
+                        </span>
+
+
+                        <span id="nodeInfoId">
+                            DM-001
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-group">
+
+                        <span class="detail-label">
+                            STATUS
+                        </span>
+
+
+                        <span id="nodeInfoStatus">
+                            ONLINE
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-group">
+
+                        <span class="detail-label">
+                            GPS COORDINATES
+                        </span>
+
+
+                        <span id="nodeInfoCoordinates">
+                            22.5726, 88.3639
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-group">
+
+                        <span class="detail-label">
+                            GPS VALIDITY
+                        </span>
+
+
+                        <span id="nodeInfoGpsValidity">
+                            Available
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- CONNECTED ROUTES -->
+
+            <div class="node-detail-section">
+
+                <div class="node-detail-section-header">
+
+                    <span class="panel-kicker">
+                        MESH CONNECTIVITY
+                    </span>
+
+
+                    <h4>
+                        Connected Routes
+                    </h4>
+
+                </div>
+
+
+                <div
+                    class="node-related-list"
+                    id="nodeRoutesList"
+                >
+                </div>
+
+            </div>
+
+
+
+            <!-- RELATED INCIDENTS -->
+
+            <div class="node-detail-section">
+
+                <div class="node-detail-section-header">
+
+                    <span class="panel-kicker">
+                        RESPONSE ACTIVITY
+                    </span>
+
+
+                    <h4>
+                        Related Incidents
+                    </h4>
+
+                </div>
+
+
+                <div
+                    class="node-related-list"
+                    id="nodeIncidentsList"
+                >
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="modal-footer">
+
+            <button
+                class="modal-action secondary-action"
+                id="nodeViewOnMapButton"
+            >
+                View on Map
+            </button>
+
+
+            <button
+                class="modal-action secondary-action"
+                id="nodeViewNetworkButton"
+            >
+                View Network
+            </button>
+
+
+            <button
+                class="modal-action primary-action"
+                id="nodeDetailCloseButton"
+            >
+                Close
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     NODE REGISTRATION MODAL
+     STEP 22
+====================================================== -->
+
+<div
+    class="modal-overlay"
+    id="nodeRegistrationModal"
+>
+
+    <div class="node-registration-modal">
+
+        <div class="modal-header">
+
+            <div>
+
+                <span class="panel-kicker">
+                    ADMINISTRATION
+                </span>
+
+
+                <h3>
+                    Register Mesh Node
+                </h3>
+
+            </div>
+
+
+            <button
+                class="modal-close"
+                id="closeNodeRegistrationModal"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <form
+            class="node-registration-form"
+            id="nodeRegistrationForm"
+        >
+
+            <div class="node-registration-intro">
+
+                <p>
+                    Register a trusted field node before it participates in the DisasterMesh network.
+                </p>
+
+            </div>
+
+
+            <div class="node-form-grid">
+
+
+                <div class="auth-field">
+
+                    <label for="registerNodeId">
+                        Node ID
+                    </label>
+
+
+                    <input
+                        type="text"
+                        id="registerNodeId"
+                        placeholder="Example: DM-007"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="auth-field">
+
+                    <label for="registerNodeStatus">
+                        Initial Status
+                    </label>
+
+
+                    <select
+                        id="registerNodeStatus"
+                        required
+                    >
+
+                        <option value="ONLINE">
+                            ONLINE
+                        </option>
+
+
+                        <option value="OFFLINE">
+                            OFFLINE
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="auth-field">
+
+                    <label for="registerNodeBattery">
+                        Battery %
+                    </label>
+
+
+                    <input
+                        type="number"
+                        id="registerNodeBattery"
+                        min="0"
+                        max="100"
+                        value="100"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="auth-field">
+
+                    <label for="registerNodeRssi">
+                        Signal / RSSI
+                    </label>
+
+
+                    <input
+                        type="number"
+                        id="registerNodeRssi"
+                        placeholder="-60"
+                        min="-120"
+                        max="0"
+                    >
+
+                </div>
+
+
+                <div class="auth-field">
+
+                    <label for="registerNodeLatitude">
+                        Latitude
+                    </label>
+
+
+                    <input
+                        type="number"
+                        id="registerNodeLatitude"
+                        placeholder="22.5726"
+                        step="any"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="auth-field">
+
+                    <label for="registerNodeLongitude">
+                        Longitude
+                    </label>
+
+
+                    <input
+                        type="number"
+                        id="registerNodeLongitude"
+                        placeholder="88.3639"
+                        step="any"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="auth-error"
+                id="nodeRegistrationError"
+            >
+            </div>
+
+
+            <div class="node-registration-security">
+
+                <span class="detail-label">
+                    TRUST POLICY
+                </span>
+
+
+                <p>
+                    Only administrator-registered nodes are considered trusted mesh participants.
+                </p>
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="modal-action secondary-action"
+                    id="cancelNodeRegistrationButton"
+                >
+                    Cancel
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="modal-action primary-action"
+                    id="saveNodeRegistrationButton"
+                >
+                    Register Node
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     STEP 23
+     MESSAGE DETAIL / PACKET INSPECTION MODAL
+====================================================== -->
+
+<div
+    class="modal-overlay"
+    id="messageDetailModal"
+>
+
+    <div class="message-detail-modal">
+
+        <div class="modal-header">
+
+            <div>
+
+                <span class="panel-kicker">
+                    PACKET INSPECTION
+                </span>
+
+
+                <h3 id="messageDetailTitle">
+                    Message Details
+                </h3>
+
+            </div>
+
+
+            <button
+                class="modal-close"
+                id="closeMessageDetailModal"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="modal-body">
+
+
+            <!-- MESSAGE SUMMARY -->
+
+            <div class="node-detail-summary">
+
+                <div class="node-detail-identity">
+
+                    <div
+                        class="node-detail-icon"
+                        id="messageDetailIcon"
+                    >
+                        MSG
+                    </div>
+
+
+                    <div>
+
+                        <span class="detail-label">
+                            MESSAGE ID
+                        </span>
+
+
+                        <strong id="messageDetailId">
+                            DM001-00017
+                        </strong>
+
+
+                        <span
+                            class="node-detail-status"
+                            id="messageDetailStatus"
+                        >
+                            DELIVERED
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="node-health-indicator">
+
+                    <span
+                        class="node-health-dot"
+                        id="messageDeliveryDot"
+                    ></span>
+
+
+                    <div>
+
+                        <strong id="messageDeliveryState">
+                            Delivered
+                        </strong>
+
+
+                        <span id="messageDeliveryDescription">
+                            Packet successfully reached the destination.
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- PACKET METADATA -->
+
+            <div class="node-detail-section">
+
+                <div class="node-detail-section-header">
+
+                    <span class="panel-kicker">
+                        PACKET METADATA
+                    </span>
+
+
+                    <h4>
+                        Message Information
+                    </h4>
+
+                </div>
+
+
+                <div class="detail-grid">
+
+
+                    <div class="detail-group">
+
+                        <span class="detail-label">
+                            MESSAGE ID
+                        </span>
+
+
+                        <span id="packetMessageId">
+                            DM001-00017
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-group">
+
+                        <span class="detail-label">
+                            SENDER
+                        </span>
+
+
+                        <span id="packetSender">
+                            DM-001
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-group">
+
+                        <span class="detail-label">
+                            CATEGORY
+                        </span>
+
+
+                        <span id="packetCategory">
+                            Trapped Person
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-group">
+
+                        <span class="detail-label">
+                            PRIORITY
+                        </span>
+
+
+                        <span id="packetPriority">
+                            CRITICAL
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-group">
+
+                        <span class="detail-label">
+                            HOPS
+                        </span>
+
+
+                        <span id="packetHops">
+                            3
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-group">
+
+                        <span class="detail-label">
+                            TTL
+                        </span>
+
+
+                        <span id="packetTtl">
+                            2
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-group">
+
+                        <span class="detail-label">
+                            STATUS
+                        </span>
+
+
+                        <span id="packetStatus">
+                            DELIVERED
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-group">
+
+                        <span class="detail-label">
+                            TIMESTAMP
+                        </span>
+
+
+                        <span id="packetTime">
+                            2 min ago
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- PACKET CONTENT -->
+
+            <div class="node-detail-section">
+
+                <div class="node-detail-section-header">
+
+                    <span class="panel-kicker">
+                        PAYLOAD
+                    </span>
+
+
+                    <h4>
+                        Message Content
+                    </h4>
+
+                </div>
+
+
+                <div class="message-payload-box">
+
+                    <p id="packetContent">
+                        Person trapped inside building. Immediate rescue required.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- DELIVERY PATH -->
+
+            <div class="node-detail-section">
+
+                <div class="node-detail-section-header">
+
+                    <span class="panel-kicker">
+                        ROUTING
+                    </span>
+
+
+                    <h4>
+                        Delivery Path
+                    </h4>
+
+                </div>
+
+
+                <div
+                    class="packet-route"
+                    id="packetRoutePath"
+                >
+                </div>
+
+            </div>
+
+
+
+            <!-- DELIVERY STATE -->
+
+            <div class="node-detail-section">
+
+                <div class="node-detail-section-header">
+
+                    <span class="panel-kicker">
+                        DELIVERY STATE
+                    </span>
+
+
+                    <h4>
+                        Acknowledgement & Integrity
+                    </h4>
+
+                </div>
+
+
+                <div class="node-telemetry-grid">
+
+
+                    <div class="node-telemetry-card">
+
+                        <span class="detail-label">
+                            ACKNOWLEDGEMENT
+                        </span>
+
+
+                        <strong id="packetAckState">
+                            CONFIRMED
+                        </strong>
+
+
+                        <span
+                            class="node-telemetry-subtext"
+                            id="packetAckDescription"
+                        >
+                            Return acknowledgement received.
+                        </span>
+
+                    </div>
+
+
+                    <div class="node-telemetry-card">
+
+                        <span class="detail-label">
+                            INTEGRITY
+                        </span>
+
+
+                        <strong id="packetIntegrityState">
+                            VERIFIED
+                        </strong>
+
+
+                        <span
+                            class="node-telemetry-subtext"
+                            id="packetIntegrityDescription"
+                        >
+                            Packet integrity check passed.
+                        </span>
+
+                    </div>
+
+
+                    <div class="node-telemetry-card">
+
+                        <span class="detail-label">
+                            DUPLICATE CHECK
+                        </span>
+
+
+                        <strong id="packetDuplicateState">
+                            CLEAR
+                        </strong>
+
+
+                        <span
+                            class="node-telemetry-subtext"
+                            id="packetDuplicateDescription"
+                        >
+                            Unique message identifier accepted.
+                        </span>
+
+                    </div>
+
+
+                    <div class="node-telemetry-card">
+
+                        <span class="detail-label">
+                            TTL STATE
+                        </span>
+
+
+                        <strong id="packetTtlState">
+                            VALID
+                        </strong>
+
+
+                        <span
+                            class="node-telemetry-subtext"
+                            id="packetTtlDescription"
+                        >
+                            Packet remained within hop limit.
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="modal-footer">
+
+            <button
+                class="modal-action secondary-action"
+                id="messageViewSenderNodeButton"
+            >
+                View Sender Node
+            </button>
+
+
+            <button
+                class="modal-action secondary-action"
+                id="messageViewNetworkButton"
+            >
+                View Network
+            </button>
+
+
+            <button
+                class="modal-action primary-action"
+                id="messageDetailCloseButton"
+            >
+                Close
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     TOASTS
+====================================================== -->
+
+<div
+    class="toast-container"
+    id="toastContainer"
+>
+</div>
+
+
+
+<!-- =====================================================
+     LEAFLET
+====================================================== -->
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+></script>
+
+
+
+<!-- =====================================================
+     DISASTERMESH DASHBOARD
+====================================================== -->
+
+<script src="js/dashboard.js"></script>
+
+
+</body>
+
+</html>
