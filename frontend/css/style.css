@@ -1,7 +1,7 @@
 /* =========================================
    DisasterMesh
    Main Stylesheet
-   Steps 1 - 26
+   Steps 1 - 30
 ========================================= */
 
 
@@ -2522,6 +2522,70 @@ textarea:focus-visible {
 }
 
 
+
+/* =========================================
+   LEAFLET NODE / INCIDENT MARKERS
+========================================= */
+
+.custom-node-marker,
+.custom-incident-marker {
+    background: transparent !important;
+    border: none !important;
+}
+
+.node-map-marker {
+    min-width: 76px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 0 8px;
+    border: 2px solid white;
+    border-radius: 14px;
+    box-shadow: 0 3px 10px rgba(15, 23, 42, 0.22);
+    color: white;
+    font-size: 9px;
+    font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.node-map-marker.online {
+    background: var(--success);
+}
+
+.node-map-marker.offline {
+    background: var(--critical);
+}
+
+.node-map-status-dot {
+    width: 7px;
+    height: 7px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: white;
+}
+
+.node-map-label {
+    display: inline-block;
+}
+
+.incident-map-marker {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+    border-radius: 50%;
+    background: var(--critical);
+    color: white;
+    font-size: 12px;
+    font-weight: 800;
+    box-shadow: 0 3px 10px rgba(15, 23, 42, 0.25);
+}
+
 /* =========================================
    TOPOLOGY
 ========================================= */
@@ -2689,6 +2753,20 @@ textarea:focus-visible {
         4 7;
 
 }
+
+
+.route-line.standby {
+    stroke: #60a5fa;
+    stroke-width: 2;
+    stroke-dasharray: 8 6;
+}
+
+.route-line.stale {
+    stroke: #fca5a5;
+    stroke-width: 2;
+    stroke-dasharray: 5 7;
+}
+
 
 .topology-nodes {
 
@@ -6684,4 +6762,681 @@ textarea:focus-visible {
 
     }
 
+}
+
+
+/* =====================================================
+   STEP 27
+   ALERT CENTER
+===================================================== */
+
+.alert-table {
+    min-width: 900px;
+}
+
+.alert-row {
+    cursor: pointer;
+    transition:
+        background 0.15s ease,
+        opacity 0.15s ease;
+}
+
+.alert-row:hover {
+    background: #fafcff;
+}
+
+.alert-unread {
+    background: #f8fbff;
+}
+
+.alert-unread:hover {
+    background: #f2f7ff;
+}
+
+.alert-title {
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.alert-description {
+    min-width: 280px;
+    max-width: 460px;
+    white-space: normal !important;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.alert-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 7px;
+    border-radius: 5px;
+    font-size: 8px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.alert-status.unread {
+    background: var(--accent-light);
+    color: var(--accent);
+}
+
+.alert-status.read {
+    background: var(--low-light);
+    color: var(--low);
+}
+
+.alert-severity {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 7px;
+    border-radius: 5px;
+    font-size: 8px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.alert-severity-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
+
+.alert-critical {
+    background: var(--critical-light);
+    color: var(--critical);
+}
+
+.alert-critical .alert-severity-dot {
+    background: var(--critical);
+}
+
+.alert-warning {
+    background: var(--medium-light);
+    color: var(--medium);
+}
+
+.alert-warning .alert-severity-dot {
+    background: var(--medium);
+}
+
+.alert-info {
+    background: var(--accent-light);
+    color: var(--accent);
+}
+
+.alert-info .alert-severity-dot {
+    background: var(--accent);
+}
+
+.alert-source {
+    font-weight: 650;
+    color: var(--text-primary);
+}
+
+.alert-time {
+    white-space: nowrap;
+    color: var(--text-secondary);
+    font-size: 9px;
+}
+
+.alert-count-badge {
+    background: var(--critical-light);
+    color: var(--critical);
+}
+
+.alert-filter-active {
+    border-color: #c7d7ff !important;
+    background: var(--accent-light) !important;
+    color: var(--accent) !important;
+}
+
+
+/* =====================================================
+   STEP 28
+   ANALYTICS & PERFORMANCE
+===================================================== */
+
+.analytics-table {
+    min-width: 850px;
+}
+
+.analytics-row:hover {
+    background: #fafcff;
+}
+
+.analytics-metric {
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.analytics-current {
+    font-weight: 700;
+}
+
+.analytics-target {
+    color: var(--text-secondary);
+}
+
+.metric-state {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 7px;
+    border-radius: 5px;
+    font-size: 8px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.metric-good {
+    background: var(--success-light);
+    color: var(--success);
+}
+
+.metric-warning {
+    background: var(--medium-light);
+    color: var(--medium);
+}
+
+.metric-critical {
+    background: var(--critical-light);
+    color: var(--critical);
+}
+
+.analytics-note {
+    min-width: 260px;
+    max-width: 430px;
+    color: var(--text-secondary);
+    font-size: 9px;
+    line-height: 1.5;
+    white-space: normal !important;
+}
+
+.performance-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    padding: 20px;
+}
+
+.performance-summary-card {
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: #fcfdff;
+}
+
+.performance-summary-card strong {
+    display: block;
+    margin-top: 8px;
+    font-size: 20px;
+}
+
+.performance-summary-card span {
+    display: block;
+    margin-top: 5px;
+    color: var(--text-secondary);
+    font-size: 9px;
+}
+
+.analytics-filter-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.analytics-export-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 10px;
+    background: var(--success-light);
+    border: 1px solid #bbf7d0;
+    border-radius: 6px;
+    color: var(--success);
+    font-size: 8px;
+    font-weight: 700;
+}
+
+
+/* =====================================================
+   STEP 29
+   USER MANAGEMENT
+===================================================== */
+
+.user-table {
+    min-width: 850px;
+}
+
+.user-row:hover {
+    background: #fafcff;
+}
+
+.user-name {
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.user-username {
+    font-family:
+        Consolas,
+        "Courier New",
+        monospace;
+    color: var(--text-secondary);
+    font-size: 9px;
+}
+
+.user-role {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 7px;
+    border-radius: 5px;
+    font-size: 8px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.user-role.admin {
+    background: var(--accent-light);
+    color: var(--accent);
+}
+
+.user-role.operator {
+    background: var(--success-light);
+    color: var(--success);
+}
+
+.user-state {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 8px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.user-state-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
+
+.user-active {
+    color: var(--success);
+}
+
+.user-active .user-state-dot {
+    background: var(--success);
+}
+
+.user-inactive {
+    color: var(--offline);
+}
+
+.user-inactive .user-state-dot {
+    background: var(--offline);
+}
+
+.user-action-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.user-action {
+    padding: 5px 8px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 8px;
+    font-weight: 600;
+}
+
+.user-action:hover {
+    background: var(--accent-light);
+    border-color: #c7d7ff;
+    color: var(--accent);
+}
+
+.user-action.danger:hover {
+    background: var(--critical-light);
+    border-color: #fecaca;
+    color: var(--critical);
+}
+
+.user-security-note {
+    margin: 0 20px 20px;
+    padding: 13px 14px;
+    background: #fafbfc;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-secondary);
+    font-size: 9px;
+    line-height: 1.5;
+}
+
+.user-form-role-note {
+    padding: 12px 14px;
+    margin: 0 22px 20px;
+    background: var(--accent-light);
+    border: 1px solid #c7d7ff;
+    border-radius: 8px;
+    color: #475569;
+    font-size: 9px;
+    line-height: 1.5;
+}
+
+
+/* =====================================================
+   STEP 30
+   SYSTEM READINESS
+===================================================== */
+
+.readiness-score-card {
+    border-left: 3px solid var(--success);
+}
+
+.readiness-score-card.warning {
+    border-left-color: var(--medium);
+}
+
+.readiness-score-card.critical {
+    border-left-color: var(--critical);
+}
+
+.readiness-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 20px;
+}
+
+.readiness-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 13px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fcfdff;
+}
+
+.readiness-item:hover {
+    background: #fafcff;
+}
+
+.readiness-main {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.readiness-check-icon {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.readiness-item.pass .readiness-check-icon {
+    background: var(--success-light);
+    color: var(--success);
+}
+
+.readiness-item.pending .readiness-check-icon {
+    background: var(--medium-light);
+    color: var(--medium);
+}
+
+.readiness-item.fail .readiness-check-icon {
+    background: var(--critical-light);
+    color: var(--critical);
+}
+
+.readiness-main-content {
+    min-width: 0;
+}
+
+.readiness-main-content strong {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.readiness-main-content span {
+    display: block;
+    margin-top: 4px;
+    color: var(--text-secondary);
+    font-size: 8px;
+    line-height: 1.45;
+}
+
+.readiness-state {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 7px;
+    border-radius: 5px;
+    font-size: 8px;
+    font-weight: 700;
+    text-transform: uppercase;
+    flex-shrink: 0;
+}
+
+.readiness-state.pass {
+    background: var(--success-light);
+    color: var(--success);
+}
+
+.readiness-state.pending {
+    background: var(--medium-light);
+    color: var(--medium);
+}
+
+.readiness-state.fail {
+    background: var(--critical-light);
+    color: var(--critical);
+}
+
+.demo-scenario-table {
+    min-width: 800px;
+}
+
+.demo-scenario-row:hover {
+    background: #fafcff;
+}
+
+.demo-step-number {
+    font-weight: 700;
+    color: var(--accent);
+}
+
+.demo-stage {
+    font-weight: 650;
+}
+
+.demo-expected {
+    min-width: 280px;
+    max-width: 460px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    white-space: normal !important;
+}
+
+.demo-state {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 7px;
+    border-radius: 5px;
+    font-size: 8px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.demo-state.complete {
+    background: var(--success-light);
+    color: var(--success);
+}
+
+.demo-state.pending {
+    background: var(--medium-light);
+    color: var(--medium);
+}
+
+.demo-state.blocked {
+    background: var(--critical-light);
+    color: var(--critical);
+}
+
+.demo-progress-complete {
+    background: var(--success-light);
+    color: var(--success);
+}
+
+.readiness-summary {
+    padding: 20px;
+}
+
+.readiness-summary-box {
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: #fafbfc;
+}
+
+.readiness-summary-box strong {
+    display: block;
+    font-size: 13px;
+}
+
+.readiness-summary-box p {
+    margin-top: 6px;
+    color: var(--text-secondary);
+    font-size: 9px;
+    line-height: 1.5;
+}
+
+
+/* =====================================================
+   STEP 27 - 30
+   SHARED INPUTS / CONTROLS
+===================================================== */
+
+.filter-group input[type="search"],
+.filter-group input[type="text"] {
+    width: 100%;
+    height: 32px;
+    padding: 0 9px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text-primary);
+    outline: none;
+    font-size: 9px;
+}
+
+.filter-group input[type="search"]:focus,
+.filter-group input[type="text"]:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.06);
+}
+
+button.panel-button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.table-action-button {
+    padding: 5px 8px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 8px;
+    font-weight: 600;
+}
+
+.table-action-button:hover {
+    background: var(--accent-light);
+    border-color: #c7d7ff;
+    color: var(--accent);
+}
+
+.table-action-button.danger:hover {
+    background: var(--critical-light);
+    border-color: #fecaca;
+    color: var(--critical);
+}
+
+.alerts-empty,
+.analytics-empty,
+.users-empty,
+.readiness-empty {
+    padding: 35px;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 10px;
+}
+
+
+/* =====================================================
+   STEPS 27-30 RESPONSIVE SUPPORT
+===================================================== */
+
+@media (max-width: 1200px) {
+
+    .performance-summary {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+@media (max-width: 900px) {
+
+    .performance-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .alert-description,
+    .analytics-note,
+    .demo-expected {
+        max-width: none;
+    }
+
+}
+
+@media (max-width: 620px) {
+
+    .alert-severity,
+    .alert-status,
+    .metric-state,
+    .user-role,
+    .user-state,
+    .readiness-state,
+    .demo-state {
+        white-space: nowrap;
+    }
+
+}
+
+@media (max-width: 520px) {
+
+    .user-action-group {
+        flex-wrap: wrap;
+    }
+
+}
+
+/* Preserve navigation flex layout after role-based reveal. */
+.nav-item.admin-visible {
+    display: flex;
 }

@@ -1,6 +1,6 @@
 /* ============================================================
    DisasterMesh Dashboard — Complete Frontend JavaScript
-   Steps 1-26
+   Steps 1-30
 ============================================================ */
 
 /* =========================
@@ -232,6 +232,8 @@ const nodes = [
         gpsValid: false,
         latitude: null,
         longitude: null,
+        lastKnownLatitude: 22.5738,
+        lastKnownLongitude: 88.3637,
         lastSeen: "2 min ago"
     }
 
@@ -667,6 +669,57 @@ const logFilter = {
     eventType: "ALL",
     severity: "ALL"
 };
+/* ============================================================
+   STEP 27 - ALERT CENTER
+============================================================ */
+const alerts = [
+    { id: "ALT-001", title: "Node DM-006 Offline", severity: "CRITICAL", source: "DM-006", time: "3 min ago", status: "UNREAD", description: "Heartbeat timeout detected. Node is unavailable and has no active forwarding route." },
+    { id: "ALT-002", title: "Packet Waiting for Route", severity: "WARNING", source: "DM-002", time: "14 min ago", status: "UNREAD", description: "Emergency packet remains in the store-and-forward queue until a usable route is available." },
+    { id: "ALT-003", title: "Critical Incident Awaiting Review", severity: "CRITICAL", source: "INC-001", time: "2 min ago", status: "UNREAD", description: "Critical trapped-person incident requires mandatory human review before workflow advancement." },
+    { id: "ALT-004", title: "Gateway Synchronization Pending", severity: "WARNING", source: "GATEWAY", time: "1 min ago", status: "READ", description: "One queued packet is waiting for successful backend synchronization." },
+    { id: "ALT-005", title: "Emergency Packet Delivered", severity: "INFO", source: "DM-003", time: "5 min ago", status: "READ", description: "Critical medical emergency packet reached the gateway successfully." },
+    { id: "ALT-006", title: "Alternate Route Available", severity: "INFO", source: "NETWORK", time: "8 min ago", status: "READ", description: "A standby path through DM-004 is available for route recovery." }
+];
+
+/* ============================================================
+   STEP 28 - ANALYTICS & PERFORMANCE
+============================================================ */
+const analyticsMetrics = {
+    deliveryRate: 94,
+    latency: 42,
+    routeRecovery: 2.8,
+    duplicateRate: 1.7,
+    aiAccuracy: 92,
+    dashboardLatency: 580
+};
+
+/* ============================================================
+   STEP 29 - USER MANAGEMENT
+============================================================ */
+const managedUsers = [
+    { username: "operator", password: "operator123", name: "Rescue Operator", role: "OPERATOR", status: "ACTIVE", created: "Prototype setup" },
+    { username: "admin", password: "admin123", name: "System Administrator", role: "ADMIN", status: "ACTIVE", created: "Prototype setup" }
+];
+
+/* ============================================================
+   STEP 30 - SYSTEM READINESS
+============================================================ */
+const readinessChecks = [
+    { id: "AUTH", title: "Dashboard authentication", description: "Login screen, session state and role-based access are available.", state: "PASS" },
+    { id: "INCIDENTS", title: "Emergency incident workflow", description: "Incident review, acknowledgement, assignment and resolution workflow is available.", state: "PASS" },
+    { id: "NODES", title: "Node monitoring", description: "Node health, battery, signal, GPS and registration controls are available.", state: "PASS" },
+    { id: "MESH", title: "Mesh topology and routes", description: "Current and standby routes can be visualized and inspected.", state: "PASS" },
+    { id: "MESSAGES", title: "Packet inspection", description: "Message payload, route path, ACK, integrity, duplicate and TTL states can be inspected.", state: "PASS" },
+    { id: "QUEUE", title: "Store-and-forward queue", description: "Queued packets and retry handling are available.", state: "PASS" },
+    { id: "GATEWAY", title: "Gateway operations", description: "Gateway, backend, database and synchronization states are represented.", state: "PASS" },
+    { id: "LOGS", title: "Audit and security logging", description: "Operational and security events are recorded and filterable.", state: "PASS" },
+    { id: "ALERTS", title: "Operational alert center", description: "Critical, warning and informational alerts can be reviewed.", state: "PASS" },
+    { id: "ANALYTICS", title: "Performance analytics", description: "Network delivery, latency, route recovery, duplicate rate and AI metrics are available.", state: "PASS" },
+    { id: "USERS", title: "Administrative user management", description: "Administrator can manage dashboard identities and role assignments.", state: "PASS" },
+    { id: "BACKEND", title: "Backend integration", description: "REST API and database integration are pending the backend implementation phase.", state: "PENDING" },
+    { id: "HARDWARE", title: "LoRa hardware integration", description: "Physical node and gateway integration are pending the hardware implementation phase.", state: "PENDING" }
+];
+
 
 
 /* =========================
@@ -1074,13 +1127,33 @@ function authenticateUser(
     password
 ) {
 
-    return (
+    const user =
         demoUsers.find(
-            user =>
-                user.username === username &&
-                user.password === password
-        ) || null
-    );
+            item =>
+                item.username === username &&
+                item.password === password
+        ) || null;
+
+    if (!user) {
+        return null;
+    }
+
+    const managed =
+        typeof managedUsers !== "undefined"
+            ? managedUsers.find(
+                item =>
+                    item.username === user.username
+            )
+            : null;
+
+    if (
+        managed &&
+        managed.status !== "ACTIVE"
+    ) {
+        return null;
+    }
+
+    return user;
 
 }
 
@@ -1485,6 +1558,30 @@ function switchView(
         viewName === "logs"
     ) {
         renderAuditLogs();
+    }
+
+    if (
+        viewName === "alerts"
+    ) {
+        renderAlertCenter();
+    }
+
+    if (
+        viewName === "analytics"
+    ) {
+        renderAnalytics();
+    }
+
+    if (
+        viewName === "users"
+    ) {
+        renderUserManagement();
+    }
+
+    if (
+        viewName === "readiness"
+    ) {
+        renderSystemReadiness();
     }
 
 }
@@ -2680,22 +2777,75 @@ function initializeMap() {
 }
 
 
-function addNodeMarker(
+function getNodeMapCoordinates(
     node
 ) {
 
     if (
-        !map ||
-        !node.gpsValid
+        Number.isFinite(
+            node.latitude
+        ) &&
+        Number.isFinite(
+            node.longitude
+        )
     ) {
 
-        return;
+        return {
+            latitude:
+                node.latitude,
+            longitude:
+                node.longitude,
+            lastKnown:
+                !node.gpsValid
+        };
 
+    }
+
+    if (
+        Number.isFinite(
+            node.lastKnownLatitude
+        ) &&
+        Number.isFinite(
+            node.lastKnownLongitude
+        )
+    ) {
+
+        return {
+            latitude:
+                node.lastKnownLatitude,
+            longitude:
+                node.lastKnownLongitude,
+            lastKnown:
+                true
+        };
+
+    }
+
+    return null;
+
+}
+
+
+function addNodeMarker(
+    node
+) {
+
+    if (!map) {
+        return;
     }
 
     nodeMarkers[
         node.id
     ]?.remove();
+
+    const coordinates =
+        getNodeMapCoordinates(
+            node
+        );
+
+    if (!coordinates) {
+        return;
+    }
 
     const online =
         node.status ===
@@ -2704,21 +2854,32 @@ function addNodeMarker(
     const marker =
         L.circleMarker(
             [
-                node.latitude,
-                node.longitude
+                coordinates.latitude,
+                coordinates.longitude
             ],
             {
-                radius: 8,
+                radius:
+                    online
+                        ? 8
+                        : 9,
+
                 color:
                     online
                         ? "#16a34a"
                         : "#dc2626",
+
                 fillColor:
                     online
                         ? "#16a34a"
                         : "#dc2626",
-                fillOpacity: 0.9,
-                weight: 2
+
+                fillOpacity:
+                    online
+                        ? 0.9
+                        : 0.95,
+
+                weight:
+                    2
             }
         );
 
@@ -2749,7 +2910,7 @@ function addNodeMarker(
             RSSI:
             ${
                 node.rssi === null
-                    ? "--"
+                    ? "Unavailable"
                     : `${escapeHtml(
                         node.rssi
                     )} dBm`
@@ -2758,9 +2919,13 @@ function addNodeMarker(
             <br>
 
             GPS:
-            ${escapeHtml(
-                node.gps
-            )}
+            ${
+                node.gpsValid
+                    ? escapeHtml(
+                        node.gps
+                    )
+                    : "Unavailable — last known position shown"
+            }
         `
     );
 
@@ -2781,7 +2946,6 @@ function addNodeMarker(
     ] = marker;
 
 }
-
 
 function addIncidentMarker(
     incident
@@ -2971,14 +3135,8 @@ function setupMap() {
 
 function fitAllMapObjects() {
 
-    if (
-        !map ||
-        typeof L ===
-            "undefined"
-    ) {
-
+    if (!map) {
         return;
-
     }
 
     const points = [];
@@ -2986,14 +3144,17 @@ function fitAllMapObjects() {
     nodes.forEach(
         node => {
 
-            if (
-                node.gpsValid
-            ) {
+            const coordinates =
+                getNodeMapCoordinates(
+                    node
+                );
+
+            if (coordinates) {
 
                 points.push(
                     [
-                        node.latitude,
-                        node.longitude
+                        coordinates.latitude,
+                        coordinates.longitude
                     ]
                 );
 
@@ -3003,34 +3164,44 @@ function fitAllMapObjects() {
     );
 
     incidents.forEach(
-        incident =>
-            points.push(
-                [
-                    incident.latitude,
+        incident => {
+
+            if (
+                Number.isFinite(
+                    incident.latitude
+                ) &&
+                Number.isFinite(
                     incident.longitude
-                ]
-            )
+                )
+            ) {
+
+                points.push(
+                    [
+                        incident.latitude,
+                        incident.longitude
+                    ]
+                );
+
+            }
+
+        }
     );
 
-    if (points.length) {
-
-        map.fitBounds(
-            L.latLngBounds(
-                points
-            ),
-            {
-                padding:
-                    [
-                        30,
-                        30
-                    ]
-            }
-        );
-
+    if (!points.length) {
+        return;
     }
 
-}
+    map.fitBounds(
+        points,
+        {
+            padding: [
+                30,
+                30
+            ]
+        }
+    );
 
+}
 
 function focusMapOnNode(
     node
@@ -3038,8 +3209,22 @@ function focusMapOnNode(
 
     if (
         !map ||
-        !node?.gpsValid
+        !node
     ) {
+        return;
+    }
+
+    const coordinates =
+        getNodeMapCoordinates(
+            node
+        );
+
+    if (!coordinates) {
+
+        showToast(
+            "No known location is available for this node.",
+            "error"
+        );
 
         return;
 
@@ -3056,8 +3241,8 @@ function focusMapOnNode(
 
             map.setView(
                 [
-                    node.latitude,
-                    node.longitude
+                    coordinates.latitude,
+                    coordinates.longitude
                 ],
                 18,
                 {
@@ -3074,7 +3259,6 @@ function focusMapOnNode(
     );
 
 }
-
 
 function focusMapOnIncident(
     incident
@@ -4453,10 +4637,24 @@ function drawTopology(
         !svg ||
         !container
     ) {
-
         return;
-
     }
+
+    const width =
+        1000;
+
+    const height =
+        520;
+
+    svg.setAttribute(
+        "viewBox",
+        `0 0 ${width} ${height}`
+    );
+
+    svg.setAttribute(
+        "preserveAspectRatio",
+        "none"
+    );
 
     svg.innerHTML =
         "";
@@ -4504,9 +4702,9 @@ function drawTopology(
         ],
 
         [
-            "DM-004",
             "DM-005",
-            "standby"
+            "DM-004",
+            "active"
         ],
 
         [
@@ -4540,9 +4738,7 @@ function drawTopology(
                 !from ||
                 !to
             ) {
-
                 return;
-
             }
 
             const line =
@@ -4553,22 +4749,34 @@ function drawTopology(
 
             line.setAttribute(
                 "x1",
-                `${from.x}%`
+                (
+                    from.x /
+                    100
+                ) * width
             );
 
             line.setAttribute(
                 "y1",
-                `${from.y}%`
+                (
+                    from.y /
+                    100
+                ) * height
             );
 
             line.setAttribute(
                 "x2",
-                `${to.x}%`
+                (
+                    to.x /
+                    100
+                ) * width
             );
 
             line.setAttribute(
                 "y2",
-                `${to.y}%`
+                (
+                    to.y /
+                    100
+                ) * height
             );
 
             line.classList.add(
@@ -4600,13 +4808,13 @@ function drawTopology(
                     "div"
                 );
 
-            const active =
+            const online =
                 node.status ===
                 "ONLINE";
 
             element.className =
                 `topology-node ${
-                    active
+                    online
                         ? "active"
                         : "offline"
                 }`;
@@ -4619,7 +4827,6 @@ function drawTopology(
 
             element.innerHTML =
                 `
-
                     <span class="topology-node-id">
                         ${escapeHtml(
                             node.id
@@ -4629,7 +4836,7 @@ function drawTopology(
                     <span class="topology-node-status">
 
                         <span class="topology-node-dot ${
-                            active
+                            online
                                 ? "online"
                                 : "offline"
                         }"></span>
@@ -4639,7 +4846,6 @@ function drawTopology(
                         )}
 
                     </span>
-
                 `;
 
             element.addEventListener(
@@ -4694,7 +4900,6 @@ function drawTopology(
     }
 
 }
-
 
 /* =========================
    MESSAGE HISTORY
@@ -5129,6 +5334,14 @@ function closeMessageDetailModal() {
 
 function setupMessageDetails() {
 
+    /* Header X button */
+    $("closeMessageDetailModal")
+        ?.addEventListener(
+            "click",
+            closeMessageDetailModal
+        );
+
+    /* Footer Close button */
     $("messageDetailCloseButton")
         ?.addEventListener(
             "click",
@@ -6178,6 +6391,42 @@ function setupUtilityButtons() {
             }
         );
 
+    $("settingsAlertsButton")
+        ?.addEventListener(
+            "click",
+            () =>
+                switchView(
+                    "alerts"
+                )
+        );
+
+    $("settingsAnalyticsButton")
+        ?.addEventListener(
+            "click",
+            () =>
+                switchView(
+                    "analytics"
+                )
+        );
+
+    $("settingsManageUsersButton")
+        ?.addEventListener(
+            "click",
+            () =>
+                switchView(
+                    "users"
+                )
+        );
+
+    $("settingsReadinessButton")
+        ?.addEventListener(
+            "click",
+            () =>
+                switchView(
+                    "readiness"
+                )
+        );
+
     $("autoRefreshToggle")
         ?.addEventListener(
             "change",
@@ -6203,6 +6452,529 @@ function setupUtilityButtons() {
 }
 
 
+/* ============================================================
+   STEPS 27-30
+   ALERTS / ANALYTICS / USER MANAGEMENT / READINESS
+============================================================ */
+
+function getAlertSeverityClass(severity) {
+    if (severity === "CRITICAL") return "alert-critical";
+    if (severity === "WARNING") return "alert-warning";
+    return "alert-info";
+}
+
+function renderAlertCenter() {
+    const body = $("alertTableBody");
+    if (!body) return;
+
+    const filter = $("alertFilter")?.value || "ALL";
+    const filtered = alerts.filter(alert => {
+        if (filter === "ALL") return true;
+        if (filter === "UNREAD") return alert.status === "UNREAD";
+        return alert.severity === filter;
+    });
+
+    const critical = alerts.filter(alert => alert.severity === "CRITICAL").length;
+    const warning = alerts.filter(alert => alert.severity === "WARNING").length;
+    const info = alerts.filter(alert => alert.severity === "INFO").length;
+    const unread = alerts.filter(alert => alert.status === "UNREAD").length;
+
+    setText("alertsCriticalCount", String(critical).padStart(2, "0"));
+    setText("alertsWarningCount", String(warning).padStart(2, "0"));
+    setText("alertsInfoCount", String(info).padStart(2, "0"));
+    setText("alertsUnreadCount", String(unread).padStart(2, "0"));
+
+    body.innerHTML = "";
+
+    if (!filtered.length) {
+        body.innerHTML = `<tr><td colspan="6"><div class="alerts-empty">No alerts match the selected filter.</div></td></tr>`;
+        return;
+    }
+
+    filtered.forEach(alert => {
+        const row = document.createElement("tr");
+        row.className = `alert-row ${alert.status === "UNREAD" ? "alert-unread" : ""}`;
+
+        row.innerHTML = `
+            <td><span class="alert-title">${escapeHtml(alert.title)}</span></td>
+            <td><span class="alert-severity ${getAlertSeverityClass(alert.severity)}"><span class="alert-severity-dot"></span>${escapeHtml(alert.severity)}</span></td>
+            <td><span class="alert-source">${escapeHtml(alert.source)}</span></td>
+            <td><span class="alert-time">${escapeHtml(alert.time)}</span></td>
+            <td><span class="alert-status ${alert.status === "UNREAD" ? "unread" : "read"}">${escapeHtml(alert.status)}</span></td>
+            <td><span class="alert-description">${escapeHtml(alert.description)}</span></td>
+        `;
+
+        row.addEventListener("click", () => {
+            if (alert.status !== "UNREAD") return;
+
+            alert.status = "READ";
+
+            addAuditLog(
+                "SYSTEM",
+                "INFO",
+                currentUser?.name,
+                alert.source.startsWith("DM-") || alert.source.startsWith("INC-") ? alert.source : "--",
+                "Alert reviewed",
+                `${alert.title} was marked as read.`
+            );
+
+            renderAlertCenter();
+            showToast("Alert marked as read.", "success");
+        });
+
+        body.appendChild(row);
+    });
+}
+
+function markAllAlertsRead() {
+    let changed = 0;
+
+    alerts.forEach(alert => {
+        if (alert.status === "UNREAD") {
+            alert.status = "READ";
+            changed += 1;
+        }
+    });
+
+    if (!changed) {
+        showToast("There are no unread alerts.", "warning");
+        return;
+    }
+
+    addAuditLog(
+        "SYSTEM",
+        "INFO",
+        currentUser?.name,
+        "--",
+        "Alerts reviewed",
+        `${changed} alert(s) marked as read.`
+    );
+
+    renderAlertCenter();
+    showToast(`${changed} alert(s) marked as read.`, "success");
+}
+
+function setupAlertEvents() {
+    $("alertFilter")?.addEventListener("change", renderAlertCenter);
+    $("markAllAlertsReadButton")?.addEventListener("click", markAllAlertsRead);
+}
+
+/* ============================================================
+   STEP 28 - ANALYTICS & PERFORMANCE
+============================================================ */
+function renderAnalytics() {
+    setText("analyticsDeliveryRate", `${analyticsMetrics.deliveryRate}%`);
+    setText("analyticsLatency", `${analyticsMetrics.latency} ms`);
+    setText("analyticsRouteRecovery", `${analyticsMetrics.routeRecovery} s`);
+    setText("analyticsDuplicateRate", `${analyticsMetrics.duplicateRate}%`);
+    setText("analyticsAiAccuracy", `${analyticsMetrics.aiAccuracy}%`);
+    setText("analyticsDashboardLatency", `${analyticsMetrics.dashboardLatency} ms`);
+
+    const body = $("analyticsMetricTableBody");
+    if (!body) return;
+
+    body.innerHTML = "";
+
+    const metrics = [
+        ["Packet Delivery Ratio", `${analyticsMetrics.deliveryRate}%`, "≥ 90%", analyticsMetrics.deliveryRate >= 90, "Controlled-test prototype target."],
+        ["Dashboard / Gateway Latency", `${analyticsMetrics.latency} ms`, "Few seconds", analyticsMetrics.latency < 1000, "Representative prototype value."],
+        ["Route Recovery", `${analyticsMetrics.routeRecovery} s`, "Within a few seconds", analyticsMetrics.routeRecovery <= 5, "Small controlled-mesh demonstration value."],
+        ["Duplicate Delivery Rate", `${analyticsMetrics.duplicateRate}%`, "< 5%", analyticsMetrics.duplicateRate < 5, "Representative normal-operation value."],
+        ["AI Classification Accuracy", `${analyticsMetrics.aiAccuracy}%`, "Measured on held-out set", analyticsMetrics.aiAccuracy >= 90, "Frontend placeholder until backend model integration."]
+    ];
+
+    metrics.forEach(metric => {
+        const row = document.createElement("tr");
+        row.className = "analytics-row";
+
+        row.innerHTML = `
+            <td><span class="analytics-metric">${escapeHtml(metric[0])}</span></td>
+            <td><span class="analytics-current">${escapeHtml(metric[1])}</span></td>
+            <td><span class="analytics-target">${escapeHtml(metric[2])}</span></td>
+            <td><span class="metric-state ${metric[3] ? "metric-good" : "metric-warning"}">${metric[3] ? "PASS" : "WARNING"}</span></td>
+            <td><span class="analytics-note">${escapeHtml(metric[4])}</span></td>
+        `;
+
+        body.appendChild(row);
+    });
+}
+
+function exportAnalyticsSummary() {
+    const range = $("analyticsRangeFilter")?.value || "CURRENT";
+
+    const lines = [
+        "DisasterMesh Analytics Summary",
+        `Evaluation Window,${range}`,
+        `Packet Delivery Ratio,${analyticsMetrics.deliveryRate}%`,
+        `End-to-End Latency,${analyticsMetrics.latency} ms`,
+        `Route Recovery,${analyticsMetrics.routeRecovery} s`,
+        `Duplicate Rate,${analyticsMetrics.duplicateRate}%`,
+        `AI Accuracy,${analyticsMetrics.aiAccuracy}%`,
+        `Dashboard Latency,${analyticsMetrics.dashboardLatency} ms`
+    ];
+
+    const blob = new Blob(
+        [lines.join("\n")],
+        { type: "text/plain;charset=utf-8" }
+    );
+
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+
+    anchor.href = url;
+    anchor.download = "DisasterMesh_Analytics_Summary.txt";
+
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
+
+    URL.revokeObjectURL(url);
+
+    addAuditLog(
+        "SYSTEM",
+        "INFO",
+        currentUser?.name,
+        "--",
+        "Analytics exported",
+        "Performance summary exported from the dashboard."
+    );
+
+    showToast("Analytics summary exported.", "success");
+}
+
+function setupAnalyticsEvents() {
+    $("analyticsRangeFilter")?.addEventListener("change", renderAnalytics);
+    $("analyticsExportButton")?.addEventListener("click", exportAnalyticsSummary);
+}
+
+/* ============================================================
+   STEP 29 - USER MANAGEMENT
+============================================================ */
+function renderUserManagement() {
+    const body = $("userTableBody");
+    if (!body) return;
+
+    const search = ($( "userSearchInput" )?.value || "").trim().toLowerCase();
+    const role = $("userRoleFilter")?.value || "ALL";
+
+    const filtered = managedUsers.filter(user => {
+        const searchMatch = !search ||
+            user.name.toLowerCase().includes(search) ||
+            user.username.toLowerCase().includes(search);
+
+        const roleMatch = role === "ALL" || user.role === role;
+        return searchMatch && roleMatch;
+    });
+
+    setText("userCount", String(managedUsers.length).padStart(2, "0"));
+    setText("adminUserCount", String(managedUsers.filter(user => user.role === "ADMIN").length).padStart(2, "0"));
+    setText("operatorUserCount", String(managedUsers.filter(user => user.role === "OPERATOR").length).padStart(2, "0"));
+    setText("userManagementState", currentUser?.role === "ADMIN" ? "ACTIVE" : "LOCKED");
+
+    body.innerHTML = "";
+
+    if (!filtered.length) {
+        body.innerHTML = `<tr><td colspan="6"><div class="users-empty">No users match the selected filters.</div></td></tr>`;
+        return;
+    }
+
+    filtered.forEach(user => {
+        const row = document.createElement("tr");
+        row.className = "user-row";
+
+        row.innerHTML = `
+            <td><span class="user-name">${escapeHtml(user.name)}</span></td>
+            <td><span class="user-username">${escapeHtml(user.username)}</span></td>
+            <td><span class="user-role ${user.role === "ADMIN" ? "admin" : "operator"}">${user.role === "ADMIN" ? "ADMINISTRATOR" : "OPERATOR"}</span></td>
+            <td><span class="user-state ${user.status === "ACTIVE" ? "user-active" : "user-inactive"}"><span class="user-state-dot"></span>${escapeHtml(user.status)}</span></td>
+            <td>${escapeHtml(user.created)}</td>
+            <td><div class="user-action-group"><button class="user-action" data-user-action="toggle" data-username="${escapeHtml(user.username)}">${user.status === "ACTIVE" ? "Disable" : "Enable"}</button><button class="user-action" data-user-action="role" data-username="${escapeHtml(user.username)}">Change Role</button></div></td>
+        `;
+
+        row.querySelectorAll("[data-user-action]").forEach(button => {
+            button.addEventListener("click", event => {
+                event.stopPropagation();
+                performUserAction(button.dataset.userAction, button.dataset.username);
+            });
+        });
+
+        body.appendChild(row);
+    });
+}
+
+function performUserAction(action, username) {
+    if (!currentUser || currentUser.role !== "ADMIN") {
+        showToast("Administrator access is required.", "warning");
+        return;
+    }
+
+    const user = managedUsers.find(item => item.username === username);
+    if (!user) return;
+
+    if (user.username === currentUser.username && action === "toggle") {
+        showToast("The active administrator session cannot be disabled.", "warning");
+        return;
+    }
+
+    if (action === "toggle") {
+        user.status = user.status === "ACTIVE" ? "INACTIVE" : "ACTIVE";
+
+        addAuditLog(
+            "AUTH",
+            "INFO",
+            currentUser.name,
+            "--",
+            "User status changed",
+            `${user.username} is now ${user.status}.`
+        );
+
+        renderUserManagement();
+        showToast(`${user.username} is now ${user.status.toLowerCase()}.`, "success");
+        return;
+    }
+
+    if (action === "role") {
+        if (user.username === currentUser.username) {
+            showToast("The active session role cannot be changed in the demo.", "warning");
+            return;
+        }
+
+        user.role = user.role === "ADMIN" ? "OPERATOR" : "ADMIN";
+
+        const authUser = demoUsers.find(item => item.username === user.username);
+        if (authUser) authUser.role = user.role;
+
+        addAuditLog(
+            "AUTH",
+            "WARNING",
+            currentUser.name,
+            "--",
+            "User role changed",
+            `${user.username} role changed to ${user.role}.`
+        );
+
+        renderUserManagement();
+        showToast(`${user.username} role changed to ${user.role}.`, "success");
+    }
+}
+
+function openUserModal() {
+    if (!currentUser || currentUser.role !== "ADMIN") {
+        showToast("Administrator access is required.", "warning");
+        return;
+    }
+
+    $("userForm")?.reset();
+    if ($("userFormError")) $("userFormError").textContent = "";
+
+    setVisible("userModal", true);
+    document.body.classList.add("modal-open");
+}
+
+function closeUserModal() {
+    setVisible("userModal", false);
+    document.body.classList.remove("modal-open");
+}
+
+function createManagedUser(event) {
+    event.preventDefault();
+
+    if (!currentUser || currentUser.role !== "ADMIN") {
+        showToast("Administrator access is required.", "warning");
+        return;
+    }
+
+    const name = $("userName")?.value.trim() || "";
+    const username = $("userUsername")?.value.trim() || "";
+    const role = $("userRole")?.value || "OPERATOR";
+    const password = $("userPassword")?.value || "";
+    const error = $("userFormError");
+
+    if (error) error.textContent = "";
+
+    if (name.length < 2 || username.length < 3 || password.length < 6) {
+        if (error) error.textContent = "Enter a valid name, username and password of at least 6 characters.";
+        return;
+    }
+
+    if (managedUsers.some(user => user.username.toLowerCase() === username.toLowerCase())) {
+        if (error) error.textContent = "That username already exists.";
+        return;
+    }
+
+    managedUsers.push({
+        username,
+        password,
+        name,
+        role,
+        status: "ACTIVE",
+        created: "Just now"
+    });
+
+    demoUsers.push({
+        username,
+        password,
+        name,
+        role
+    });
+
+    addAuditLog(
+        "AUTH",
+        "INFO",
+        currentUser.name,
+        "--",
+        "User registered",
+        `${name} (${username}) was created with role ${role}.`
+    );
+
+    renderUserManagement();
+    closeUserModal();
+    showToast(`User ${username} created.`, "success");
+}
+
+function setupUserManagementEvents() {
+    $("userSearchInput")?.addEventListener("input", renderUserManagement);
+    $("userRoleFilter")?.addEventListener("change", renderUserManagement);
+
+    $("resetUserFilters")?.addEventListener("click", () => {
+        if ($("userSearchInput")) $("userSearchInput").value = "";
+        if ($("userRoleFilter")) $("userRoleFilter").value = "ALL";
+        renderUserManagement();
+    });
+
+    $("addUserButton")?.addEventListener("click", openUserModal);
+    $("closeUserModal")?.addEventListener("click", closeUserModal);
+    $("cancelUserModal")?.addEventListener("click", closeUserModal);
+    $("userForm")?.addEventListener("submit", createManagedUser);
+
+    $("userModal")?.addEventListener("click", event => {
+        if (event.target === $("userModal")) closeUserModal();
+    });
+}
+
+/* ============================================================
+   STEP 30 - SYSTEM READINESS
+============================================================ */
+function getReadinessStateClass(state) {
+    if (state === "PASS") return "pass";
+    if (state === "FAIL") return "fail";
+    return "pending";
+}
+
+function renderSystemReadiness() {
+    const container = $("readinessChecklist");
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    let passed = 0;
+
+    readinessChecks.forEach(check => {
+        if (check.state === "PASS") passed += 1;
+
+        const item = document.createElement("div");
+        item.className = `readiness-item ${getReadinessStateClass(check.state)}`;
+
+        item.innerHTML = `
+            <div class="readiness-main">
+                <div class="readiness-check-icon">
+                    ${check.state === "PASS" ? "✓" : check.state === "FAIL" ? "!" : "•"}
+                </div>
+                <div class="readiness-main-content">
+                    <strong>${escapeHtml(check.title)}</strong>
+                    <span>${escapeHtml(check.description)}</span>
+                </div>
+            </div>
+            <span class="readiness-state ${getReadinessStateClass(check.state)}">
+                ${escapeHtml(check.state)}
+            </span>
+        `;
+
+        container.appendChild(item);
+    });
+
+    const total = readinessChecks.length;
+    const score = Math.round((passed / total) * 100);
+    const pending = readinessChecks.filter(check => check.state === "PENDING").length;
+    const failed = readinessChecks.filter(check => check.state === "FAIL").length;
+
+    setText("readinessScore", `${score}%`);
+    setText("readinessState", failed ? "BLOCKED" : pending ? "READY*" : "READY");
+    setText("readinessLastCheck", new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }));
+
+    renderDemoScenario();
+}
+
+function renderDemoScenario() {
+    const body = $("demoScenarioTableBody");
+    if (!body) return;
+
+    const steps = [
+        ["01", "Field emergency created", "Emergency request receives a unique ID, category, GPS and timestamp.", true],
+        ["02", "Mesh forwarding", "Packet travels through available multi-hop routes with TTL and duplicate checks.", true],
+        ["03", "Gateway reception", "Gateway validates and forwards the packet toward the backend.", true],
+        ["04", "Dashboard incident", "Critical incident becomes visible with location and classification details.", true],
+        ["05", "Operator response", "Operator reviews, acknowledges, assigns and advances the incident.", true],
+        ["06", "Route recovery", "Alternate path can be selected when an intermediate node fails.", true],
+        ["07", "Store-and-forward", "Queued packet can be retained and retried after connectivity returns.", true],
+        ["08", "Backend / hardware integration", "Live API, database, gateway and LoRa hardware must be integrated and tested.", false]
+    ];
+
+    body.innerHTML = "";
+    let complete = 0;
+
+    steps.forEach(step => {
+        if (step[3]) complete += 1;
+
+        const row = document.createElement("tr");
+        row.className = "demo-scenario-row";
+
+        row.innerHTML = `
+            <td><span class="demo-step-number">${step[0]}</span></td>
+            <td><span class="demo-stage">${escapeHtml(step[1])}</span></td>
+            <td><span class="demo-expected">${escapeHtml(step[2])}</span></td>
+            <td><span class="demo-state ${step[3] ? "complete" : "pending"}">${step[3] ? "READY" : "PENDING"}</span></td>
+        `;
+
+        body.appendChild(row);
+    });
+
+    setText("demoProgress", `${Math.round((complete / steps.length) * 100)}%`);
+}
+
+function runReadinessCheck() {
+    renderSystemReadiness();
+
+    addAuditLog(
+        "SYSTEM",
+        "INFO",
+        currentUser?.name,
+        "--",
+        "Readiness check executed",
+        "Frontend readiness and demonstration checkpoints were validated."
+    );
+
+    showToast("System readiness check completed.", "success");
+}
+
+function resetReadinessCheck() {
+    readinessChecks.forEach(check => {
+        check.state = (check.id === "BACKEND" || check.id === "HARDWARE") ? "PENDING" : "PASS";
+    });
+
+    renderSystemReadiness();
+    showToast("Readiness checklist reset.", "success");
+}
+
+function setupReadinessEvents() {
+    $("runReadinessCheckButton")?.addEventListener("click", runReadinessCheck);
+    $("resetReadinessButton")?.addEventListener("click", resetReadinessCheck);
+}
+
+/* =========================
+   MODAL / GLOBAL EVENTS
+========================= */
+
 /* =========================
    GLOBAL MODAL CONTROL
 ========================= */
@@ -6213,7 +6985,8 @@ function closeAllModals() {
         "incidentModal",
         "nodeDetailsModal",
         "nodeRegistrationModal",
-        "messageDetailModal"
+        "messageDetailModal",
+        "userModal"
     ].forEach(
         id =>
             setVisible(
@@ -6293,6 +7066,19 @@ function setupGlobalKeyboard() {
             }
 
             if (
+                $("userModal")
+                    ?.classList.contains(
+                        "visible"
+                    )
+            ) {
+
+                closeUserModal();
+
+                return;
+
+            }
+
+            if (
                 $("incidentModal")
                     ?.classList.contains(
                         "visible"
@@ -6336,6 +7122,14 @@ function initializeDashboard() {
     setupQueue();
 
     setupAuditLogs();
+
+    setupAlertEvents();
+
+    setupAnalyticsEvents();
+
+    setupUserManagementEvents();
+
+    setupReadinessEvents();
 
     setupUtilityButtons();
 
@@ -6383,6 +7177,14 @@ function initializeDashboard() {
 
     renderAuditLogs();
 
+    renderAlertCenter();
+
+    renderAnalytics();
+
+    renderUserManagement();
+
+    renderSystemReadiness();
+
     renderSystemHealth();
 
     initializeMap();
@@ -6391,13 +7193,27 @@ function initializeDashboard() {
 
 
     console.log(
-        "DisasterMesh dashboard initialized — Steps 1-26."
+        "DisasterMesh dashboard initialized — Steps 1-30."
     );
 
 }
 
 
-document.addEventListener(
-    "DOMContentLoaded",
-    initializeDashboard
-);
+if (
+    document.readyState ===
+    "loading"
+) {
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        initializeDashboard,
+        {
+            once: true
+        }
+    );
+
+} else {
+
+    initializeDashboard();
+
+}
