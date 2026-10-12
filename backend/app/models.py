@@ -1,16 +1,10 @@
+
 """
 DisasterMesh Backend
-Step 34 - Database Models
+Database Models
 
-SQLAlchemy ORM models for the six core entities defined in the
-DisasterMesh Project Report:
-
-    Users
-    Nodes
-    Messages
-    Routes
-    EmergencyRequests
-    Logs
+SQLAlchemy ORM models for the six core entities:
+Users, Nodes, Messages, Routes, EmergencyRequests, and Logs.
 """
 
 from datetime import datetime, timezone
@@ -32,47 +26,42 @@ def utc_now() -> datetime:
 # ---------------------------------------------------------------------------
 
 class User(Base):
-    """
-    Dashboard user.
-
-    Report fields:
-        user_id, name, role, username, password_hash, created_at
-    """
+    """Dashboard user."""
 
     __tablename__ = "users"
 
     user_id: Mapped[int] = mapped_column(
         Integer,
         primary_key=True,
-        autoincrement=True
+        autoincrement=True,
     )
 
     name: Mapped[str] = mapped_column(
         String(120),
-        nullable=False
+        nullable=False,
     )
 
     role: Mapped[str] = mapped_column(
         String(20),
-        nullable=False
+        nullable=False,
     )
 
     username: Mapped[str] = mapped_column(
         String(80),
         unique=True,
         nullable=False,
-        index=True
+        index=True,
     )
 
     password_hash: Mapped[str] = mapped_column(
         String(255),
-        nullable=False
+        nullable=False,
     )
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         default=utc_now,
-        nullable=False
+        nullable=False,
     )
 
     def __repr__(self) -> str:
@@ -90,85 +79,79 @@ class User(Base):
 # ---------------------------------------------------------------------------
 
 class Node(Base):
-    """
-    Registered DisasterMesh field or relay node.
-
-    Report fields:
-        node_id, device_id, node_type, latitude, longitude,
-        battery_level, status, last_seen
-    """
+    """Registered DisasterMesh field, relay, or gateway node."""
 
     __tablename__ = "nodes"
 
     node_id: Mapped[str] = mapped_column(
         String(50),
-        primary_key=True
+        primary_key=True,
     )
 
     device_id: Mapped[str] = mapped_column(
         String(100),
         unique=True,
         nullable=False,
-        index=True
+        index=True,
     )
 
     node_type: Mapped[str] = mapped_column(
         String(30),
-        nullable=False
+        nullable=False,
     )
 
     latitude: Mapped[Optional[float]] = mapped_column(
         Float,
-        nullable=True
+        nullable=True,
     )
 
     longitude: Mapped[Optional[float]] = mapped_column(
         Float,
-        nullable=True
+        nullable=True,
     )
 
     battery_level: Mapped[Optional[float]] = mapped_column(
         Float,
-        nullable=True
+        nullable=True,
     )
 
     status: Mapped[str] = mapped_column(
         String(30),
-        nullable=False
+        nullable=False,
     )
 
     last_seen: Mapped[Optional[datetime]] = mapped_column(
         DateTime(timezone=True),
-        nullable=True
+        nullable=True,
     )
 
     messages: Mapped[list["Message"]] = relationship(
         "Message",
         foreign_keys="Message.sender_id",
-        back_populates="sender_node"
+        back_populates="sender_node",
     )
 
     source_routes: Mapped[list["Route"]] = relationship(
         "Route",
         foreign_keys="Route.source",
-        back_populates="source_node"
+        back_populates="source_node",
     )
 
     destination_routes: Mapped[list["Route"]] = relationship(
         "Route",
         foreign_keys="Route.destination",
-        back_populates="destination_node"
+        back_populates="destination_node",
     )
 
     next_hop_routes: Mapped[list["Route"]] = relationship(
         "Route",
         foreign_keys="Route.next_hop",
-        back_populates="next_hop_node"
+        back_populates="next_hop_node",
     )
 
     logs: Mapped[list["Log"]] = relationship(
         "Log",
-        back_populates="node"
+        back_populates="node",
     )
 
     def __repr__(self) -> str:
@@ -186,100 +169,91 @@ class Node(Base):
 # ---------------------------------------------------------------------------
 
 class Message(Base):
-    """
-    Emergency or system packet stored by the backend.
-
-    Report fields:
-        message_id, sender_id, category, priority, content,
-        latitude, longitude, timestamp, status, ttl, hop_count
-
-    The SRS additionally identifies receiver_id and location as logical
-    packet fields, so receiver_id is included here as well.
-    """
+    """Emergency or system packet stored by the backend."""
 
     __tablename__ = "messages"
 
     message_id: Mapped[str] = mapped_column(
         String(100),
-        primary_key=True
+        primary_key=True,
     )
 
     sender_id: Mapped[str] = mapped_column(
         ForeignKey("nodes.node_id"),
         nullable=False,
-        index=True
+        index=True,
     )
 
     receiver_id: Mapped[Optional[str]] = mapped_column(
         ForeignKey("nodes.node_id"),
         nullable=True,
-        index=True
+        index=True,
     )
 
     category: Mapped[str] = mapped_column(
         String(50),
-        nullable=False
+        nullable=False,
     )
 
     priority: Mapped[str] = mapped_column(
         String(20),
-        nullable=False
+        nullable=False,
     )
 
     content: Mapped[str] = mapped_column(
         Text,
-        nullable=False
+        nullable=False,
     )
 
     latitude: Mapped[Optional[float]] = mapped_column(
         Float,
-        nullable=True
+        nullable=True,
     )
 
     longitude: Mapped[Optional[float]] = mapped_column(
         Float,
-        nullable=True
+        nullable=True,
     )
 
     timestamp: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         default=utc_now,
         nullable=False,
-        index=True
+        index=True,
     )
 
     status: Mapped[str] = mapped_column(
         String(30),
-        nullable=False
+        nullable=False,
     )
 
     ttl: Mapped[int] = mapped_column(
         Integer,
         nullable=False,
-        default=5
+        default=5,
     )
 
     hop_count: Mapped[int] = mapped_column(
         Integer,
         nullable=False,
-        default=0
+        default=0,
     )
 
     sender_node: Mapped["Node"] = relationship(
         "Node",
         foreign_keys=[sender_id],
-        back_populates="messages"
+        back_populates="messages",
     )
 
     receiver_node: Mapped[Optional["Node"]] = relationship(
         "Node",
-        foreign_keys=[receiver_id]
+        foreign_keys=[receiver_id],
     )
 
     emergency_request: Mapped[Optional["EmergencyRequest"]] = relationship(
         "EmergencyRequest",
         back_populates="message",
-        uselist=False
+        uselist=False,
     )
 
     def __repr__(self) -> str:
@@ -298,79 +272,73 @@ class Message(Base):
 # ---------------------------------------------------------------------------
 
 class Route(Base):
-    """
-    Current or standby route information for mesh forwarding.
-
-    Report fields:
-        route_id, source, destination, next_hop,
-        hop_count, quality, status, updated_at
-    """
+    """Current or standby route information for mesh forwarding."""
 
     __tablename__ = "routes"
 
     route_id: Mapped[int] = mapped_column(
         Integer,
         primary_key=True,
-        autoincrement=True
+        autoincrement=True,
     )
 
     source: Mapped[str] = mapped_column(
         ForeignKey("nodes.node_id"),
         nullable=False,
-        index=True
+        index=True,
     )
 
     destination: Mapped[str] = mapped_column(
         ForeignKey("nodes.node_id"),
         nullable=False,
-        index=True
+        index=True,
     )
 
     next_hop: Mapped[Optional[str]] = mapped_column(
         ForeignKey("nodes.node_id"),
         nullable=True,
-        index=True
+        index=True,
     )
 
     hop_count: Mapped[int] = mapped_column(
         Integer,
         nullable=False,
-        default=0
+        default=0,
     )
 
     quality: Mapped[Optional[float]] = mapped_column(
         Float,
-        nullable=True
+        nullable=True,
     )
 
     status: Mapped[str] = mapped_column(
         String(30),
-        nullable=False
+        nullable=False,
     )
 
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         default=utc_now,
         onupdate=utc_now,
-        nullable=False
+        nullable=False,
     )
 
     source_node: Mapped["Node"] = relationship(
         "Node",
         foreign_keys=[source],
-        back_populates="source_routes"
+        back_populates="source_routes",
     )
 
     destination_node: Mapped["Node"] = relationship(
         "Node",
         foreign_keys=[destination],
-        back_populates="destination_routes"
+        back_populates="destination_routes",
     )
 
     next_hop_node: Mapped[Optional["Node"]] = relationship(
         "Node",
         foreign_keys=[next_hop],
-        back_populates="next_hop_routes"
+        back_populates="next_hop_routes",
     )
 
     def __repr__(self) -> str:
@@ -393,11 +361,8 @@ class EmergencyRequest(Base):
     """
     Operator-facing emergency request derived from a message.
 
-    Report/SRS fields:
-        request_id, message_id, category, priority, location,
-        status, assigned_team, timestamps
-
-    Location is represented as latitude and longitude for the prototype.
+    Includes lifecycle timestamps for acknowledgement, assignment,
+    and resolution.
     """
 
     __tablename__ = "emergency_requests"
@@ -405,61 +370,71 @@ class EmergencyRequest(Base):
     request_id: Mapped[int] = mapped_column(
         Integer,
         primary_key=True,
-        autoincrement=True
+        autoincrement=True,
     )
 
     message_id: Mapped[str] = mapped_column(
         ForeignKey("messages.message_id"),
         unique=True,
         nullable=False,
-        index=True
+        index=True,
     )
 
     category: Mapped[str] = mapped_column(
         String(50),
-        nullable=False
+        nullable=False,
     )
 
     priority: Mapped[str] = mapped_column(
         String(20),
-        nullable=False
+        nullable=False,
     )
 
     latitude: Mapped[Optional[float]] = mapped_column(
         Float,
-        nullable=True
+        nullable=True,
     )
 
     longitude: Mapped[Optional[float]] = mapped_column(
         Float,
-        nullable=True
+        nullable=True,
     )
 
     status: Mapped[str] = mapped_column(
         String(30),
         nullable=False,
-        default="NEW"
+        default="NEW",
     )
 
     assigned_team: Mapped[Optional[str]] = mapped_column(
         String(100),
-        nullable=True
+        nullable=True,
     )
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         default=utc_now,
-        nullable=False
+        nullable=False,
+    )
+
+    acknowledged_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True),
+        nullable=True,
+    )
+
+    assigned_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True),
+        nullable=True,
     )
 
     resolved_at: Mapped[Optional[datetime]] = mapped_column(
         DateTime(timezone=True),
-        nullable=True
+        nullable=True,
     )
 
     message: Mapped["Message"] = relationship(
         "Message",
-        back_populates="emergency_request"
+        back_populates="emergency_request",
     )
 
     def __repr__(self) -> str:
@@ -477,47 +452,42 @@ class EmergencyRequest(Base):
 # ---------------------------------------------------------------------------
 
 class Log(Base):
-    """
-    Operational and security log entry.
-
-    Report fields:
-        log_id, node_id, event_type, description, timestamp
-    """
+    """Operational and security log entry."""
 
     __tablename__ = "logs"
 
     log_id: Mapped[int] = mapped_column(
         Integer,
         primary_key=True,
-        autoincrement=True
+        autoincrement=True,
     )
 
     node_id: Mapped[Optional[str]] = mapped_column(
         ForeignKey("nodes.node_id"),
         nullable=True,
-        index=True
+        index=True,
     )
 
     event_type: Mapped[str] = mapped_column(
         String(50),
-        nullable=False
+        nullable=False,
     )
 
     description: Mapped[str] = mapped_column(
         Text,
-        nullable=False
+        nullable=False,
     )
 
     timestamp: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         default=utc_now,
         nullable=False,
-        index=True
+        index=True,
     )
 
     node: Mapped[Optional["Node"]] = relationship(
         "Node",
-        back_populates="logs"
+        back_populates="logs",
     )
 
     def __repr__(self) -> str:

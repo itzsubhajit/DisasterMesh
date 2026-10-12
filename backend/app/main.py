@@ -4,24 +4,25 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from .database import initialize_database, test_database_connection
-from .routers import auth, nodes, users
+from .routers import (
+    auth,
+    emergencies,
+    gateway,
+    logs,
+    messages,
+    nodes,
+    routes,
+    users,
+)
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """
-    Application startup and shutdown lifecycle.
-    """
-
     print("Starting DisasterMesh backend...")
-
     test_database_connection()
     initialize_database()
-
     print("DisasterMesh backend started successfully.")
-
     yield
-
     print("DisasterMesh backend shutting down...")
 
 
@@ -36,10 +37,6 @@ app = FastAPI(
 )
 
 
-# ---------------------------------------------------------
-# CORS
-# ---------------------------------------------------------
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -49,18 +46,15 @@ app.add_middleware(
 )
 
 
-# ---------------------------------------------------------
-# Routers
-# ---------------------------------------------------------
-
 app.include_router(auth.router)
 app.include_router(users.router)
 app.include_router(nodes.router)
+app.include_router(messages.router)
+app.include_router(emergencies.router)
+app.include_router(routes.router)
+app.include_router(logs.router)
+app.include_router(gateway.router)
 
-
-# ---------------------------------------------------------
-# Root endpoint
-# ---------------------------------------------------------
 
 @app.get("/")
 def root():
@@ -71,10 +65,6 @@ def root():
     }
 
 
-# ---------------------------------------------------------
-# Health endpoint
-# ---------------------------------------------------------
-
 @app.get("/api/health")
 def health_check():
     return {
@@ -82,10 +72,6 @@ def health_check():
         "service": "DisasterMesh Backend",
     }
 
-
-# ---------------------------------------------------------
-# System status endpoint
-# ---------------------------------------------------------
 
 @app.get("/api/system/status")
 def system_status():
