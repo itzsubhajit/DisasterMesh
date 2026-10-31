@@ -189,6 +189,75 @@ class LogResponse(DisasterMeshSchema):
 
 
 # =========================================================
+# Packet Queue Schemas
+# =========================================================
+
+class PacketQueueCreate(DisasterMeshSchema):
+    message_id: str = Field(min_length=1, max_length=100)
+    sender_id: str = Field(min_length=2, max_length=50)
+    receiver_id: Optional[str] = Field(default=None, max_length=50)
+
+    category: str = Field(min_length=1, max_length=50)
+    priority: str = Field(default="MEDIUM", max_length=20)
+    content: str = Field(min_length=1, max_length=2000)
+
+    latitude: Optional[float] = Field(default=None, ge=-90, le=90)
+    longitude: Optional[float] = Field(default=None, ge=-180, le=180)
+
+    ttl: int = Field(default=5, ge=1, le=255)
+    hop_count: int = Field(default=0, ge=0)
+
+    retention_minutes: int = Field(default=1440, ge=1, le=10080)
+    max_attempts: int = Field(default=5, ge=1, le=20)
+
+
+class PacketQueueResponse(DisasterMeshSchema):
+    queue_id: int
+    message_id: str
+    sender_id: str
+    receiver_id: Optional[str] = None
+
+    category: str
+    priority: str
+    content: str
+
+    latitude: Optional[float] = None
+    longitude: Optional[float] = None
+
+    ttl: int
+    hop_count: int
+
+    status: str
+    attempt_count: int
+    max_attempts: int
+
+    queued_at: datetime
+    last_attempt_at: Optional[datetime] = None
+    next_retry_at: Optional[datetime] = None
+    expires_at: Optional[datetime] = None
+    synced_at: Optional[datetime] = None
+
+    last_error: Optional[str] = None
+
+
+class PacketQueueStatsResponse(DisasterMeshSchema):
+    total_items: int
+    queued_items: int
+    syncing_items: int
+    synced_items: int
+    failed_items: int
+    expired_items: int
+
+
+class PacketQueueProcessResponse(DisasterMeshSchema):
+    checked: int
+    synced: int
+    retry_scheduled: int
+    failed: int
+    expired: int
+
+
+# =========================================================
 # System Status
 # =========================================================
 

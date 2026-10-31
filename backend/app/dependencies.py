@@ -1,3 +1,4 @@
+
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jose import JWTError
@@ -8,38 +9,41 @@ from .models import User
 from .security import decode_access_token
 
 
-# HTTP Bearer authentication scheme
-bearer_scheme = HTTPBearer(
-    auto_error=True
-)
+bearer_scheme = HTTPBearer(auto_error=True)
+
+
+def authentication_error(detail: str):
+    return HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail=detail,
+        headers={"WWW-Authenticate": "Bearer"},
+    )
 
 
 def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme),
     db: Session = Depends(get_db),
 ) -> User:
-    """
-    Validate the JWT bearer token and return the authenticated user.
-    """
 
     token = credentials.credentials
 
     try:
         payload = decode_access_token(token)
     except (JWTError, ValueError, TypeError):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid or expired authentication token.",
-            headers={"WWW-Authenticate": "Bearer"},
+        raise authentication_error(
+            "Invalid or expired authentication token."
+        )
+
+    if not isinstance(payload, dict):
+        raise authentication_error(
+            "Invalid or expired authentication token."
         )
 
     username = payload.get("sub")
 
     if not username:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid authentication token.",
-            headers={"WWW-Authenticate": "Bearer"},
+        raise authentication_error(
+            "Invalid authentication token."
         )
 
     user = (
@@ -49,10 +53,26 @@ def get_current_user(
     )
 
     if user is None:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Authenticated user no longer exists.",
-            headers={"WWW-Authenticate": "Bearer"},
+        raise authentication_error(
+            "Authenticated user no longer exists."
+        )
+
+    if not user.is_active:
+        raise authentication_error(
+            "This user account has been deactivated."
+        )
+
+    # Older development tokens without a version claim are treated
+    # as version zero. The migration assigns existing users version 0.
+    token_version = payload.get("ver", 0)
+
+    if (
+        isinstance(token_version, bool)
+        or not isinstance(token_version, int)
+        or token_version != user.token_version
+    ):
+        raise authentication_error(
+            "This token has been revoked. Please log in again."
         )
 
     return user
@@ -61,9 +81,6 @@ def get_current_user(
 def require_admin(
     current_user: User = Depends(get_current_user),
 ) -> User:
-    """
-    Allow access only to ADMIN users.
-    """
 
     if current_user.role != "ADMIN":
         raise HTTPException(
@@ -77,9 +94,6 @@ def require_admin(
 def require_operator_or_admin(
     current_user: User = Depends(get_current_user),
 ) -> User:
-    """
-    Allow access to OPERATOR and ADMIN users.
-    """
 
     if current_user.role not in {"OPERATOR", "ADMIN"}:
         raise HTTPException(

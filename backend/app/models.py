@@ -1,33 +1,37 @@
 
 """
-DisasterMesh Backend
-Database Models
+DisasterMesh Backend - Database Models
 
-SQLAlchemy ORM models for the six core entities:
-Users, Nodes, Messages, Routes, EmergencyRequests, and Logs.
+Six core entities:
+Users, Nodes, Messages, Routes, EmergencyRequests, Logs.
 """
 
 from datetime import datetime, timezone
 from typing import Optional
 
-from sqlalchemy import DateTime, Float, ForeignKey, Integer, String, Text
+from sqlalchemy import (
+    Boolean,
+    DateTime,
+    Float,
+    ForeignKey,
+    Integer,
+    String,
+    Text,
+)
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .database import Base
 
 
 def utc_now() -> datetime:
-    """Return the current UTC time for database timestamps."""
     return datetime.now(timezone.utc)
 
 
-# ---------------------------------------------------------------------------
+# =========================================================
 # USERS
-# ---------------------------------------------------------------------------
+# =========================================================
 
 class User(Base):
-    """Dashboard user."""
-
     __tablename__ = "users"
 
     user_id: Mapped[int] = mapped_column(
@@ -58,6 +62,20 @@ class User(Base):
         nullable=False,
     )
 
+    is_active: Mapped[bool] = mapped_column(
+        Boolean,
+        nullable=False,
+        default=True,
+        server_default="1",
+    )
+
+    token_version: Mapped[int] = mapped_column(
+        Integer,
+        nullable=False,
+        default=0,
+        server_default="0",
+    )
+
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         default=utc_now,
@@ -69,18 +87,17 @@ class User(Base):
             f"<User("
             f"user_id={self.user_id}, "
             f"username='{self.username}', "
-            f"role='{self.role}'"
+            f"role='{self.role}', "
+            f"is_active={self.is_active}"
             f")>"
         )
 
 
-# ---------------------------------------------------------------------------
+# =========================================================
 # NODES
-# ---------------------------------------------------------------------------
+# =========================================================
 
 class Node(Base):
-    """Registered DisasterMesh field, relay, or gateway node."""
-
     __tablename__ = "nodes"
 
     node_id: Mapped[str] = mapped_column(
@@ -164,13 +181,11 @@ class Node(Base):
         )
 
 
-# ---------------------------------------------------------------------------
+# =========================================================
 # MESSAGES
-# ---------------------------------------------------------------------------
+# =========================================================
 
 class Message(Base):
-    """Emergency or system packet stored by the backend."""
-
     __tablename__ = "messages"
 
     message_id: Mapped[str] = mapped_column(
@@ -267,13 +282,11 @@ class Message(Base):
         )
 
 
-# ---------------------------------------------------------------------------
+# =========================================================
 # ROUTES
-# ---------------------------------------------------------------------------
+# =========================================================
 
 class Route(Base):
-    """Current or standby route information for mesh forwarding."""
-
     __tablename__ = "routes"
 
     route_id: Mapped[int] = mapped_column(
@@ -353,18 +366,11 @@ class Route(Base):
         )
 
 
-# ---------------------------------------------------------------------------
+# =========================================================
 # EMERGENCY REQUESTS
-# ---------------------------------------------------------------------------
+# =========================================================
 
 class EmergencyRequest(Base):
-    """
-    Operator-facing emergency request derived from a message.
-
-    Includes lifecycle timestamps for acknowledgement, assignment,
-    and resolution.
-    """
-
     __tablename__ = "emergency_requests"
 
     request_id: Mapped[int] = mapped_column(
@@ -447,13 +453,11 @@ class EmergencyRequest(Base):
         )
 
 
-# ---------------------------------------------------------------------------
+# =========================================================
 # LOGS
-# ---------------------------------------------------------------------------
+# =========================================================
 
 class Log(Base):
-    """Operational and security log entry."""
-
     __tablename__ = "logs"
 
     log_id: Mapped[int] = mapped_column(
