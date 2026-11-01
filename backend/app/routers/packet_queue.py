@@ -1,7 +1,7 @@
 
 from datetime import datetime, timezone, timedelta
 from typing import Optional
-
+from threading import Lock
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import func, or_
 from sqlalchemy.orm import Session
@@ -32,6 +32,7 @@ VALID_STATUSES = {
 }
 
 
+_queue_processing_lock = Lock()
 def utc_now():
     return datetime.now(timezone.utc)
 
@@ -228,9 +229,187 @@ def get_queue_items(
     )
 
 
+
 # =========================================================
 # PROCESS QUEUED PACKETS
 # =========================================================
+
+def process_queue_batch(
+    db: Session,
+    limit: int = 25,
+) -> PacketQueueProcessResponse:
+    """
+    Shared processing function used by both the API endpoint
+    and the automatic background worker.
+
+    This synchronizes queued backend packets into the main
+    message database. It does not perform physical LoRa transmission.
+    """
+
+    with _queue_processing_lock:
+
+        now = utc_now()
+
+        items = (
+            db.query(PacketQueue)
+            .filter(
+                PacketQueue.status == "QUEUED",
+                or_(
+                    PacketQueue.next_retry_at.is_(None),
+                    PacketQueue.next_retry_at <= now,
+                    PacketQueue.expires_at <= now,
+                ),
+            )
+            .order_by(PacketQueue.queued_at.asc())
+            .limit(limit)
+            .all()
+        )
+
+        checked = 0
+        synced = 0
+        retry_scheduled = 0
+        failed = 0
+        expired = 0
+
+        for item in items:
+
+            checked += 1
+            now = utc_now()
+            queue_id = item.queue_id
+
+            # Check packet expiry
+            if (
+                item.expires_at is not None
+                and normalize_utc(item.expires_at) <= now
+            ):
+                item.status = "EXPIRED"
+                item.last_error = (
+                    "Packet retention period expired before synchronization."
+                )
+
+                db.commit()
+                expired += 1
+                continue
+
+            attempt_number = item.attempt_count + 1
+
+            # Check maximum processing attempts
+            if attempt_number > item.max_attempts:
+
+                item.status = "FAILED"
+                item.last_error = (
+                    "Maximum processing attempts exceeded."
+                )
+
+                db.commit()
+                failed += 1
+                continue
+
+            try:
+
+                item.status = "SYNCING"
+                item.attempt_count = attempt_number
+                item.last_attempt_at = now
+
+                # Prevent duplicate message creation
+                existing_message = (
+                    db.query(Message)
+                    .filter(
+                        Message.message_id == item.message_id
+                    )
+                    .first()
+                )
+
+                if existing_message is None:
+
+                    message = Message(
+                        message_id=item.message_id,
+                        sender_id=item.sender_id,
+                        receiver_id=item.receiver_id,
+                        category=item.category,
+                        priority=item.priority,
+                        content=item.content,
+                        latitude=item.latitude,
+                        longitude=item.longitude,
+                        ttl=item.ttl,
+                        hop_count=item.hop_count,
+                        status="RECEIVED",
+                    )
+
+                    db.add(message)
+
+                # Mark queue item synchronized
+                item.status = "SYNCED"
+                item.synced_at = now
+                item.next_retry_at = None
+                item.last_error = None
+
+                db.add(
+                    Log(
+                        node_id=item.sender_id,
+                        event_type="PACKET_SYNCED",
+                        description=(
+                            f"Queued packet {item.message_id} "
+                            "synchronized into the main message database."
+                        ),
+                    )
+                )
+
+                db.commit()
+                synced += 1
+
+            except Exception as exc:
+
+                db.rollback()
+
+                failed_item = (
+                    db.query(PacketQueue)
+                    .filter(
+                        PacketQueue.queue_id == queue_id
+                    )
+                    .first()
+                )
+
+                if failed_item is not None:
+
+                    failed_item.attempt_count = attempt_number
+                    failed_item.last_attempt_at = now
+                    failed_item.last_error = str(exc)[:2000]
+
+                    if attempt_number >= failed_item.max_attempts:
+
+                        failed_item.status = "FAILED"
+                        failed_item.next_retry_at = None
+                        failed += 1
+
+                    else:
+
+                        failed_item.status = "QUEUED"
+
+                        # Exponential backoff:
+                        # 30, 60, 120, 240... seconds,
+                        # with a maximum delay of one hour.
+                        delay_seconds = min(
+                            30 * (2 ** (attempt_number - 1)),
+                            3600,
+                        )
+
+                        failed_item.next_retry_at = (
+                            now + timedelta(seconds=delay_seconds)
+                        )
+
+                        retry_scheduled += 1
+
+                    db.commit()
+
+        return PacketQueueProcessResponse(
+            checked=checked,
+            synced=synced,
+            retry_scheduled=retry_scheduled,
+            failed=failed,
+            expired=expired,
+        )
+
 
 @router.post(
     "/process",
@@ -242,148 +421,12 @@ def process_queue(
     current_user: User = Depends(require_operator_or_admin),
 ):
     """
-    Process pending buffered packets into the main message database.
+    Manually process pending buffered packets.
 
-    This represents backend synchronization after connectivity returns.
-    It does not perform physical LoRa transmission.
+    This uses the same processing function as the background worker.
     """
 
-    now = utc_now()
-
-    items = (
-        db.query(PacketQueue)
-        .filter(
-            PacketQueue.status == "QUEUED",
-            or_(
-                PacketQueue.next_retry_at.is_(None),
-                PacketQueue.next_retry_at <= now,
-                PacketQueue.expires_at <= now,
-            ),
-        )
-        .order_by(PacketQueue.queued_at.asc())
-        .limit(limit)
-        .all()
-    )
-
-    checked = 0
-    synced = 0
-    retry_scheduled = 0
-    failed = 0
-    expired = 0
-
-    for item in items:
-        checked += 1
-        now = utc_now()
-
-        if (
-            item.expires_at is not None
-            and normalize_utc(item.expires_at) <= now
-        ):
-            item.status = "EXPIRED"
-            item.last_error = (
-                "Packet retention period expired before synchronization."
-            )
-            db.commit()
-            expired += 1
-            continue
-
-        attempt_number = item.attempt_count + 1
-
-        if attempt_number > item.max_attempts:
-            item.status = "FAILED"
-            item.last_error = "Maximum processing attempts exceeded."
-            db.commit()
-            failed += 1
-            continue
-
-        try:
-            item.status = "SYNCING"
-            item.attempt_count = attempt_number
-            item.last_attempt_at = now
-
-            existing_message = (
-                db.query(Message)
-                .filter(Message.message_id == item.message_id)
-                .first()
-            )
-
-            if existing_message is None:
-                message = Message(
-                    message_id=item.message_id,
-                    sender_id=item.sender_id,
-                    receiver_id=item.receiver_id,
-                    category=item.category,
-                    priority=item.priority,
-                    content=item.content,
-                    latitude=item.latitude,
-                    longitude=item.longitude,
-                    ttl=item.ttl,
-                    hop_count=item.hop_count,
-                    status="RECEIVED",
-                )
-
-                db.add(message)
-
-            item.status = "SYNCED"
-            item.synced_at = now
-            item.next_retry_at = None
-            item.last_error = None
-
-            db.add(
-                Log(
-                    node_id=item.sender_id,
-                    event_type="PACKET_SYNCED",
-                    description=(
-                        f"Queued packet {item.message_id} synchronized "
-                        "into the main message database."
-                    ),
-                )
-            )
-
-            db.commit()
-            synced += 1
-
-        except Exception as exc:
-            db.rollback()
-
-            failed_item = (
-                db.query(PacketQueue)
-                .filter(PacketQueue.queue_id == item.queue_id)
-                .first()
-            )
-
-            if failed_item is not None:
-                failed_item.attempt_count = attempt_number
-                failed_item.last_attempt_at = now
-                failed_item.last_error = str(exc)[:2000]
-
-                if attempt_number >= failed_item.max_attempts:
-                    failed_item.status = "FAILED"
-                    failed_item.next_retry_at = None
-                    failed += 1
-                else:
-                    failed_item.status = "QUEUED"
-
-                    delay_seconds = min(
-                        30 * (2 ** (attempt_number - 1)),
-                        3600,
-                    )
-
-                    failed_item.next_retry_at = (
-                        now + timedelta(seconds=delay_seconds)
-                    )
-
-                    retry_scheduled += 1
-
-                db.commit()
-
-    return PacketQueueProcessResponse(
-        checked=checked,
-        synced=synced,
-        retry_scheduled=retry_scheduled,
-        failed=failed,
-        expired=expired,
-    )
+    return process_queue_batch(db=db, limit=limit)
 
 
 # =========================================================

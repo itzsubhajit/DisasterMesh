@@ -1,6 +1,6 @@
 
 from datetime import datetime
-from typing import Optional
+from typing import Literal, Optional
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -111,6 +111,20 @@ class MessageResponse(DisasterMeshSchema):
     ttl: int
     hop_count: int
 
+    # AI fields are separate recommendations; they do not overwrite the
+    # category and priority received in the original message.
+    ai_category: Optional[str] = None
+    ai_category_confidence: Optional[float] = None
+    ai_category_probabilities: Optional[dict] = None
+    ai_priority: Optional[str] = None
+    ai_priority_confidence: Optional[float] = None
+    ai_priority_probabilities: Optional[dict] = None
+    ai_requires_human_review: bool = False
+    ai_review_reasons: Optional[list[str]] = None
+    ai_matched_high_risk_phrases: Optional[list[str]] = None
+    ai_decision_authority: str = "HUMAN_OPERATOR"
+    ai_model_info: Optional[dict] = None
+
 
 # =========================================================
 # Emergency Request Schemas
@@ -140,10 +154,29 @@ class EmergencyResponse(DisasterMeshSchema):
     assigned_at: Optional[datetime] = None
     resolved_at: Optional[datetime] = None
 
+    ai_category: Optional[str] = None
+    ai_category_confidence: Optional[float] = None
+    ai_priority: Optional[str] = None
+    ai_priority_confidence: Optional[float] = None
+    ai_requires_human_review: bool = False
+    ai_review_reasons: Optional[list[str]] = None
+
+    ai_reviewed_at: Optional[datetime] = None
+    ai_reviewed_by: Optional[int] = None
+    ai_review_decision: Optional[str] = None
+    ai_review_notes: Optional[str] = None
+
 
 class EmergencyStatusUpdate(DisasterMeshSchema):
     status: str = Field(min_length=1, max_length=30)
     assigned_team: Optional[str] = Field(default=None, max_length=120)
+
+
+class EmergencyAIReview(DisasterMeshSchema):
+    decision: Literal["CONFIRM_AI", "OVERRIDE"]
+    final_category: Optional[str] = Field(default=None, min_length=1, max_length=50)
+    final_priority: Optional[Literal["CRITICAL", "HIGH", "MEDIUM", "LOW"]] = None
+    notes: Optional[str] = Field(default=None, max_length=2000)
 
 
 # =========================================================

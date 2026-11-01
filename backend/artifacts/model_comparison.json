@@ -1,0 +1,58 @@
+{
+    "project": "DisasterMesh",
+    "dataset_examples": 440,
+    "scikit_learn_version": "1.9.1",
+    "cross_validation_folds": 5,
+    "category_comparison": {
+        "Logistic Regression": {
+            "cv_accuracy_mean": 0.7757575757575758,
+            "cv_accuracy_std": 0.07132486239963529,
+            "cv_macro_f1_mean": 0.7699952572679846,
+            "cv_macro_f1_std": 0.07587997162545408,
+            "holdout_accuracy": 0.7636363636363637,
+            "holdout_macro_f1": 0.7612197360052815
+        },
+        "Multinomial Naive Bayes": {
+            "cv_accuracy_mean": 0.709090909090909,
+            "cv_accuracy_std": 0.06735185082088747,
+            "cv_macro_f1_mean": 0.7034586091270583,
+            "cv_macro_f1_std": 0.06937071178267243,
+            "holdout_accuracy": 0.7090909090909091,
+            "holdout_macro_f1": 0.7025457928567976
+        },
+        "Linear SVM": {
+            "cv_accuracy_mean": 0.7969696969696969,
+            "cv_accuracy_std": 0.06680426571226848,
+            "cv_macro_f1_mean": 0.7955287137105319,
+            "cv_macro_f1_std": 0.06779224507314625,
+            "holdout_accuracy": 0.7636363636363637,
+            "holdout_macro_f1": 0.762492525822963
+        }
+    },
+    "priority_comparison": {
+        "Logistic Regression": {
+            "cv_accuracy_mean": 0.5999999999999999,
+            "cv_accuracy_std": 0.052135304648743185,
+            "cv_macro_f1_mean": 0.5941573992592195,
+            "cv_macro_f1_std": 0.047257652490229535,
+            "holdout_accuracy": 0.5,
+            "holdout_macro_f1": 0.4964560247579115
+        },
+        "Multinomial Naive Bayes": {
+            "cv_accuracy_mean": 0.5757575757575757,
+            "cv_accuracy_std": 0.07902063521457756,
+            "cv_macro_f1_mean": 0.5756532622887138,
+            "cv_macro_f1_std": 0.07411348916034076,
+            "holdout_accuracy": 0.4636363636363636,
+            "holdout_macro_f1": 0.45837690542857823
+        },
+        "Linear SVM": {
+            "cv_accuracy_mean": 0.5818181818181818,
+            "cv_accuracy_std": 0.05213530464874319,
+            "cv_macro_f1_mean": 0.5738966608870811,
+            "cv_macro_f1_std": 0.046973981206973416,
+            "holdout_accuracy": 0.5,
+            "holdout_macro_f1": 0.4959642050159292
+        }
+    }
+}

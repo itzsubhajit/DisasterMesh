@@ -15,6 +15,7 @@ from sqlalchemy import (
     Float,
     ForeignKey,
     Integer,
+    JSON,
     String,
     Text,
 )
@@ -254,6 +255,26 @@ class Message(Base):
         default=0,
     )
 
+    # AI outputs are recommendations only. The original category and priority
+    # above remain unchanged and continue to represent the received packet.
+    ai_category: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
+    ai_category_confidence: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    ai_category_probabilities: Mapped[Optional[dict]] = mapped_column(JSON, nullable=True)
+
+    ai_priority: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
+    ai_priority_confidence: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    ai_priority_probabilities: Mapped[Optional[dict]] = mapped_column(JSON, nullable=True)
+
+    ai_requires_human_review: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=False, server_default="0"
+    )
+    ai_review_reasons: Mapped[Optional[list]] = mapped_column(JSON, nullable=True)
+    ai_matched_high_risk_phrases: Mapped[Optional[list]] = mapped_column(JSON, nullable=True)
+    ai_decision_authority: Mapped[str] = mapped_column(
+        String(30), nullable=False, default="HUMAN_OPERATOR", server_default="HUMAN_OPERATOR"
+    )
+    ai_model_info: Mapped[Optional[dict]] = mapped_column(JSON, nullable=True)
+
     sender_node: Mapped["Node"] = relationship(
         "Node",
         foreign_keys=[sender_id],
@@ -438,10 +459,55 @@ class EmergencyRequest(Base):
         nullable=True,
     )
 
+    # Explicit, auditable operator review of the AI recommendation.
+    ai_reviewed_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+    ai_reviewed_by: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("users.user_id"), nullable=True
+    )
+    ai_review_decision: Mapped[Optional[str]] = mapped_column(
+        String(20), nullable=True
+    )
+    ai_review_notes: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+
     message: Mapped["Message"] = relationship(
         "Message",
         back_populates="emergency_request",
     )
+
+    @property
+    def ai_category(self) -> Optional[str]:
+        return self.message.ai_category if self.message is not None else None
+
+    @property
+    def ai_category_confidence(self) -> Optional[float]:
+        return (
+            self.message.ai_category_confidence
+            if self.message is not None else None
+        )
+
+    @property
+    def ai_priority(self) -> Optional[str]:
+        return self.message.ai_priority if self.message is not None else None
+
+    @property
+    def ai_priority_confidence(self) -> Optional[float]:
+        return (
+            self.message.ai_priority_confidence
+            if self.message is not None else None
+        )
+
+    @property
+    def ai_requires_human_review(self) -> bool:
+        return bool(
+            self.message is not None
+            and self.message.ai_requires_human_review
+        )
+
+    @property
+    def ai_review_reasons(self) -> Optional[list]:
+        return self.message.ai_review_reasons if self.message is not None else None
 
     def __repr__(self) -> str:
         return (

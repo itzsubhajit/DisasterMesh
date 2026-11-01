@@ -1,0 +1,441 @@
+text,category,priority
+A survivor is calling for help beneath a collapsed concrete roof.,Trapped Person,CRITICAL
+Two residents are pinned under a fallen reinforced concrete beam.,Trapped Person,CRITICAL
+A child is trapped in a room after the staircase collapsed.,Trapped Person,CRITICAL
+A worker is buried under rubble and reports difficulty breathing.,Trapped Person,CRITICAL
+An earthquake survivor is trapped under debris with an injured leg.,Trapped Person,CRITICAL
+People are trapped in the basement of a partially collapsed building.,Trapped Person,CRITICAL
+A person is stuck beneath heavy machinery after a factory collapse.,Trapped Person,CRITICAL
+A family member is heard responding from underneath the rubble.,Trapped Person,CRITICAL
+A resident is trapped in a damaged apartment and cannot open the door.,Trapped Person,CRITICAL
+A person is pinned between a fallen wall and a concrete pillar.,Trapped Person,CRITICAL
+A child is crying beneath debris following the building collapse.,Trapped Person,CRITICAL
+A survivor is trapped in an air pocket and urgently needs extraction.,Trapped Person,CRITICAL
+Three people are reported trapped beneath a collapsed market roof.,Trapped Person,CRITICAL
+A construction worker is pinned under a fallen slab at the site.,Trapped Person,CRITICAL
+A resident is trapped on a balcony with the building structure shifting.,Trapped Person,CRITICAL
+A person is trapped inside a vehicle crushed by falling debris.,Trapped Person,CRITICAL
+A survivor under the rubble says that another person is beside them.,Trapped Person,CRITICAL
+A person is trapped in a lift after an earthquake damaged the building.,Trapped Person,CRITICAL
+A collapsed stairwell has trapped residents on the upper floor.,Trapped Person,CRITICAL
+A person is trapped in a narrow space and has limited air supply.,Trapped Person,CRITICAL
+A rescue caller reports hearing faint voices under the collapsed structure.,Trapped Person,CRITICAL
+An injured resident is pinned beneath a heavy cupboard and wall debris.,Trapped Person,CRITICAL
+A person is trapped in a flooded basement with water rising rapidly.,Trapped Person,CRITICAL
+A worker is stuck under a collapsed roof and cannot move their legs.,Trapped Person,CRITICAL
+A family of four is trapped inside a damaged house after the tremor.,Trapped Person,CRITICAL
+A survivor is trapped under bricks and urgently requests an air supply.,Trapped Person,CRITICAL
+A person is trapped behind a jammed emergency exit in a damaged building.,Trapped Person,CRITICAL
+A child is stuck inside a debris-filled room after a ceiling fell.,Trapped Person,CRITICAL
+A trapped resident reports severe pain and asks rescuers to hurry.,Trapped Person,CRITICAL
+A person is pinned under a fallen tree and cannot free themselves.,Trapped Person,CRITICAL
+A survivor is trapped in a collapsed tunnel with no clear exit.,Trapped Person,CRITICAL
+A resident is stuck on a damaged floor above an unstable lower level.,Trapped Person,CRITICAL
+A person remains trapped inside a partially collapsed school building.,Trapped Person,CRITICAL
+A worker is trapped under a fallen metal frame and is bleeding heavily.,Trapped Person,CRITICAL
+A trapped person reports that the surrounding structure is still moving.,Trapped Person,CRITICAL
+A resident is trapped behind rubble but is conscious and responding.,Trapped Person,CRITICAL
+A person is stuck inside a locked storage room after structural damage.,Trapped Person,HIGH
+A resident is stranded inside a damaged house but has a clear air supply.,Trapped Person,HIGH
+A conscious person is trapped in a stable room awaiting controlled extraction.,Trapped Person,HIGH
+A worker is unable to leave a confined area after a door jammed.,Trapped Person,HIGH
+A patient is unconscious and not responding after the impact.,Medical,CRITICAL
+A person has severe uncontrolled bleeding and needs an ambulance now.,Medical,CRITICAL
+A resident is having chest pain and severe difficulty breathing.,Medical,CRITICAL
+A casualty has stopped breathing after being pulled from the debris.,Medical,CRITICAL
+A person shows signs of a stroke and needs immediate medical care.,Medical,CRITICAL
+A child has severe burns and is struggling to breathe.,Medical,CRITICAL
+A patient has a suspected spinal injury after a fall from height.,Medical,CRITICAL
+A resident is in shock with a very weak pulse after the accident.,Medical,CRITICAL
+A pregnant woman has heavy bleeding and requires urgent treatment.,Medical,CRITICAL
+A person has suffered a serious head injury and is losing consciousness.,Medical,CRITICAL
+A casualty has severe allergic swelling and difficulty breathing.,Medical,CRITICAL
+An elderly patient is unconscious following prolonged heat exposure.,Medical,CRITICAL
+A person has crushing chest pain and cold sweating.,Medical,CRITICAL
+A victim has multiple fractures and is trapped in severe pain.,Medical,CRITICAL
+A patient is having repeated seizures after the building collapse.,Medical,CRITICAL
+A child has swallowed a harmful chemical and needs urgent assessment.,Medical,CRITICAL
+A resident has a deep wound with continuous blood loss.,Medical,CRITICAL
+A person is showing signs of severe dehydration and confusion.,Medical,CRITICAL
+A patient with asthma has a severe attack and no inhaler available.,Medical,CRITICAL
+A casualty has a serious injury and needs immediate evacuation to hospital.,Medical,CRITICAL
+An elderly resident needs an urgent refill of essential heart medication.,Medical,HIGH
+A dialysis patient needs transport to the nearest functioning centre today.,Medical,HIGH
+A diabetic patient has dangerously low blood sugar and needs assistance.,Medical,HIGH
+A person with a fractured arm needs medical transport from the relief camp.,Medical,HIGH
+A resident has a high fever and is becoming increasingly weak.,Medical,HIGH
+A patient needs oxygen support because their breathing is worsening.,Medical,HIGH
+A person has an infected wound and requires a doctor soon.,Medical,HIGH
+A child has persistent vomiting and cannot keep fluids down.,Medical,HIGH
+An injured resident needs a tetanus injection and wound dressing.,Medical,HIGH
+A patient with hypertension has run out of prescribed medicine.,Medical,HIGH
+A person has a minor cut that needs basic first aid.,Medical,HIGH
+A resident reports mild dizziness but is alert and walking.,Medical,HIGH
+A casualty has bruising and small abrasions with no serious symptoms.,Medical,MEDIUM
+A patient needs routine dressing replacement at the medical camp.,Medical,MEDIUM
+A resident requests a basic health check after evacuation.,Medical,MEDIUM
+A person has a mild headache after spending time in the heat.,Medical,MEDIUM
+A stable patient needs a follow-up check for a sprained ankle.,Medical,MEDIUM
+A person asks where to collect routine medication at the camp.,Medical,MEDIUM
+A resident reports mild muscle soreness after carrying supplies.,Medical,LOW
+A volunteer requests a routine first-aid kit for the medical desk.,Medical,LOW
+A large fire is spreading through an occupied apartment block.,Fire,CRITICAL
+Flames are coming from several floors of the residential tower.,Fire,CRITICAL
+A gas cylinder has exploded and the kitchen is fully alight.,Fire,CRITICAL
+A school building is filling with thick smoke while children are inside.,Fire,CRITICAL
+An electrical fire is spreading through the hospital ward.,Fire,CRITICAL
+A warehouse fire contains chemicals and nearby homes are at risk.,Fire,CRITICAL
+A wildfire is moving rapidly toward a crowded village.,Fire,CRITICAL
+A fuel tanker is burning beside a busy road.,Fire,CRITICAL
+People are trapped upstairs while flames block the main staircase.,Fire,CRITICAL
+A fire has reached the oxygen storage area of a clinic.,Fire,CRITICAL
+An entire market row is burning and the flames are spreading.,Fire,CRITICAL
+A fire is approaching a shelter where evacuees are sleeping.,Fire,CRITICAL
+A transformer has exploded and a nearby building is on fire.,Fire,CRITICAL
+A house fire has spread to the adjoining homes in the lane.,Fire,CRITICAL
+A large brush fire is crossing the boundary toward a settlement.,Fire,CRITICAL
+Smoke and flames are visible inside a crowded cinema hall.,Fire,CRITICAL
+A factory fire is producing dense smoke and workers are unaccounted for.,Fire,CRITICAL
+A fire has broken out near stored fuel drums at the depot.,Fire,CRITICAL
+A burning roof is collapsing over an occupied structure.,Fire,CRITICAL
+A fire in a multi-storey building has cut off the evacuation route.,Fire,CRITICAL
+A small electrical panel fire is producing smoke in an empty office.,Fire,HIGH
+A kitchen fire is spreading toward the gas connection.,Fire,HIGH
+Smoke is coming from a vehicle parked beside the relief camp.,Fire,HIGH
+A shop fire is contained to one room but needs fire service support.,Fire,HIGH
+A generator has caught fire near the community centre.,Fire,HIGH
+A burnt electrical cable is smouldering near a residential entrance.,Fire,HIGH
+A fire is burning in a vacant storage shed near the road.,Fire,HIGH
+A small grass fire is moving toward dry vegetation outside the village.,Fire,HIGH
+A cooking fire has been extinguished but the cylinder needs inspection.,Fire,HIGH
+A few sparks and smoke were seen from a damaged streetlight junction.,Fire,HIGH
+A fire alarm sounded in an empty classroom and smoke is being checked.,Fire,HIGH
+A resident reports a burning smell from a household switchboard.,Fire,HIGH
+A fire blanket was used to put out a small pan fire.,Fire,HIGH
+A small waste-bin fire has been put out by nearby residents.,Fire,HIGH
+Firefighters are checking a wall that remains warm after extinguishing flames.,Fire,HIGH
+A minor smoke incident occurred in an outdoor cooking area.,Fire,MEDIUM
+A controlled cooking flame is burning at the designated relief kitchen.,Fire,MEDIUM
+A volunteer reports a routine fire extinguisher inspection is due.,Fire,MEDIUM
+A fire crew has confirmed that the room is clear and no flames remain.,Fire,MEDIUM
+A resident asks for instructions on replacing an expired fire extinguisher.,Fire,MEDIUM
+A residential building has collapsed and several families may be inside.,Building Collapse,CRITICAL
+Multiple floors of an occupied apartment block fell after the earthquake.,Building Collapse,CRITICAL
+A school structure collapsed during class and children are missing.,Building Collapse,CRITICAL
+A bridge deck collapsed while vehicles were crossing it.,Building Collapse,CRITICAL
+A factory roof collapsed with workers reported underneath.,Building Collapse,CRITICAL
+A market building collapsed and people are calling from the debris.,Building Collapse,CRITICAL
+A hospital wing has fallen and patients need urgent evacuation.,Building Collapse,CRITICAL
+A multi-storey building collapsed beside a crowded street.,Building Collapse,CRITICAL
+A wall collapse buried pedestrians and rescue teams are needed.,Building Collapse,CRITICAL
+A roof slab collapsed onto an occupied room during the storm.,Building Collapse,CRITICAL
+A building collapsed after a gas blast and occupants are unaccounted for.,Building Collapse,CRITICAL
+A damaged apartment block has partially collapsed onto neighbouring homes.,Building Collapse,CRITICAL
+A flyover section collapsed and vehicles are trapped beneath it.,Building Collapse,CRITICAL
+A landslide destroyed several houses on the hillside.,Building Collapse,CRITICAL
+A ceiling and supporting beam fell inside an occupied classroom.,Building Collapse,CRITICAL
+A retaining wall failed and buried homes below the slope.,Building Collapse,CRITICAL
+A crowded community hall roof collapsed during the event.,Building Collapse,CRITICAL
+A building under repair collapsed while workers were inside.,Building Collapse,CRITICAL
+A concrete balcony collapsed onto a public footpath.,Building Collapse,CRITICAL
+A riverbank structure collapsed and residents may be missing.,Building Collapse,CRITICAL
+A small section of an empty boundary wall collapsed onto the pavement.,Building Collapse,HIGH
+A vacant shed roof fell after strong winds with no injuries reported.,Building Collapse,HIGH
+A staircase in an unoccupied building has partially collapsed.,Building Collapse,HIGH
+A damaged shopfront wall collapsed and blocked one lane.,Building Collapse,HIGH
+A retaining wall has cracked and a nearby footpath is closed.,Building Collapse,HIGH
+A ceiling panel fell in an empty office after heavy rain.,Building Collapse,HIGH
+A roadside drain cover collapsed and the area has been cordoned off.,Building Collapse,HIGH
+A non-occupied storage structure has a partial roof failure.,Building Collapse,HIGH
+A small portion of plaster fell from a vacant building facade.,Building Collapse,HIGH
+A minor crack has appeared in an empty outbuilding after the tremor.,Building Collapse,HIGH
+An inspection team reports fresh cracks in a school building.,Building Collapse,HIGH
+A residential staircase is damaged and residents have been moved outside.,Building Collapse,HIGH
+A shop awning collapsed but the entrance remains accessible.,Building Collapse,HIGH
+A road culvert has subsided and traffic has been diverted.,Building Collapse,HIGH
+A low garden wall collapsed inside an empty compound.,Building Collapse,HIGH
+A damaged roof is sagging and the room has been evacuated.,Building Collapse,MEDIUM
+A small roadside structure is leaning and needs inspection.,Building Collapse,MEDIUM
+A few bricks fell from a vacant wall after vibration.,Building Collapse,MEDIUM
+A building inspection found no active collapse but recommends restricted access.,Building Collapse,MEDIUM
+A damaged unused structure has been isolated pending an engineering review.,Building Collapse,MEDIUM
+A child is missing after the family was separated during evacuation.,Missing Person,CRITICAL
+An elderly person with memory difficulties has not reached the shelter.,Missing Person,CRITICAL
+A resident was last seen near the flooded riverbank this morning.,Missing Person,CRITICAL
+A child is unaccounted for after the school evacuation.,Missing Person,HIGH
+A person using a wheelchair is missing from the temporary camp.,Missing Person,HIGH
+A family cannot locate their young daughter after the earthquake.,Missing Person,HIGH
+A resident with a medical condition has gone missing from the village.,Missing Person,HIGH
+A missing person may be inside the evacuation zone near the fire.,Missing Person,HIGH
+A teenager was separated from relatives in the crowded relief queue.,Missing Person,HIGH
+An elderly man has not returned after going to collect water.,Missing Person,HIGH
+A child was last seen near the damaged bridge after the flood.,Missing Person,HIGH
+A woman with limited mobility is missing from her assigned shelter.,Missing Person,HIGH
+A family reports that one member is still missing after the landslide.,Missing Person,HIGH
+A resident has not checked in since the building collapse.,Missing Person,HIGH
+A young child is missing and the search area includes damaged buildings.,Missing Person,HIGH
+An older adult was separated from the group during night evacuation.,Missing Person,HIGH
+A person has not been located after leaving the medical aid station.,Missing Person,HIGH
+A missing resident may have taken the road near the collapsed wall.,Missing Person,HIGH
+A student is unaccounted for after the school bus evacuation.,Missing Person,HIGH
+A family is searching for a relative last seen near the shelter entrance.,Missing Person,HIGH
+A resident has been missing for several hours after the storm.,Missing Person,HIGH
+A local volunteer has not returned from the flood response area.,Missing Person,HIGH
+A person is missing after being swept away from the river crossing.,Missing Person,HIGH
+A child with special communication needs is missing from the camp.,Missing Person,HIGH
+A man is unaccounted for after assisting neighbours during evacuation.,Missing Person,MEDIUM
+Search volunteers are checking the last known location of a missing resident.,Missing Person,MEDIUM
+A family asks for help locating an adult relative who missed the roll call.,Missing Person,MEDIUM
+One evacuee has not been matched with any registered shelter group.,Missing Person,MEDIUM
+A missing person report was filed and contact details have been recorded.,Missing Person,MEDIUM
+A resident has not answered calls since the power outage began.,Missing Person,MEDIUM
+A person who went to a nearby shop has not returned after the flood warning.,Missing Person,MEDIUM
+A family member is temporarily separated but has a confirmed phone contact.,Missing Person,MEDIUM
+A resident was reported missing but has now contacted the shelter desk.,Missing Person,MEDIUM
+A search team is verifying a possible sighting near the relief centre.,Missing Person,MEDIUM
+A missing adult's last known location is being checked by local volunteers.,Missing Person,MEDIUM
+A resident is delayed returning to the camp and family has been informed.,Missing Person,LOW
+A person was located at a neighbouring shelter and identity is being confirmed.,Missing Person,LOW
+A missing-person notice is being shared after verification by the family.,Missing Person,LOW
+A relative asks how to register a non-urgent missing-person enquiry.,Missing Person,LOW
+A resident has been found safe and reunited with their family.,Missing Person,LOW
+Evacuees have no meals remaining and children are becoming weak.,Food,HIGH
+The relief kitchen has run out of food for the overnight shift.,Food,HIGH
+Hundreds of stranded residents need food packets before nightfall.,Food,HIGH
+A shelter has no infant formula left for babies staying there.,Food,HIGH
+Flood-affected families have not received food supplies since yesterday.,Food,HIGH
+A community kitchen needs urgent cooked meals for displaced families.,Food,HIGH
+The village food store is empty and road access is still open.,Food,HIGH
+A food distribution vehicle is needed for isolated residents today.,Food,HIGH
+The shelter has enough dry food for only one more day.,Food,MEDIUM
+A group of elderly evacuees needs ready-to-eat meals delivered.,Food,MEDIUM
+A camp serving two hundred people needs another rice and lentil supply.,Food,MEDIUM
+A batch of relief food is damaged and must be replaced.,Food,MEDIUM
+Residents with dietary restrictions need suitable food packets.,Food,MEDIUM
+The relief centre requests packaged drinking-safe meals for the evening.,Food,MEDIUM
+A remote hamlet needs a scheduled food drop after the road reopens.,Food,MEDIUM
+The community kitchen requests cooking gas and basic ingredients.,Food,MEDIUM
+Food stocks are running low but current supplies will last until tomorrow.,Food,MEDIUM
+A shelter requests additional meals for newly arrived families.,Food,MEDIUM
+The camp has sufficient staples but needs fresh vegetables.,Food,MEDIUM
+A group of displaced workers needs lunch distribution at the school.,Food,MEDIUM
+Food packets are available but volunteers are needed to distribute them.,Food,MEDIUM
+The relief kitchen needs disposable plates and serving utensils.,Food,MEDIUM
+A family requests a food package for an infant and two adults.,Food,MEDIUM
+The village committee needs a list of households requiring food support.,Food,MEDIUM
+The camp requests vegetarian meals for the next distribution cycle.,Food,LOW
+A delivery of rice is expected this afternoon and storage space is ready.,Food,LOW
+There is a shortage of clean cooking pots at the community kitchen.,Food,LOW
+Food distribution is delayed because the access road is muddy.,Food,LOW
+Volunteers are packing dry rations for the next scheduled round.,Food,LOW
+The relief centre needs labels for special-diet food parcels.,Food,LOW
+A family has enough food for today but requests registration for future aid.,Food,LOW
+The kitchen has received a routine supply of lentils and rice.,Food,LOW
+Food stock was counted and recorded for the evening shift.,Food,LOW
+The camp menu is being updated to include meals for children.,Food,LOW
+A local group volunteered to prepare meals for the next two days.,Food,LOW
+The distribution desk requests extra bags for packing food kits.,Food,LOW
+A small food parcel is needed for a newly registered evacuee.,Food,LOW
+The shelter has food stocks for three days and no immediate shortage.,Food,LOW
+Routine meal distribution is continuing at the community hall.,Food,LOW
+A volunteer asks where to submit a non-urgent food donation offer.,Food,LOW
+A shelter has run out of safe drinking water for all its residents.,Water,CRITICAL
+Floodwater has contaminated the only drinking water source in the village.,Water,HIGH
+A hospital relief ward has no clean water for patients.,Water,HIGH
+Hundreds of stranded people urgently need drinking water deliveries.,Water,HIGH
+A water tanker is required for an isolated settlement today.,Water,HIGH
+Residents are drinking untreated floodwater because supplies are exhausted.,Water,HIGH
+The village hand pump is broken and no alternative supply is available.,Water,HIGH
+A water pipeline burst and the relief camp supply has stopped.,Water,HIGH
+A shelter needs bottled water for infants and elderly residents.,Water,HIGH
+A remote community has only a few hours of drinking water left.,Water,HIGH
+The local water source smells unusual and needs urgent quality testing.,Water,HIGH
+A tanker delivery is delayed and the camp needs temporary water storage.,Water,MEDIUM
+A school shelter requests additional water containers for its residents.,Water,MEDIUM
+The water purification unit is operating but filter cartridges are low.,Water,MEDIUM
+A neighbourhood needs water purification tablets after the flood.,Water,MEDIUM
+The relief camp needs water for drinking and basic sanitation.,Water,MEDIUM
+A broken public tap is causing a shortage in the evacuation centre.,Water,MEDIUM
+Clean water is available but needs distribution to the upper-floor shelter.,Water,MEDIUM
+A village well is muddy after heavy rain and should be tested.,Water,MEDIUM
+Water containers are needed for families arriving at the relief camp.,Water,MEDIUM
+The tanker supply is sufficient for today but needs replenishment tomorrow.,Water,MEDIUM
+A community requests a routine check of the water storage tank.,Water,MEDIUM
+The camp has drinking water but needs extra handwashing stations.,Water,MEDIUM
+A household water filter stopped working after the power cut.,Water,MEDIUM
+The water distribution point needs a queue and refill schedule.,Water,MEDIUM
+Residents need advice on boiling water before drinking it.,Water,MEDIUM
+A small leak is reducing water pressure in the shelter block.,Water,LOW
+A pump requires a routine maintenance visit to restore normal flow.,Water,LOW
+Water quality samples have been collected for laboratory testing.,Water,LOW
+A water tanker has arrived and distribution is being organized.,Water,LOW
+The camp has enough clean water for the next two days.,Water,LOW
+A household requests two additional water cans for tomorrow.,Water,LOW
+A storage tank is being cleaned as part of routine maintenance.,Water,LOW
+Water distribution is continuing according to the posted schedule.,Water,LOW
+The village tap supply has returned and residents are filling containers.,Water,LOW
+A volunteer records the water stock level at the relief centre.,Water,LOW
+A family asks where to collect its regular drinking water allocation.,Water,LOW
+The water kiosk is open and has sufficient stock for current demand.,Water,LOW
+A routine water delivery has been confirmed for the afternoon.,Water,LOW
+The camp's reserve water supply is full and the situation is stable.,Water,LOW
+Families displaced by the flood are sleeping outdoors without protection.,Shelter,HIGH
+An evacuation centre has no safe space for newly arrived families.,Shelter,HIGH
+A group of elderly residents needs accessible temporary accommodation.,Shelter,HIGH
+Hundreds of people need emergency tents before severe weather arrives.,Shelter,HIGH
+A shelter roof is leaking heavily and residents need relocation.,Shelter,HIGH
+Families with infants need a safe indoor place to sleep tonight.,Shelter,HIGH
+The temporary camp is overcrowded and people are sleeping outside.,Shelter,HIGH
+A landslide has made the village homes unsafe for overnight stay.,Shelter,HIGH
+Displaced residents need blankets and dry shelter after the storm.,Shelter,MEDIUM
+A school shelter has reached capacity and another site is required.,Shelter,MEDIUM
+The relief camp needs separate safe sleeping space for women and children.,Shelter,MEDIUM
+A damaged shelter building must be evacuated due to structural cracks.,Shelter,MEDIUM
+Residents need temporary accommodation while floodwater recedes.,Shelter,MEDIUM
+A tent area is exposed to strong winds and needs reinforcement.,Shelter,MEDIUM
+The relief centre requires bedding for families arriving this evening.,Shelter,MEDIUM
+A shelter has no lighting in the sleeping area after the power failure.,Shelter,MEDIUM
+An accessible ramp is needed for wheelchair users at the camp.,Shelter,MEDIUM
+The temporary housing site needs mosquito nets and sleeping mats.,Shelter,MEDIUM
+A family needs a dry room because their home is waterlogged.,Shelter,MEDIUM
+The camp requests additional toilets and bathing facilities.,Shelter,MEDIUM
+"New evacuees need blankets, mats and a designated sleeping area.",Shelter,MEDIUM
+The shelter needs a partition to create a private family space.,Shelter,MEDIUM
+A community hall can be opened as an additional temporary shelter.,Shelter,MEDIUM
+The camp needs volunteers to register people and assign sleeping spaces.,Shelter,MEDIUM
+A family shelter requires repairs to its damaged window covers.,Shelter,MEDIUM
+Temporary accommodation is needed for residents whose homes are being inspected.,Shelter,MEDIUM
+The shelter requests extra fans because the sleeping hall is hot.,Shelter,LOW
+A designated quiet area is needed for older residents at the camp.,Shelter,LOW
+The camp requires a safe charging station for residents' phones.,Shelter,LOW
+A temporary shelter needs a routine cleaning and bedding replacement.,Shelter,LOW
+The relief centre has enough tents but needs additional floor mats.,Shelter,LOW
+A family asks where to register for temporary accommodation tomorrow.,Shelter,LOW
+The camp has available beds for the newly arrived evacuees.,Shelter,LOW
+A shelter requests routine maintenance of its entrance lighting.,Shelter,LOW
+A resident needs information about the next housing assessment visit.,Shelter,LOW
+The temporary camp has dry sleeping space available for tonight.,Shelter,LOW
+A relief centre is distributing blankets according to its normal schedule.,Shelter,LOW
+A family has been assigned a room at the nearby community shelter.,Shelter,LOW
+The shelter manager reports that current capacity is sufficient.,Shelter,LOW
+A volunteer asks where to donate clean bedding for future use.,Shelter,LOW
+Rescue teams must evacuate people from rooftops surrounded by floodwater.,Rescue,CRITICAL
+A boat rescue is urgently needed for residents trapped by rising water.,Rescue,CRITICAL
+People are stranded on an unstable bridge and need immediate extraction.,Rescue,CRITICAL
+A search and rescue team is needed after the landslide buried homes.,Rescue,CRITICAL
+Residents are trapped on upper floors as floodwater enters the ground level.,Rescue,CRITICAL
+A rescue vehicle is needed to reach an isolated village after the storm.,Rescue,CRITICAL
+A person is clinging to debris in a fast-moving river.,Rescue,CRITICAL
+Rescuers are needed to evacuate patients from the damaged clinic.,Rescue,CRITICAL
+A child is stranded on a rooftop and water is still rising.,Rescue,CRITICAL
+A rescue crew is required at the collapsed tunnel entrance now.,Rescue,CRITICAL
+A rope rescue team is needed to reach people on the steep hillside.,Rescue,HIGH
+Residents are stranded in a bus surrounded by deep floodwater.,Rescue,HIGH
+A rescue boat should reach the submerged settlement immediately.,Rescue,HIGH
+A team is needed to search an area where people are still unaccounted for.,Rescue,HIGH
+Evacuation assistance is required for a hospital ward without power.,Rescue,HIGH
+A rescue crew is requested to move families away from the unstable slope.,Rescue,HIGH
+People are stuck inside vehicles after the river overflowed the road.,Rescue,HIGH
+A high-clearance vehicle is needed to evacuate stranded residents.,Rescue,HIGH
+A rescue team is needed to reach a person on a damaged balcony.,Rescue,HIGH
+Fire and rescue personnel are requested at the blocked apartment exit.,Rescue,HIGH
+A rescue team should help evacuate a group with limited mobility.,Rescue,HIGH
+Volunteers are needed to guide residents to the designated safe route.,Rescue,HIGH
+A boat team is requested to check homes cut off by shallow floodwater.,Rescue,HIGH
+Rescue personnel are needed to carry an injured resident to an ambulance.,Rescue,HIGH
+A team is needed to clear a safe path through fallen branches.,Rescue,HIGH
+The village requests trained volunteers to assist with an orderly evacuation.,Rescue,HIGH
+A rescue vehicle is needed to transport a family from the affected area.,Rescue,HIGH
+A team should check the riverbank for people needing assistance.,Rescue,MEDIUM
+Rescue staff are requested to support the transfer of shelter residents.,Rescue,MEDIUM
+A search team is checking the designated zone after receiving a distress call.,Rescue,MEDIUM
+A rescue crew is on standby near the community centre.,Rescue,MEDIUM
+The evacuation team needs extra personnel for a planned movement.,Rescue,MEDIUM
+A boat crew is checking a route that has reopened after the flood.,Rescue,MEDIUM
+Volunteers are guiding residents from the assembly point to transport.,Rescue,MEDIUM
+A rescue team is requested to assist with a non-urgent supply transfer.,Rescue,MEDIUM
+The response team needs help setting up a safe evacuation corridor.,Rescue,LOW
+A scheduled rescue drill is taking place at the training ground.,Rescue,LOW
+Rescue volunteers are registering for the next shift at the base.,Rescue,LOW
+A team is requested to inspect an accessible route before evacuation.,Rescue,LOW
+The rescue vehicle is returning to base after completing its assignment.,Rescue,LOW
+All residents have been accounted for and the neighbourhood is safe.,Safe / All Clear,MEDIUM
+The evacuation point is clear and every registered family is present.,Safe / All Clear,MEDIUM
+Search teams confirmed that no one remains inside the inspected building.,Safe / All Clear,MEDIUM
+The missing child has been found safe and reunited with family.,Safe / All Clear,MEDIUM
+All shelter occupants are safe and no assistance is currently required.,Safe / All Clear,MEDIUM
+The area inspection is complete and no immediate hazards were found.,Safe / All Clear,MEDIUM
+Every patient has been transferred safely to the alternate clinic.,Safe / All Clear,MEDIUM
+The fire is extinguished and the site has been declared clear by responders.,Safe / All Clear,MEDIUM
+The rescue team confirms all people have left the affected structure.,Safe / All Clear,MEDIUM
+All residents reached the designated assembly point without injury.,Safe / All Clear,MEDIUM
+The search operation is complete and all missing residents are located.,Safe / All Clear,MEDIUM
+The shelter has confirmed that every family is safe and registered.,Safe / All Clear,MEDIUM
+The road inspection is complete and the route is safe for normal access.,Safe / All Clear,MEDIUM
+The building was checked and no occupants or hazards were found.,Safe / All Clear,MEDIUM
+The floodwater has receded and residents have been cleared to return after inspection.,Safe / All Clear,MEDIUM
+The evacuation operation ended and the last group reached the safe zone.,Safe / All Clear,MEDIUM
+The medical team reports that all patients are stable after transfer.,Safe / All Clear,MEDIUM
+The local response team reports no further emergency at this location.,Safe / All Clear,MEDIUM
+Residents are safe at the camp and have received the required supplies.,Safe / All Clear,LOW
+The response coordinator confirms that the affected block is all clear.,Safe / All Clear,LOW
+All volunteers have checked in safely after the field operation.,Safe / All Clear,LOW
+The community centre is open and ready to receive routine visitors.,Safe / All Clear,LOW
+The shelter roll call is complete and no person is unaccounted for.,Safe / All Clear,LOW
+The response team has completed its inspection with no new incidents.,Safe / All Clear,LOW
+The power supply has returned and the public area is operating normally.,Safe / All Clear,LOW
+The water test passed and the source has been declared safe for use.,Safe / All Clear,LOW
+The temporary evacuation order has ended after the safety inspection.,Safe / All Clear,LOW
+The rescue operation is closed and all teams have returned safely.,Safe / All Clear,LOW
+The road is reopened after debris removal and final inspection.,Safe / All Clear,LOW
+All registered residents have confirmed their safe arrival at home.,Safe / All Clear,LOW
+A routine welfare check found the household safe and well.,Safe / All Clear,LOW
+The assembly area is clear and ready for the next scheduled activity.,Safe / All Clear,LOW
+The incident site is stable and no additional response is requested.,Safe / All Clear,LOW
+A team confirmed that the shelter has adequate supplies and safe conditions.,Safe / All Clear,LOW
+The family confirms that all members are together and safe.,Safe / All Clear,LOW
+The local health desk reports no outstanding urgent cases.,Safe / All Clear,LOW
+The field node reports a normal heartbeat and no active distress message.,Safe / All Clear,LOW
+The response lead confirms that the assigned task is complete.,Safe / All Clear,LOW
+The inspection team found no immediate danger around the relief centre.,Safe / All Clear,LOW
+The area remains calm and the scheduled monitoring is continuing.,Safe / All Clear,LOW
+The field node sent its routine heartbeat successfully.,General,MEDIUM
+A network status update was received from the relay station.,General,MEDIUM
+The operator requests the latest contact list for the response team.,General,MEDIUM
+A volunteer has checked in for the afternoon shift.,General,MEDIUM
+The field team is moving its supplies to the assembly point.,General,MEDIUM
+A routine equipment inventory is being completed at the base.,General,MEDIUM
+The gateway has received a normal status packet from the node.,General,MEDIUM
+A maintenance visit is scheduled for the communication equipment tomorrow.,General,MEDIUM
+The team requests an update to the daily operations roster.,General,LOW
+A routine announcement will be made at the relief camp at noon.,General,LOW
+The field operator confirms that the radio battery has been replaced.,General,LOW
+A delivery vehicle is expected at the response base this afternoon.,General,LOW
+The team is recording the number of volunteers present at the site.,General,LOW
+A routine network test is planned after the shift change.,General,LOW
+The operator asks for the location of the nearest charging point.,General,LOW
+The response office requests copies of the daily activity summary.,General,LOW
+A volunteer has submitted a routine request for identification badges.,General,LOW
+The team is updating the list of available transport vehicles.,General,LOW
+The local office will hold a routine coordination meeting at four.,General,LOW
+A field worker reports that the equipment case has been delivered.,General,LOW
+The node battery is at forty percent and should be checked during the next round.,General,LOW
+A relay node has intermittent connectivity and needs technical inspection.,General,LOW
+The gateway clock needs synchronization with the server time.,General,LOW
+A routine software update is planned for the dashboard workstation.,General,LOW
+The team requests spare cables for the next equipment inspection.,General,LOW
+A field report has been saved and is awaiting routine review.,General,LOW
+The operator is checking whether the daily log has been submitted.,General,LOW
+The next volunteer briefing is scheduled for tomorrow morning.,General,LOW
+The response base needs a printed copy of the contact directory.,General,LOW
+A routine count of portable radios is being recorded.,General,LOW
+The field team has completed its scheduled communication check.,General,LOW
+A volunteer asks where to submit a general feedback form.,General,LOW
+The office is updating the schedule for routine supply collection.,General,LOW
+A non-urgent request for stationery was received at the base.,General,LOW
+The operator confirms receipt of the weekly coordination note.,General,LOW
+A routine inspection of the charging station is planned this evening.,General,LOW
+The team is organizing documents for the next coordination meeting.,General,LOW
+A status report was received with no emergency information included.,General,LOW
+The field station requests a replacement label for its equipment box.,General,LOW
+A volunteer is asking for directions to the registration desk.,General,LOW

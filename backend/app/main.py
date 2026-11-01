@@ -1,10 +1,17 @@
 
+import asyncio
+
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .database import initialize_database, test_database_connection
+from .database import (
+    initialize_database,
+    test_database_connection,
+)
+
+from .queue_worker import run_queue_worker
 
 from .routers import (
     alerts,
@@ -23,16 +30,38 @@ from .routers import (
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+
     print("Starting DisasterMesh backend...")
 
     test_database_connection()
     initialize_database()
 
+    # Start the automatic packet queue worker.
+    worker_stop_event = asyncio.Event()
+
+    worker_task = asyncio.create_task(
+        run_queue_worker(worker_stop_event),
+        name="disastermesh-packet-queue-worker",
+    )
+
+    print("Automatic packet queue worker started.")
     print("DisasterMesh backend started successfully.")
 
-    yield
+    try:
 
-    print("DisasterMesh backend shutting down...")
+        yield
+
+    finally:
+
+        print("Stopping DisasterMesh background services...")
+
+        # Request graceful worker shutdown.
+        worker_stop_event.set()
+
+        # Wait until the current processing batch finishes.
+        await worker_task
+
+        print("DisasterMesh backend shutting down...")
 
 
 app = FastAPI(
@@ -82,6 +111,7 @@ app.include_router(analytics.router)
 
 @app.get("/")
 def root():
+
     return {
         "project": "DisasterMesh",
         "status": "online",
@@ -95,6 +125,7 @@ def root():
 
 @app.get("/api/health")
 def health_check():
+
     return {
         "status": "healthy",
         "service": "DisasterMesh Backend",
@@ -107,6 +138,7 @@ def health_check():
 
 @app.get("/api/system/status")
 def system_status():
+
     return {
         "system": "DisasterMesh",
         "backend": "online",

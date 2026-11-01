@@ -5,7 +5,11 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from ..database import get_db
-from ..dependencies import get_current_user
+from ..dependencies import (
+    get_current_user,
+    require_admin,
+    require_operator_or_admin,
+)
 from ..models import Node, User
 from ..schemas import (
     NodeCreate,
@@ -39,15 +43,16 @@ def normalized_utc(value: datetime) -> datetime:
 def register_node(
     node_data: NodeCreate,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_admin),
 ):
-    """Register a new field, relay, or gateway node."""
+    """Register a new field, relay, or gateway node. Admin only."""
 
     existing_node = (
         db.query(Node)
         .filter(Node.node_id == node_data.node_id)
         .first()
     )
+
     if existing_node is not None:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
@@ -59,6 +64,7 @@ def register_node(
         .filter(Node.device_id == node_data.device_id)
         .first()
     )
+
     if existing_device is not None:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
@@ -79,6 +85,7 @@ def register_node(
     db.add(node)
     db.commit()
     db.refresh(node)
+
     return node
 
 
@@ -90,9 +97,9 @@ def node_heartbeat(
     node_id: str,
     heartbeat: NodeHeartbeat,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_operator_or_admin),
 ):
-    """Record a heartbeat and update any supplied node telemetry."""
+    """Record node heartbeat and update telemetry."""
 
     node = db.query(Node).filter(Node.node_id == node_id).first()
 
@@ -116,6 +123,7 @@ def node_heartbeat(
 
     db.commit()
     db.refresh(node)
+
     return node
 
 
@@ -175,14 +183,18 @@ def get_node_status(
 
         if is_stale:
             stale_nodes += 1
+
             if node.status != "STALE":
                 node.status = "STALE"
                 changed = True
+
         elif node_status in {"ONLINE", "STALE"}:
             online_nodes += 1
+
             if node.status != "ONLINE":
                 node.status = "ONLINE"
                 changed = True
+
         else:
             offline_nodes += 1
 

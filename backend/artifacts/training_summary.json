@@ -1,0 +1,55 @@
+{
+    "project": "DisasterMesh",
+    "dataset_examples": 440,
+    "category_model": {
+        "task": "category",
+        "algorithm": "Linear SVM",
+        "feature_extraction": "TF-IDF",
+        "probability_calibration": "Sigmoid",
+        "calibration_folds": 5,
+        "classes": [
+            "Building Collapse",
+            "Fire",
+            "Food",
+            "General",
+            "Medical",
+            "Missing Person",
+            "Rescue",
+            "Safe / All Clear",
+            "Shelter",
+            "Trapped Person",
+            "Water"
+        ],
+        "dataset_examples": 440,
+        "evaluation_training_examples": 330,
+        "evaluation_testing_examples": 110,
+        "holdout_accuracy": 0.7818181818181819,
+        "holdout_macro_f1": 0.7801318146387224,
+        "random_state": 42,
+        "trained_at": "2026-11-01T16:08:05.320242+00:00",
+        "sklearn_version": "1.9.1",
+        "confidence_warning": "Estimated probabilities from synthetic development data; not validated for real-world emergency decisions."
+    },
+    "priority_model": {
+        "task": "priority",
+        "algorithm": "Logistic Regression",
+        "feature_extraction": "TF-IDF",
+        "probability_calibration": "Sigmoid",
+        "calibration_folds": 5,
+        "classes": [
+            "CRITICAL",
+            "HIGH",
+            "LOW",
+            "MEDIUM"
+        ],
+        "dataset_examples": 440,
+        "evaluation_training_examples": 330,
+        "evaluation_testing_examples": 110,
+        "holdout_accuracy": 0.4909090909090909,
+        "holdout_macro_f1": 0.48393987560743196,
+        "random_state": 42,
+        "trained_at": "2026-11-01T16:08:05.838885+00:00",
+        "sklearn_version": "1.9.1",
+        "confidence_warning": "Estimated probabilities from synthetic development data; not validated for real-world emergency decisions."
+    }
+}
