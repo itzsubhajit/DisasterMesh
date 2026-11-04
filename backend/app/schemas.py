@@ -1,8 +1,7 @@
-
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Literal, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_serializer
 
 
 # =========================================================
@@ -11,6 +10,25 @@ from pydantic import BaseModel, ConfigDict, Field
 
 class DisasterMeshSchema(BaseModel):
     model_config = ConfigDict(from_attributes=True)
+
+    @field_serializer("*", when_used="json")
+    def serialize_datetime_values_as_utc(self, value):
+        """Serialize naive SQLite datetimes as UTC and include an explicit Z.
+
+        SQLAlchemy's SQLite DateTime columns do not preserve tzinfo even when
+        the Python value was created as timezone-aware UTC. DisasterMesh stores
+        these timestamps in UTC, so a naive value read from SQLite is treated
+        as UTC rather than as the browser/operator's local timezone.
+        """
+        if not isinstance(value, datetime):
+            return value
+
+        if value.tzinfo is None or value.utcoffset() is None:
+            value = value.replace(tzinfo=timezone.utc)
+        else:
+            value = value.astimezone(timezone.utc)
+
+        return value.isoformat().replace("+00:00", "Z")
 
 
 # =========================================================
